@@ -1,12 +1,13 @@
 <template>
+  <!-- 头部导航栏 -->
+  <header-bar />
+  <!-- 主题内容 -->
   <router-view />
 </template>
 
 <script setup lang='ts'>
-import { ref, reactive} from 'vue'
-import { RouterLink } from 'vue-router';
-
+import HeaderBar from './components/HeaderBar.vue';
 </script>
-<style lang='less' scoped>
+<style lang='less'>
 
 </style>

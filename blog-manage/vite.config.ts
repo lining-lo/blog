@@ -17,4 +17,11 @@ export default defineConfig({
       resolvers: [ElementPlusResolver()],
     }),
   ],
+  css: {
+    preprocessorOptions: {
+      less: {
+        additionalData: `@import "./src/styles/reset.less";`,
+      },
+    },
+  },
 });
