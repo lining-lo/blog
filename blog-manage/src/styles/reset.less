@@ -1,14 +1,8 @@
 /* 基础重置 */
-*,
-*::before,
-*::after {
+* {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-}
-
-body{
-  background: #f6f6f8;
 }
 
 /* 去除链接默认样式 */
@@ -46,7 +40,19 @@ img {
 }
 
 /* 标题重置 */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-size: inherit;
   font-weight: normal;
+}
+
+html,body{
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #f6f6f8;
 }

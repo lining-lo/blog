@@ -8,12 +8,23 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    Arcticle: typeof import('./src/components/Arcticle.vue')['default']
+    copy: typeof import('./src/components/LocalFile copy.vue')['default']
+    Diary: typeof import('./src/components/Diary.vue')['default']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElIcon: typeof import('element-plus/es')['ElIcon']
+    Gallery: typeof import('./src/components/Gallery.vue')['default']
     HeaderBar: typeof import('./src/components/HeaderBar.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
+    Install: typeof import('./src/components/Install.vue')['default']
+    Localfile: typeof import('./src/components/Localfile.vue')['default']
+    LocalFile: typeof import('./src/components/LocalFile.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Setting: typeof import('./src/components/Setting.vue')['default']
+    Sharing: typeof import('./src/components/Sharing.vue')['default']
+    SideBar: typeof import('./src/components/SideBar.vue')['default']
+    SiderBar: typeof import('./src/components/SiderBar.vue')['default']
   }
 }

@@ -18,7 +18,7 @@
                 </el-icon>
             </div>
             <div class="right-logout">
-                <el-button type="primary" >退出</el-button>
+                <button>退出</button>
             </div>
         </div>
     </div>
@@ -37,6 +37,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 0 24px;
+
     .header-left {
         display: flex;
         align-items: center;
@@ -56,12 +57,13 @@
             margin-left: 12px;
         }
     }
-    .header-right{
+
+    .header-right {
         width: 200px;
-    height: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
     }
 }
 </style>
