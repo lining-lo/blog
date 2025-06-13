@@ -49,7 +49,22 @@ import { headerbarRoutes } from '../utils/data';
                 display: flex;
                 align-items: center;
                 cursor: pointer;
-                padding: 0 12px;
+                padding: 0 6px;
+                margin: 0 6px;
+
+                &:hover{
+                    border-bottom: 2px solid #42b983;
+                    &>.route-name{
+                        color: #42b983;
+                    }
+                }
+
+                &.router-link-active{
+                    border-bottom: 2px solid #42b983;
+                    &>.route-name{
+                        color: #42b983;
+                    }
+                }
 
                 .route-icon {
                     height: 20px;
