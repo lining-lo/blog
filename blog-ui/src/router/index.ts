@@ -13,6 +13,31 @@ const routes = [
         name: 'home',
         component: () => import('../views/Home.vue')
       },
+      {
+        path: '/timeline',
+        name: 'timeline',
+        component: () => import('../views/TimeLine.vue')
+      },
+      {
+        path: '/album',
+        name: 'album',
+        component: () => import('../views/Album.vue')
+      },
+      {
+        path: '/diary',
+        name: 'diary',
+        component: () => import('../views/Diary.vue')
+      },
+      {
+        path: '/friend',
+        name: 'friend',
+        component: () => import('../views/Friend.vue')
+      },
+      {
+        path: '/message',
+        name: 'message',
+        component: () => import('../views/Message.vue')
+      },
     ]
   },
 ]

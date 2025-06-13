@@ -1,10 +1,8 @@
 <template>
-    <header-bar />
-    <router-view />
+    我是相册
 </template>
 
 <script setup lang='ts'>
-import HeaderBar from '../components/HeaderBar.vue';
 
 </script>
 <style lang='less' scoped></style>
