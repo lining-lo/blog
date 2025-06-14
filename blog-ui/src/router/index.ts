@@ -11,31 +11,37 @@ const routes = [
       {
         path: '/home',
         name: 'home',
+        meta: { name: '首页', msg: '初遇是故事序章，重逢是常看常新' },
         component: () => import('../views/Home.vue')
       },
       {
         path: '/timeline',
         name: 'timeline',
+        meta: { name: '时间线', msg: '岁月痕迹值得标记，成长足迹值得回望' },
         component: () => import('../views/TimeLine.vue')
       },
       {
         path: '/album',
         name: 'album',
+        meta: { name: '相册', msg: '片刻光影值得定格，每份回忆值得翻阅' },
         component: () => import('../views/Album.vue')
       },
       {
         path: '/diary',
         name: 'diary',
+        meta: { name: '说说', msg: '零碎心情值得分享，真实情绪值得共鸣' },
         component: () => import('../views/Diary.vue')
       },
       {
         path: '/friend',
         name: 'friend',
+        meta: { name: '友链', msg: '他人故事值得连接，同频灵魂值得相遇' },
         component: () => import('../views/Friend.vue')
       },
       {
         path: '/message',
         name: 'message',
+        meta: { name: '留言', msg: '很多事情值得记录，当然也值得回味。' },
         component: () => import('../views/Message.vue')
       },
     ]

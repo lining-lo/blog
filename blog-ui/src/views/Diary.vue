@@ -1,8 +1,10 @@
 <template>
-    我是说说
+  我是说说
 </template>
 
 <script setup lang='ts'>
-
 </script>
-<style lang='less' scoped></style>
+
+<style lang='less' scoped>
+
+</style>

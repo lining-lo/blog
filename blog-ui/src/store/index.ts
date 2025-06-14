@@ -1,14 +1,12 @@
 import { defineStore } from 'pinia'
 
-export const useCounterStore = defineStore('counter', {
+export const useTimeStore = defineStore('time', {
   state: () => {
-    return { count: 11 }
+    return { isDark: false }
   },
-  // 也可以这样定义
-  // state: () => ({ count: 0 })
   actions: {
-    increment() {
-      this.count++
+    changeTime() {
+      this.isDark = !this.isDark
     },
   },
 })
