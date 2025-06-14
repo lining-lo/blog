@@ -15,8 +15,9 @@ import Banner from '../components/Banner.vue';
 <style lang='less' scoped>
 .main-container{
     width: 90%;
-    height: 100vh;
-    background-color: pink;
+    height: 100%;
+    // background-color: pink;
     margin: 0 auto;
+    padding: 0 10px 0 10px;
 }
 </style>

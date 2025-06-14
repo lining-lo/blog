@@ -47,7 +47,7 @@ const { isDark } = storeToRefs(timeStore)
     }
 
     .header-left {
-        color: #fff;
+        color: #1861a6;
         font-size: 17px;
         font-family: fantasy;
         word-break: break-word;

@@ -44,7 +44,7 @@ import { ref, reactive } from 'vue'
 <style lang='less' scoped>
 .footerbar {
   width: 100%;
-  background: rgba(142, 142, 143, 0.5);
+  background: rgba(5, 12, 14, 0.8);
   padding: 20px;
   box-sizing: border-box;
 
