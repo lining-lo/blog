@@ -11,6 +11,7 @@ declare module 'vue' {
     Aa: typeof import('./src/components/aa.vue')['default']
     Banner: typeof import('./src/components/Banner.vue')['default']
     BottomBar: typeof import('./src/components/BottomBar.vue')['default']
+    CreateMessage: typeof import('./src/components/CreateMessage.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCarousel: typeof import('element-plus/es')['ElCarousel']
     ElCarouselItem: typeof import('element-plus/es')['ElCarouselItem']
@@ -22,6 +23,7 @@ declare module 'vue' {
     FooterBar1: typeof import('./src/components/FooterBar1.vue')['default']
     HeaderBar: typeof import('./src/components/HeaderBar.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
+    MessageCard: typeof import('./src/components/MessageCard.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }

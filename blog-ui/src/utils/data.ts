@@ -26,7 +26,6 @@ export const bannerImg = [
 ]
 
 //标签颜色
-//头像背景
 export const labelColors = [
     "rgba(127, 29, 29, 0.95)", // 深红
     "rgba(133, 77, 14, 0.94)", // 深橙
@@ -61,3 +60,26 @@ export const labelColors = [
     "rgba(57, 22, 111, 0.93)", // 中紫
     "rgba(97, 18, 95, 0.95)"  // 中粉
   ];
+
+//留言墙标签
+export const messageLabels =  ['留言', '目标', '理想', '过去', '将来', '爱情', '亲情', '友情', '秘密', '信条', '无题'];
+
+//留言卡片背景颜色
+export const messageCardColors = [
+    'rgba(252,175,162,0.30)',
+    'rgba(255,227,148,0.30)',
+    'rgba(146,230,245,0.30)',
+    'rgba(168,230,138,0.30)',
+    'rgba(202,167,247,0.30)',
+    'rgba(212,212,212,0.30)'
+]
+
+//创建留言卡片的颜色选项
+export const createMessageCardColors = [
+    'rgba(252,175,162,1)',
+    'rgba(255,227,148,1)',
+    'rgba(146,230,245,1)',
+    'rgba(168,230,138,1)',
+    'rgba(202,167,247,1)',
+    'rgba(212,212,212,1)'
+]
