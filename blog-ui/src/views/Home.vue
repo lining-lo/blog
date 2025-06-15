@@ -20,12 +20,38 @@
                 </div>
                 <a class="baseInfo-note" href="https://lining-lo.github.io/">⭐我的笔记</a>
             </div>
+
+            <div class="left-consulting">
+                <div class="consulting-title">
+                    <el-icon color="purple">
+                        <Notebook />
+                    </el-icon><span>网站资讯</span>
+                </div>
+                <div class="consulting-content">
+                    <p><span>今日访问：</span><span>26</span></p>
+                    <p><span>运行时间：</span><span>235</span></p>
+                    <p><span>用户数量：</span><span>26</span></p>
+                </div>
+            </div>
+
+
+            <div class="left-label">
+                <div class="label-title">
+                    <el-icon color="skyblue">
+                        <DocumentAdd />
+                    </el-icon><span>标签</span>
+                </div>
+                <div class="label-content">
+                    <span v-for="(item,index) in 12" :key="index" :style="{color: labelColors[index]}">我的博客</span>
+                </div>
+            </div>
+
             <div class="left-message">
                 <div class="message-title">
-                    <el-icon size="20" color="blue">
-                        <ChatLineRound />
+                    <el-icon color="chocolate">
+                        <Postcard />
                     </el-icon>
-                    <div class="title">最新评论</div>
+                    <div class="title">最新树洞</div>
                 </div>
                 <div class="message-content">
                     <div class="content-item">
@@ -56,9 +82,17 @@
             </div>
         </div>
         <div class="home-right">
+            <div class="right-banner">
+                <el-carousel trigger="click" height="340px" arrow="never">
+                    <el-carousel-item v-for="item in bannerImg[isDark ? 1 : 0]" :key="item">
+                        <div class="bannerimg" :style="{ backgroundImage: item }">
+                        </div>
+                    </el-carousel-item>
+                </el-carousel>
+            </div>
             <div class="right-header">
                 <div class="header-notice">
-                    <el-icon size="18" color="yellow">
+                    <el-icon size="18" color="red">
                         <BellFilled />
                     </el-icon>
                     <p class="notice">NOTICE&nbsp;-&nbsp;授权：https://github.com/lining-lo/blog</p>
@@ -114,6 +148,14 @@
 </template>
 
 <script setup lang='ts'>
+import { bannerImg,labelColors } from '../utils/data';
+import { useTimeStore } from '../store'
+import { storeToRefs } from 'pinia'
+
+//实例化 Store
+const timeStore = useTimeStore()
+//解构 State（自动转为响应式 ref）
+const { isDark } = storeToRefs(timeStore)
 
 </script>
 <style lang='less' scoped>
@@ -123,6 +165,7 @@
     display: flex;
 
     .home-left {
+        padding: 0px 0 0 50px;
         width: calc(30% - 30px);
 
         .left-baseInfo {
@@ -132,7 +175,7 @@
             margin-bottom: 30px;
             background: linear-gradient(20deg, #e8d8b9, #eccec5, #a3e9eb, #bdbdf0, #eec1ea);
             background-size: 400% 400%;
-            box-shadow: 0 1px 20px -6px black;
+            box-shadow: 0 1px 10px -6px gray;
             border-radius: 10px;
             display: flex;
             flex-direction: column;
@@ -194,24 +237,84 @@
             }
         }
 
+        .left-consulting {
+            width: 100%;
+            height: 160px;
+            box-shadow: 0 1px 10px -6px gray;
+            margin: 10px 0;
+            border-radius: 10px;
+            padding: 14px 25px;
+
+            .consulting-title {
+                display: flex;
+                font-size: 20px;
+                align-items: center;
+                margin-top: 14px;
+                color: gray;
+            }
+
+            .consulting-content {
+                padding: 12px;
+
+                p {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin: 5px;
+                    color: #373434;
+                }
+            }
+        }
+
+        .left-label {
+            width: 100%;
+            max-width: 300px;
+            box-shadow: 0 1px 10px -6px gray;
+            margin: 10px 0;
+            border-radius: 10px;
+            padding: 14px 30px;
+
+            .label-title {
+                display: flex;
+                font-size: 20px;
+                align-items: center;
+                margin-top: 14px;
+                color: gray;
+            }
+
+            .label-content {
+                margin-top: 10px;
+                display: flex;
+                flex-wrap: wrap;
+                font-size: 13px;
+                font-family: none;
+                font-weight: 800;
+
+                span {
+                    margin: 1px 4px;
+                    cursor: pointer;
+                }
+            }
+        }
+
         .left-message {
             width: 100%;
             height: 456px;
             padding: 20px;
             border-radius: 10px;
             margin-bottom: 30px;
-            background: linear-gradient(60deg, #e8d8b9, #eccec5, #a3e9eb, #bdbdf0, #eec1ea);
-            background-size: 400% 400%;
-            box-shadow: 0 1px 20px -6px black;
+            box-shadow: 0 1px 10px -6px gray;
 
             .message-title {
                 display: flex;
+                font-size: 20px;
+                align-items: center;
                 margin-bottom: 20px;
 
                 .title {
                     margin-left: 5px;
                     font-size: 20px;
-                    font-weight: 600;
+                    color: gray;
                 }
             }
 
@@ -237,6 +340,7 @@
                     .msg {
                         font-size: 16px;
                         font-weight: 500;
+                        color: #373434;
                     }
                 }
             }
@@ -248,13 +352,30 @@
         width: 70%;
         margin-left: 30px;
 
+        .right-banner {
+            width: 100%;
+            height: 340px;
+            margin-top: 40px;
+            border-radius: 10px;
+            box-shadow: 0 1px 10px -6px gray;
+
+            .bannerimg {
+                width: 100%;
+                height: 100%;
+                border-radius: 10px;
+                background-size: cover;
+                background-position: center;
+
+            }
+        }
+
         .right-header {
             padding: 22px;
             border: 1px dashed #dddddd;
             color: #868686;
             border-radius: 10px;
             display: flex;
-            margin: 40px auto 40px;
+            margin: 40px auto 20px;
             align-items: center;
             justify-content: space-between;
 
@@ -305,16 +426,17 @@
             margin-bottom: 20px;
             display: flex;
             flex-wrap: wrap;
+            justify-content: space-between;
 
             .article-item {
                 height: 300px;
-                width: calc(33.33333% - 20px);
+                width: calc(33.33333% - 15px);
                 border-radius: 10px;
                 overflow: hidden;
-                margin: 10px;
+                margin: 10px 10px 10px 0;
                 flex-shrink: 0;
                 cursor: pointer;
-                box-shadow: 0 1px 20px -6px black;
+                box-shadow: 0 1px 10px -6px gray;
 
                 .item-img {
                     width: 100%;

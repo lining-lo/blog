@@ -12,6 +12,8 @@ declare module 'vue' {
     Banner: typeof import('./src/components/Banner.vue')['default']
     BottomBar: typeof import('./src/components/BottomBar.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
+    ElCarousel: typeof import('element-plus/es')['ElCarousel']
+    ElCarouselItem: typeof import('element-plus/es')['ElCarouselItem']
     ElIcon: typeof import('element-plus/es')['ElIcon']
     ElPagination: typeof import('element-plus/es')['ElPagination']
     ElSwitch: typeof import('element-plus/es')['ElSwitch']

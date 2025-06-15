@@ -6,4 +6,7 @@
 
 </script>
 <style lang='less'>
+// #app{
+//     background-color: rgba(40,40,40,0.8);
+// }
 </style>
