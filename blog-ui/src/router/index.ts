@@ -17,8 +17,14 @@ const routes = [
       {
         path: '/timeline',
         name: 'timeline',
-        meta: { name: '时间线', msg: '岁月痕迹值得标记，成长足迹值得回望' },
+        meta: { name: '时间轴', msg: '岁月痕迹值得标记，成长足迹值得回望' },
         component: () => import('../views/TimeLine.vue')
+      },
+      {
+        path: '/classification',
+        name: 'classification',
+        meta: { name: '分类', msg: '世界万物皆可归档，每个维度都是认知的罗盘' },
+        component: () => import('../views/Classification.vue')
       },
       {
         path: '/album',
@@ -31,6 +37,12 @@ const routes = [
         name: 'diary',
         meta: { name: '说说', msg: '零碎心情值得分享，真实情绪值得共鸣' },
         component: () => import('../views/Diary.vue')
+      },
+      {
+        path: '/treehole',
+        name: 'treehole',
+        meta: { name: '树洞', msg: '字里行间藏着心事，无声倾诉也能泛起回声' },
+        component: () => import('../views/Treehole.vue')
       },
       {
         path: '/friend',

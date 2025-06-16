@@ -2,9 +2,10 @@
   我是说说
 </template>
 
-<script setup lang='ts'>
+<script setup lang="ts">
+
 </script>
 
-<style lang='less' scoped>
+<style scoped>
 
 </style>

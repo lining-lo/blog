@@ -1,16 +1,21 @@
 <template>
     <header-bar />
-    <banner />
-    <div class="main-container">
-        <router-view />
+    <banner v-if="route.name !== 'treehole'"/>
+    <div class="main-container" v-if="route.name !== 'treehole'">
+        <router-view/>
     </div>
-    <footer-bar />
+    <router-view v-else/>
+    <footer-bar v-if="route.name !== 'treehole'"/>
 </template>
 
 <script setup lang='ts'>
 import HeaderBar from '../components/HeaderBar.vue';
 import FooterBar from '../components/FooterBar.vue';
 import Banner from '../components/Banner.vue';
+import { useRoute } from 'vue-router';
+//实例化route
+const route = useRoute()
+
 </script>
 <style lang='less' scoped>
 .main-container{
