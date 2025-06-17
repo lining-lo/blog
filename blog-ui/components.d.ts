@@ -21,6 +21,8 @@ declare module 'vue' {
     ElPagination: typeof import('element-plus/es')['ElPagination']
     ElRow: typeof import('element-plus/es')['ElRow']
     ElSwitch: typeof import('element-plus/es')['ElSwitch']
+    ElTimeline: typeof import('element-plus/es')['ElTimeline']
+    ElTimelineItem: typeof import('element-plus/es')['ElTimelineItem']
     FootBar: typeof import('./src/components/FootBar.vue')['default']
     FooterBar: typeof import('./src/components/FooterBar.vue')['default']
     FooterBar1: typeof import('./src/components/FooterBar1.vue')['default']

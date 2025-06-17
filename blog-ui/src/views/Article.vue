@@ -2,7 +2,7 @@
     <div class="article-container">
         <div class="article-left">
             <p class="left-title">目录</p>
-            <MdCatalog class="left-content" :editorId="id" :scrollElement="scrollElement" />
+            <MdCatalog class="left-content" :editorId="id" :scrollElement="scrollElement" :offsetTop="80"/>
         </div>
         <div class="article-content">
             <MdPreview :id="id" :modelValue="text" previewTheme="mk-cute" />

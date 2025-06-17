@@ -38,7 +38,7 @@
             <div class="wave wave1" :style="{ backgroundImage: wave1Bg }"></div>
             <div class="wave wave2" :style="{ backgroundImage: wave2Bg }"></div>
         </div>
-        <div class="bottom-container">
+        <div class="bottom-container" v-if="route.name === 'home'">
             <el-icon :size="40" color="skyblue">
                 <ArrowDownBold />
             </el-icon>
