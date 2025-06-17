@@ -56,6 +56,12 @@ const routes = [
         meta: { name: '留言', msg: '很多事情值得记录，当然也值得回味。' },
         component: () => import('../views/Message.vue')
       },
+      {
+        path: '/article',
+        name: 'article',
+        meta: { name: '', msg: '' },
+        component: () => import('../views/Article.vue')
+      },
     ]
   },
 ]

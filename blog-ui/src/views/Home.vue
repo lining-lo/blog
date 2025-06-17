@@ -107,7 +107,7 @@
                 </div>
             </div>
             <div class="right-article">
-                <div class="article-item" v-for="(item, index) in 6" :key="index">
+                <router-link to="article" class="article-item" v-for="(item, index) in 6" :key="index">
                     <div class="item-img"></div>
                     <div class="item-content">
                         <div class="content-time">
@@ -138,7 +138,7 @@
                             </p>
                         </div>
                     </div>
-                </div>
+                </router-link>
             </div>
             <div class="right-pager">
                 <el-pagination background="#53e5b9" layout="prev, pager, next" :total="1000" />

@@ -1,15 +1,47 @@
 <template>
     <div class="banner" :style="{ backgroundImage: imgurl }">
         <div class="title-container">
-            <p class="name">{{ route.meta.name }}</p>
-            <p class="msg">{{ route.meta.msg }}</p>
+            <!-- 路由标题 -->
+            <div class="title-route" v-if="route.name !== 'article'">
+                <p class="route-name">{{ route.meta.name }}</p>
+                <p class="route-msg">{{ route.meta.msg }}</p>
+            </div>
+            <!-- 文章标题 -->
+            <div class="title-article" v-if="route.name === 'article'">
+                <p class="article-name">搭建自己的个人专属歌单</p>
+                <p class="article-msg">
+                    <el-icon color="blue">
+                        <Avatar />
+                    </el-icon><span style="margin-left: 4px;">lining-lo</span> |
+                    <el-icon color="purple">
+                        <Calendar />
+                    </el-icon><span style="margin-left: 4px;">2025-11-19</span> |
+                    <el-icon color="red">
+                        <View />
+                    </el-icon><span style="margin-left: 4px;">255</span> |
+                    👍<span style="margin-left: 4px;">20</span> |
+                    <el-icon color="navy">
+                        <ChatDotRound />
+                    </el-icon><span style="margin-left: 4px;">40</span>
+                </p>
+                <div class="labels">
+                    <p class="labels-item"><el-icon color="purple" style="margin-right: 4px;">
+                            <FolderOpened />
+                        </el-icon><span>BLOG</span></p>
+                    <p class="labels-item"><el-icon color="green" style="margin-right: 4px;">
+                            <HelpFilled />
+                        </el-icon><span>使用指南</span></p>
+                </div>
+            </div>
         </div>
         <div class="water-container">
             <div class="wave wave1" :style="{ backgroundImage: wave1Bg }"></div>
             <div class="wave wave2" :style="{ backgroundImage: wave2Bg }"></div>
         </div>
         <div class="bottom-container">
-            <el-icon :size="40" color="skyblue"><ArrowDownBold /></el-icon>
+            <el-icon :size="40" color="skyblue">
+                <ArrowDownBold />
+            </el-icon>
         </div>
     </div>
 </template>
@@ -30,7 +62,12 @@ const { isDark } = storeToRefs(timeStore)
 
 //获取背景图片
 const imgurl = computed(() => {
-    const url = `url(/src/assets/images/${isDark.value ? 'dark' : 'light'}-${String(route.name)}.png)`;
+    let url = null
+    if (route.name === 'article') {
+        url = `url(/src/assets/images/light-treehole.png)`;
+    } else {
+        url = `url(/src/assets/images/${isDark.value ? 'dark' : 'light'}-${String(route.name)}.png)`;
+    }
     return url;
 })
 
@@ -73,19 +110,51 @@ const wave2Bg = computed(() => {
         transform: translate(-50%, -50%);
         text-align: center;
 
-        .name {
-            color: #42b983;
-            font-size: 40px;
-            font-weight: 600;
-            margin-bottom: 18px;
+        .title-route {
+            .route-name {
+                color: #42b983;
+                font-size: 40px;
+                font-weight: 600;
+                margin-bottom: 18px;
+            }
+
+            .route-msg {
+                background: rgba(5, 12, 14, 0.5);
+                padding: 12px 20px;
+                color: #fff;
+                font-size: 18px;
+                font-weight: 600;
+            }
         }
 
-        .msg {
-            background: rgba(5, 12, 14, 0.5);
-            padding: 12px 20px;
-            color: #fff;
-            font-size: 18px;
-            font-weight: 600;
+        .title-article {
+            .article-name {
+                color: #fff;
+                font-size: 33px;
+                font-weight: 600;
+                margin-bottom: 10px;
+            }
+
+            .article-msg {
+                color: #fff;
+            }
+
+            .labels {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 13px;
+
+                .labels-item {
+                    display: flex;
+                    align-items: center;
+                    margin-top: 12px;
+                    margin-right: 14px;
+                    padding: 2px 4px;
+                    background-color: #eeeeee;
+                    border-radius: 3px;
+                }
+            }
         }
     }
 
@@ -117,7 +186,7 @@ const wave2Bg = computed(() => {
         }
     }
 
-    .bottom-container{
+    .bottom-container {
         position: absolute;
         bottom: 0;
         left: 50%;
