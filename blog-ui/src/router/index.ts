@@ -62,6 +62,12 @@ const routes = [
         meta: { name: '', msg: '' },
         component: () => import('../views/Article.vue')
       },
+      {
+        path: '/photos',
+        name: 'photos',
+        meta: { name: '', msg: '' },
+        component: () => import('../views/Photos.vue')
+      },
     ]
   },
 ]

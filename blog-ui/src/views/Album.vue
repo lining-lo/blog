@@ -1,12 +1,12 @@
 <template>
     <div class="album-container">
         <div class="album-list">
-            <div class="list-item" v-for="(item,index) in 4" :key="index">
+            <router-link to="photos" class="list-item" v-for="(item,index) in 4" :key="index">
                 <div class="item-content">
                     <p class="title">风景</p>
                     <p class="msg">记录沿途的风景</p>
                 </div>
-            </div>
+            </router-link>
         </div>
     </div>
 </template>

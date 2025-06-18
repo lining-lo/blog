@@ -2,7 +2,7 @@
     <div class="banner" :style="{ backgroundImage: imgurl }">
         <div class="title-container">
             <!-- 路由标题 -->
-            <div class="title-route" v-if="route.name !== 'article'">
+            <div class="title-route" v-if="route.name !== 'article' && route.name !== 'photos'">
                 <p class="route-name">{{ route.meta.name }}</p>
                 <p class="route-msg">{{ route.meta.msg }}</p>
             </div>
@@ -32,6 +32,10 @@
                             <HelpFilled />
                         </el-icon><span>使用指南</span></p>
                 </div>
+            </div>
+            <!-- 图片标题 -->
+            <div class="title-photos" v-if="route.name === 'photos'" >
+                图库-风景
             </div>
         </div>
         <div class="water-container">
@@ -64,6 +68,8 @@ const { isDark } = storeToRefs(timeStore)
 const imgurl = computed(() => {
     let url = null
     if (route.name === 'article') {
+        url = `url(/src/assets/images/light-treehole.png)`;
+    } else if (route.name === 'photos') {
         url = `url(/src/assets/images/light-treehole.png)`;
     } else {
         url = `url(/src/assets/images/${isDark.value ? 'dark' : 'light'}-${String(route.name)}.png)`;
@@ -155,6 +161,12 @@ const wave2Bg = computed(() => {
                     border-radius: 3px;
                 }
             }
+        }
+
+        .title-photos {
+            color: #fff;
+            font-size: 40px;
+            font-weight: 600;
         }
     }
 
