@@ -138,7 +138,8 @@ const isShow = ref(false)
           background-size: cover;
           background-position: center;
         }
-        .footer-welcome{
+
+        .footer-welcome {
           text-align: center;
           background-color: #fff;
           padding: 20px;
@@ -156,13 +157,38 @@ const isShow = ref(false)
 
     .submit-img {
       width: 100%;
-      height: 317px;
+      height: 260px;
       background-image: url(../assets/images/friendLetterBottom.png);
       background-size: cover;
       background-position: center;
       position: absolute;
       bottom: 0;
       left: 0;
+
+      /* 左上角三角形 */
+      &::before {
+        content: "";
+        position: absolute;
+        top: 1px;
+        left: 1px;
+        border-top: 7px solid #50748b;
+        border-left: 7px solid transparent;
+        border-right: 7px solid #50748b;
+        border-bottom: 7px solid transparent;
+      }
+
+      /* 右上角三角形 */
+      &::after {
+        content: "";
+        position: absolute;
+        position: absolute;
+        top: 3px;
+        right: 2px;
+        border-top: 7px solid #50748b;
+        border-left: 7px solid #50748b;
+        border-right: 7px solid transparent;
+        border-bottom: 7px solid transparent;
+      }
     }
   }
 
