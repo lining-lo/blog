@@ -28,3 +28,19 @@ export const messageCardsMock = Mock.mock({
         'type': 0
     }]
 })
+
+//树洞弹幕
+export const treeholeMock = Mock.mock({
+    'data|50': [{
+        //id
+        "id|+1": 0,
+        //内容
+        'message|2-20': '@cword',
+        //背景色
+        'imgurl|0-20': 0,
+        //弹幕位置
+        'top|60-700': 0,
+        //弹幕的速度
+        'animationDuration|8-18': 0
+    }]
+})

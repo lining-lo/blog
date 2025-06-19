@@ -7,7 +7,7 @@
           <p class="title">{{ item.title }}</p>
           <p class="count">12</p>
         </div>
-        <div class="item-right" v-if="index !== 0">
+        <div class="item-right">
           <el-icon size="12">
             <Plus />
           </el-icon>

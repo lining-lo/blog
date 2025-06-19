@@ -21,15 +21,14 @@
 
     .photos-list {
         display: flex;
-        justify-content: center;
         align-items: center;
         flex-wrap: wrap;
 
         .list-item {
-            width: 200px;
+            width: calc(25% - 10px);
             height: 140px;
             background-color: pink;
-            margin: 7.5px 3.75px;
+            margin: 7.5px 5px;
             box-shadow: 0 1px 10px -6px black;
             border-radius: 10px;
         }

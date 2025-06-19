@@ -53,7 +53,7 @@ const routes = [
       {
         path: '/message',
         name: 'message',
-        meta: { name: '留言', msg: '很多事情值得记录，当然也值得回味。' },
+        meta: { name: '留言墙', msg: '很多事情值得记录，当然也值得回味。' },
         component: () => import('../views/Message.vue')
       },
       {

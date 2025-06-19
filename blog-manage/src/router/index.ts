@@ -21,7 +21,7 @@ const routes = [
       {
         path: '/article',
         name: 'article',
-        component: () => import('../views/Arcticle.vue')
+        component: () => import('../views/Article.vue')
       },
       {
         path: '/gallery',

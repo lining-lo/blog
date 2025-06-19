@@ -7,8 +7,9 @@ export const headerbarRoutes = [
     { path: 'diary', name: '说说', icon: 'Lollipop', color: '#eb254b' },
     { path: 'treehole', name: '树洞', icon: 'Bicycle', color: '#ee6c2a' },
     { path: 'friend', name: '友链', icon: 'Ship', color: '#a8e68a' },
-    { path: 'message', name: '留言', icon: 'ChatDotRound', color: '#3873f0' },
+    { path: 'message', name: '留言墙', icon: 'ChatDotRound', color: '#3873f0' },
 ]
+
 //轮播图
 export const bannerImg = [
     [
