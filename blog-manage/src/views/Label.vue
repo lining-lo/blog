@@ -1,9 +1,9 @@
 <template>
-    <div class="container-diary">
-        <div class="diary-title">
-            <span>随笔随记</span>
+    <div class="container-label">
+        <div class="label-title">
+            <span>分类标签</span>
             <div class="title-search">
-                <input placeholder="搜索说说">
+                <input placeholder="搜索标签">
                 <div class="serch">
                     <el-icon size="12" color="gray">
                         <Search />
@@ -11,7 +11,7 @@
                 </div>
             </div>
         </div>
-        <div class="diary-header">
+        <div class="label-header">
             <div class="header-delete">
                 <button style="display: flex;align-items: center; color: red;">
                     <el-icon size="12" style="margin-right: 3px;">
@@ -25,20 +25,15 @@
                     <el-icon size="16">
                         <Plus style="margin-right: 3px;" />
                     </el-icon>
-                    <span>新增说说</span>
+                    <span>新增标签</span>
                 </button>
             </div>
         </div>
-        <div class="diary-form">
+        <div class="label-form">
             <el-table :data="tableData" border style="width: 100%">
                 <el-table-column type="selection" :selectable="selectable" width="55" align="center" />
                 <el-table-column prop="id" label="序号" width="60" align="center" />
-                <el-table-column prop="content" width="440" show-overflow-tooltip="true" label="内容" align="center" />
-                <el-table-column label="图片" align="center">
-                    <template #default="scope">
-                        <span>{{ scope.row.imgs.length }}张</span>
-                    </template>
-                </el-table-column>
+                <el-table-column prop="content" label="标签" align="center" />
                 <el-table-column prop="createtime" label="创建时间" align="center" />
                 <el-table-column label="操作" align="center">
                     <template #default="scope">
@@ -58,11 +53,11 @@
                 </el-table-column>
             </el-table>
         </div>
-        <div class="diary-footer">
+        <div class="label-footer">
             <el-pagination :style="{ '--el-pager-bg-color': '#42b983' }" size="small" background
                 layout="prev, pager, next" :total="50" />
         </div>
-        <div class="diary-create">
+        <div class="label-create">
             <el-dialog v-model="dialogVisible" title="添加标签" width="500">
                 <span></span>
                 <template #footer>
@@ -82,69 +77,69 @@ import { ref } from 'vue'
 const tableData = [
     {
         id: 1,
-        content: '开发这个项目一来是为了练习全栈技术，积累项目经验，二来呢是拥有一个属于自己的博客是一个很酷的事情1',
+        content: '我的博客1',
         createtime: '2014-03-22',
-        imgs: []
+        updatetime: '2016-05-03',
     },
     {
         id: 2,
-        content: '开发这个项目一来是为了练习全栈技术，积累项目经验，二来呢是拥有一个属于自己的博客是一个很酷的事情2',
+        content: '我的博客2',
         createtime: '2014-03-22',
-        imgs: ['http://img.mrzym.top/FsmFwJb-phLb9aNSiKLYZP-s_vAk', 'http://img.mrzym.top/FsmFwJb-phLb9aNSiKLYZP-s_vAk']
+        updatetime: '2016-05-03',
     },
     {
         id: 3,
-        content: '开发这个项目一来是为了练习全栈技术，积累项目经验，二来呢是拥有一个属于自己的博客是一个很酷的事情3',
+        content: '我的博客3',
         createtime: '2014-03-22',
-        imgs: ['http://img.mrzym.top/FsmFwJb-phLb9aNSiKLYZP-s_vAk']
+        updatetime: '2016-05-03',
     },
     {
         id: 4,
-        content: '开发这个项目一来是为了练习全栈技术，积累项目经验，二来呢是拥有一个属于自己的博客是一个很酷的事情4',
+        content: '我的博客4',
         createtime: '2014-03-22',
-        imgs: ['http://img.mrzym.top/FsmFwJb-phLb9aNSiKLYZP-s_vAk', 'http://img.mrzym.top/FsmFwJb-phLb9aNSiKLYZP-s_vAk', 'http://img.mrzym.top/FsmFwJb-phLb9aNSiKLYZP-s_vAk']
+        updatetime: '2016-05-03',
     },
     {
         id: 5,
-        content: '开发这个项目一来是为了练习全栈技术，积累项目经验，二来呢是拥有一个属于自己的博客是一个很酷的事情5',
+        content: '我的博客5',
         createtime: '2014-03-22',
-        imgs: ['xxx']
+        updatetime: '2016-05-03',
     },
     {
         id: 6,
         content: '我的博客6',
         createtime: '2014-03-22',
-        imgs: []
+        updatetime: '2016-05-03',
     },
     {
         id: 7,
         content: '我的博客7',
         createtime: '2014-03-22',
-        imgs: []
+        updatetime: '2016-05-03',
     },
     {
         id: 8,
         content: '我的博客8',
         createtime: '2014-03-22',
-        imgs: ['xxx']
+        updatetime: '2016-05-03',
     },
     {
         id: 9,
         content: '我的博客9',
         createtime: '2014-03-22',
-        imgs: []
+        updatetime: '2016-05-03',
     },
     {
         id: 10,
         content: '我的博客10',
         createtime: '2014-03-22',
-        imgs: []
+        updatetime: '2016-05-03',
     },
     {
         id: 11,
         content: '我的博客11',
         createtime: '2014-03-22',
-        imgs: []
+        updatetime: '2016-05-03',
     }
 ]
 
@@ -156,12 +151,12 @@ const dialogVisible = ref(false)
 </script>
 
 <style lang='less' scoped>
-.container-diary {
+.container-label {
     padding: 14px;
     width: 100%;
     height: 100%;
 
-    .diary-title {
+    .label-title {
         width: 100%;
         height: 32px;
         color: #000000;
@@ -209,7 +204,7 @@ const dialogVisible = ref(false)
         }
     }
 
-    .diary-header {
+    .label-header {
         width: 100%;
         height: 40px;
         background-color: #fff;
@@ -244,7 +239,7 @@ const dialogVisible = ref(false)
         }
     }
 
-    .diary-form {
+    .label-form {
         margin-top: 10px;
         width: 100%;
         height: 508px;
@@ -253,7 +248,7 @@ const dialogVisible = ref(false)
         overflow: auto;
     }
 
-    .diary-footer {
+    .label-footer {
         width: 100%;
         display: flex;
         margin-top: 16px;

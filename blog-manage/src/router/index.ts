@@ -14,9 +14,9 @@ const routes = [
         component: () => import('../views/OverView.vue')
       },
       {
-        path: '/localfile',
-        name: 'localfile',
-        component: () => import('../views/LocalFile.vue')
+        path: '/label',
+        name: 'label',
+        component: () => import('../views/Label.vue')
       },
       {
         path: '/article',
@@ -34,14 +34,34 @@ const routes = [
         component: () => import('../views/Diary.vue')
       },
       {
-        path: '/sharing',
-        name: 'sharing',
-        component: () => import('../views/Sharing.vue')
+        path: '/wall',
+        name: 'wall',
+        component: () => import('../views/Wall.vue')
+      },
+      {
+        path: '/message',
+        name: 'message',
+        component: () => import('../views/Message.vue')
+      },
+      {
+        path: '/friend',
+        name: 'friend',
+        component: () => import('../views/Friend.vue')
+      },
+      {
+        path: '/user',
+        name: 'user',
+        component: () => import('../views/User.vue')
       },
       {
         path: '/install',
         name: 'install',
         component: () => import('../views/Install.vue')
+      },
+      {
+        path: '/createArticle',
+        name: 'createArticle',
+        component: () => import('../views/CreateArticle.vue')
       },
     ]
   },

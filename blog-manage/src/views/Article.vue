@@ -17,24 +17,24 @@
                 <span v-for="(item, index) in 5" :key="index">我的博客</span>
             </div>
             <div class="header-create">
-                <button style="display: flex;align-items: center; color: #42b983;">
+                <router-link to="createArticle" style="display: flex;align-items: center; color: #42b983;">
                     <el-icon>
                         <CirclePlusFilled />
                     </el-icon>
-                    <span style="margin-left: 3px;">新增</span>
-                </button>
+                    <span style="margin-left: 3px;">新增文章</span>
+                </router-link>
             </div>
         </div>
         <div class="article-form">
-            <el-table :data="tableData" border style="width: 100%" >
-                <el-table-column prop="id" label="序号" width="60" align="center"/>
+            <el-table :data="tableData" border style="width: 100%">
+                <el-table-column prop="id" label="序号" width="60" align="center" />
                 <el-table-column label="封面" width="180" align="center">
                     <template #default="scope">
                         <img style="width: 100%;height: 55px;background-color: pink;" :src="scope.row.cover" alt="">
                     </template>
                 </el-table-column>
-                <el-table-column prop="title" label="标题" align="center"/>
-                <el-table-column prop="content" label="文字描述" show-overflow-tooltip="true" align="center"/>
+                <el-table-column prop="title" label="标题" align="center" />
+                <el-table-column prop="content" label="文字描述" show-overflow-tooltip="true" align="center" />
                 <el-table-column prop="label" label="标签" align="center">
                     <template #default="{ row }">
                         <el-tag color="#f6f6f8" style="color: #42b983; padding: 5px 10px;">
@@ -48,18 +48,20 @@
                             style="--el-switch-on-color: #42b983; --el-switch-off-color: #f4f4f5" />
                     </template>
                 </el-table-column>
-                <el-table-column prop="date" label="创建时间" align="center"/>
+                <el-table-column prop="date" label="创建时间" align="center" />
                 <el-table-column label="操作" align="center">
                     <template #default="scope">
                         <el-button size="small" link type="success" @click="handleEdit(scope.$index, scope.row)">
                             <el-icon style="margin-right: 2px;">
                                 <Edit />
-                            </el-icon>编辑
+                            </el-icon>
+                            编辑
                         </el-button>
                         <el-button size="small" link type="danger" @click="handleDelete(scope.$index, scope.row)">
                             <el-icon style="margin-right: 2px;">
                                 <Delete />
-                            </el-icon>删除
+                            </el-icon>
+                            删除
                         </el-button>
                     </template>
                 </el-table-column>
@@ -141,6 +143,14 @@ const tableData = [
         address: 'No. 189, Grove St, Los Angeles',
     },
 ]
+
+const handleEdit = (index:any,row:any)=>{
+
+}
+
+const handleDelete = (index:any,row:any)=>{
+
+}
 </script>
 
 <style lang='less' scoped>
@@ -242,5 +252,4 @@ const tableData = [
         justify-content: end;
     }
 }
-
 </style>

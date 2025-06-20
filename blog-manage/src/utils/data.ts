@@ -2,10 +2,13 @@
 export const silderbarMenu = [
     { path: 'overview', name: '总览', icon: 'HomeFilled' },
     { path: 'article', name: '博客文章', icon: 'Document' },
-    { path: 'localfile', name: '本地文件', icon: 'FolderOpened' },
+    { path: 'label', name: '标签分类', icon: 'Discount' },
     { path: 'gallery', name: '摄影图库', icon: 'Camera' },
     { path: 'diary', name: '随笔随记', icon: 'EditPen' },
-    { path: 'sharing', name: '资源分享', icon: 'Grid' },
+    { path: 'wall', name: '留言墙', icon: 'Reading' },
+    { path: 'message', name: '留言评论', icon: 'ChatLineSquare' },
+    { path: 'friend', name: '友情链接', icon: 'Link' },
+    { path: 'user', name: '用户管理', icon: 'User' },
     { path: 'install', name: '设置', icon: 'Setting' },
 ]
 
@@ -52,3 +55,10 @@ export const labelColors = [
     "rgba(57, 22, 111, 0.93)", // 中紫
     "rgba(97, 18, 95, 0.95)"  // 中粉
   ];
+
+  //留言位置
+  export const messagePosition = ['文章','说说','树洞','留言墙']
+
+  //留言墙标签
+export const wallLabels =  ['留言', '目标', '理想', '过去', '将来', '爱情', '亲情', '友情', '秘密', '信条', '无题'];
+

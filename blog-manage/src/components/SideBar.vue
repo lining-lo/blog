@@ -1,6 +1,7 @@
 <template>
     <div class="sidebar">
-        <router-link class="sidebar-item" v-for="(item, index) in silderbarMenu" :key="index" :to="item.path">
+        <router-link :class="{ 'router-link-active': route.name === 'createArticle' && item.path === 'article' }"
+            class="sidebar-item" v-for="(item, index) in silderbarMenu" :key="index" :to="item.path">
             <component class="item-icon" :is="item.icon" style="width: 18px;height: 18px;"></component>
             <span class="item-name">{{ item.name }}</span>
         </router-link>
@@ -8,7 +9,9 @@
 </template>
 
 <script setup lang='ts'>
-import { silderbarMenu } from '../utils/data'; 
+import { useRoute } from 'vue-router';
+import { silderbarMenu } from '../utils/data';
+const route = useRoute()
 </script>
 
 <style lang='less' scoped>
@@ -20,7 +23,7 @@ import { silderbarMenu } from '../utils/data';
     .sidebar-item {
         display: flex;
         align-items: center;
-        width: 100%;
+        width: 140px;
         height: 40px;
         margin-bottom: 12px;
         padding-left: 12px;
