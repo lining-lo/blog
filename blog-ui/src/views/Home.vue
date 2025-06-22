@@ -42,7 +42,7 @@
                     </el-icon><span>标签</span>
                 </div>
                 <div class="label-content">
-                    <span v-for="(item,index) in 12" :key="index" :style="{color: labelColors[index]}">我的博客</span>
+                    <span v-for="(item, index) in 12" :key="index" :style="{ color: labelColors[index] }">我的博客</span>
                 </div>
             </div>
 
@@ -95,18 +95,72 @@
                     <el-icon size="18" color="red">
                         <BellFilled />
                     </el-icon>
-                    <p class="notice">NOTICE&nbsp;-&nbsp;授权：https://github.com/lining-lo/blog</p>
-                </div>
-                <div class="header-search">
-                    <input type="text" placeholder="搜索文章">
-                    <div class="serch">
-                        <el-icon color="blue">
-                            <Search />
-                        </el-icon>
-                    </div>
+                    <p class="notice">NOTICE&nbsp;-&nbsp;本站已开启随缘更新模式(更新较慢)，原因：网站需要优化、维护。期待给您带来更好的体验。</p>
                 </div>
             </div>
+            <div class="right-recommend">
+                <div class="recommend-header">
+                    <div class="header-left">
+                        <el-icon color="#ff623e" size="24">
+                            <Menu />
+                        </el-icon>
+                        <span style="margin-left: 4px;">站长推荐</span>
+                    </div>
+                    <div class="header-right">
+                        <el-icon color="#53e5b9" size="24">
+                            <HomeFilled />
+                        </el-icon>
+                        <span style="margin-left: 4px;">首页</span>
+                    </div>
+                </div>
+                <router-link to="article" class="article-item" v-for="(item, index) in 6" :key="index">
+                    <div class="item-img"></div>
+                    <div class="item-content">
+                        <div class="content-time">
+                            <el-icon>
+                                <Calendar />
+                            </el-icon>
+                            <span style="margin-left: 4px;">2025-4-10&nbsp;20:22:36</span>
+                        </div>
+                        <div class="content-title">我的个人博客</div>
+                        <div class="content-info">
+                            <el-icon color="red">
+                                <Loading />
+                            </el-icon><span style="margin-left: 4px;">4799热度</span>&nbsp;
+                            <el-icon color="orange">
+                                <ChatDotSquare />
+                            </el-icon><span style="margin-left: 4px;">7评论</span>
+                        </div>
+                        <div class="content-label">
+                            <p>
+                                <el-icon color="purple" style="margin-right: 4px;">
+                                    <FolderOpened />
+                                </el-icon>BLOG
+                            </p>
+                            <p>
+                                <el-icon color="green" style="margin-right: 4px;">
+                                    <HelpFilled />
+                                </el-icon>使用指南
+                            </p>
+                        </div>
+                    </div>
+                </router-link>
+            </div>
             <div class="right-article">
+                <div class="article-header">
+                    <div class="header-left">
+                        <el-icon color="#ff623e" size="24">
+                            <Menu />
+                        </el-icon>
+                        <span style="margin-left: 4px;">文章列表</span>
+                    </div>
+                    <div class="header-right">
+                        <el-icon color="#53e5b9" size="24">
+                            <HomeFilled />
+                        </el-icon>
+                        <span style="margin-left: 4px;">首页</span>
+                    </div>
+                </div>
                 <router-link to="article" class="article-item" v-for="(item, index) in 6" :key="index">
                     <div class="item-img"></div>
                     <div class="item-content">
@@ -148,7 +202,7 @@
 </template>
 
 <script setup lang='ts'>
-import { bannerImg,labelColors } from '../utils/data';
+import { bannerImg, labelColors } from '../utils/data';
 import { useTimeStore } from '../store'
 import { storeToRefs } from 'pinia'
 
@@ -375,7 +429,7 @@ const { isDark } = storeToRefs(timeStore)
             color: #868686;
             border-radius: 10px;
             display: flex;
-            margin: 40px auto 20px;
+            margin-top: 40px;
             align-items: center;
             justify-content: space-between;
 
@@ -420,13 +474,130 @@ const { isDark } = storeToRefs(timeStore)
             }
         }
 
-        .right-article {
+        .right-recommend {
             width: 100%;
-            height: 640px;
-            margin-bottom: 20px;
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
+
+            .recommend-header {
+                width: 100%;
+                height: 30px;
+                margin-top: 30px;
+                padding: 25px 0;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                font-size: 18px;
+                font-family: auto;
+                color: #797979;
+                border-bottom: 1px dashed #dddddd;
+
+                .header-left {
+                    display: flex;
+                    align-items: center;
+                }
+
+                .header-right {
+                    display: flex;
+                    align-items: center;
+                    cursor: pointer;
+                }
+
+            }
+
+            .article-item {
+                height: 300px;
+                width: calc(33.33333% - 15px);
+                border-radius: 10px;
+                overflow: hidden;
+                margin: 10px 10px 10px 0;
+                flex-shrink: 0;
+                cursor: pointer;
+                box-shadow: 0 1px 10px -6px gray;
+
+                .item-img {
+                    width: 100%;
+                    height: 170px;
+                    background-color: #ad6e4c;
+                    border-radius: 10px 10px 0 0;
+                }
+
+                .item-content {
+                    width: 100%;
+                    height: 130px;
+                    background-color: #fff;
+                    border-radius: 0 0 10px 10px;
+                    padding: 10px 15px;
+
+                    .content-time {
+                        display: flex;
+                        align-items: center;
+                        font-size: 12px;
+                        color: gray;
+                    }
+
+                    .content-title {
+                        margin: 10px 0;
+                        font-size: 18px;
+                        font-weight: 600;
+                    }
+
+                    .content-info {
+                        display: flex;
+                        align-items: center;
+                        font-size: 13px;
+                        color: gray;
+                    }
+
+                    .content-label {
+                        display: flex;
+                        align-items: center;
+
+                        p {
+                            margin-top: 12px;
+                            margin-right: 14px;
+                            padding: 2px 4px;
+                            background-color: #eeeeee;
+                            border-radius: 3px;
+                            display: flex;
+                            align-items: center;
+                        }
+                    }
+                }
+            }
+        }
+        .right-article {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+
+            .article-header {
+                width: 100%;
+                height: 30px;
+                margin-top: 30px;
+                padding: 25px 0;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                font-size: 18px;
+                font-family: auto;
+                color: #797979;
+                border-bottom: 1px dashed #dddddd;
+
+                .header-left {
+                    display: flex;
+                    align-items: center;
+                }
+
+                .header-right {
+                    display: flex;
+                    align-items: center;
+                    cursor: pointer;
+                }
+
+            }
 
             .article-item {
                 height: 300px;

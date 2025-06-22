@@ -41,7 +41,7 @@ const temp = JSON.parse(JSON.stringify(treeholeMock.data))
 
 //弹幕循环
 const resetDanmu = (index: number) => {
-    danmus.splice(index, 1)[0]
+    danmus.splice(index, 1)
     // 使用nextTick确保DOM更新完成后再重置位置
 
     nextTick(() => {
