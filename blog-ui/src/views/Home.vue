@@ -2,7 +2,10 @@
     <div class="home-container">
         <div class="home-left">
             <div class="left-baseInfo">
-                <div class="baseInfo-avator"></div>
+                <div class="baseInfo-avator">
+                    <img style="width: 120px;height: 120px;border-radius: 50%;" src="../assets/images/dark-treehole.png"
+                        alt="">
+                </div>
                 <p class="baseInfo-name">LO'S BLOG</p>
                 <div class="baseInfo-content">
                     <p>
@@ -21,19 +24,21 @@
                 <a class="baseInfo-note" href="https://lining-lo.github.io/">⭐我的笔记</a>
             </div>
 
-            <div class="left-consulting">
-                <div class="consulting-title">
-                    <el-icon color="purple">
-                        <Notebook />
-                    </el-icon><span>网站资讯</span>
+            <div class="left-welcome">
+                <div class="welcome-title">
+                    🎉欢迎 &nbsp;<span style="color: red;">江西省-南昌市</span> &nbsp;的小伙伴！
                 </div>
-                <div class="consulting-content">
-                    <p><span>今日访问：</span><span>26</span></p>
-                    <p><span>运行时间：</span><span>235</span></p>
-                    <p><span>用户数量：</span><span>26</span></p>
+                <div class="welcome-content">
+                    <p><span>温度：</span><span style="color: red;">23℃</span><span style="margin-left: 20px;">天气：</span><span style="color: red;font-weight: 500;">小雨</span></p>
+                    <p><span>日期：</span><span style="color: red;font-weight: 500;">2025-6-23</span><span
+                            style="color: red;margin-left: 10px;font-weight: 500;">星期一</span></p>
+                    <p><span>风力：</span><span style="color: red;font-weight: 500;">东风≤3级</span></p>
                 </div>
             </div>
 
+            <div class="left-news">
+
+            </div>
 
             <div class="left-label">
                 <div class="label-title">
@@ -114,7 +119,9 @@
                     </div>
                 </div>
                 <router-link to="article" class="article-item" v-for="(item, index) in 6" :key="index">
-                    <div class="item-img"></div>
+                    <div class="item-img">
+                        <img style="width: 100%;height: 100%;" src="../assets/images/dark-treehole.png" alt="">
+                    </div>
                     <div class="item-content">
                         <div class="content-time">
                             <el-icon>
@@ -162,7 +169,9 @@
                     </div>
                 </div>
                 <router-link to="article" class="article-item" v-for="(item, index) in 6" :key="index">
-                    <div class="item-img"></div>
+                    <div class="item-img">
+                        <img style="width: 100%;height: 100%;" src="../assets/images/light-treehole.png" alt="">
+                    </div>
                     <div class="item-content">
                         <div class="content-time">
                             <el-icon>
@@ -223,13 +232,12 @@ const { isDark } = storeToRefs(timeStore)
         width: calc(30% - 30px);
 
         .left-baseInfo {
-            margin-top: 40px;
+            margin: 40px 0;
             width: 100%;
             height: 340px;
-            margin-bottom: 30px;
-            background: linear-gradient(20deg, #e8d8b9, #eccec5, #a3e9eb, #bdbdf0, #eec1ea);
+            background: linear-gradient(45deg, #e8d8b9, #eccec5, #a3e9eb, #bdbdf0, #eec1ea);
             background-size: 400% 400%;
-            box-shadow: 0 1px 10px -6px gray;
+            box-shadow: 0 1px 20px -6px rgba(0, 0, 0, 0.5);
             border-radius: 10px;
             display: flex;
             flex-direction: column;
@@ -291,39 +299,45 @@ const { isDark } = storeToRefs(timeStore)
             }
         }
 
-        .left-consulting {
+        .left-welcome {
             width: 100%;
-            height: 160px;
-            box-shadow: 0 1px 10px -6px gray;
             margin: 10px 0;
             border-radius: 10px;
-            padding: 14px 25px;
+            padding: 4px 12px 10px 12px;
+            font-family: auto;
 
-            .consulting-title {
+            background: rgba(252, 175, 162, 0.30);
+
+            .welcome-title {
                 display: flex;
-                font-size: 20px;
+                font-size: 17px;
                 align-items: center;
                 margin-top: 14px;
-                color: gray;
             }
 
-            .consulting-content {
-                padding: 12px;
+            .welcome-content {
+                padding: 4px 12px;
+                font-size: 14px;
 
                 p {
                     display: flex;
-                    justify-content: space-between;
                     align-items: center;
                     margin: 5px;
-                    color: #373434;
                 }
             }
+        }
+
+        .left-news{
+            width: 100%;
+            height: 300px;
+            background-color: pink;
+            margin-top: 20px;
         }
 
         .left-label {
             width: 100%;
             max-width: 300px;
-            box-shadow: 0 1px 10px -6px gray;
+            box-shadow: 0 1px 20px -6px rgba(0, 0, 0, 0.5);
             margin: 10px 0;
             border-radius: 10px;
             padding: 14px 30px;
@@ -357,7 +371,7 @@ const { isDark } = storeToRefs(timeStore)
             padding: 20px;
             border-radius: 10px;
             margin-bottom: 30px;
-            box-shadow: 0 1px 10px -6px gray;
+            box-shadow: 0 1px 20px -6px rgba(0, 0, 0, 0.5);
 
             .message-title {
                 display: flex;
@@ -411,7 +425,7 @@ const { isDark } = storeToRefs(timeStore)
             height: 340px;
             margin-top: 40px;
             border-radius: 10px;
-            box-shadow: 0 1px 10px -6px gray;
+            box-shadow: 0 1px 20px -6px rgba(0, 0, 0, 0.5);
 
             .bannerimg {
                 width: 100%;
@@ -425,13 +439,13 @@ const { isDark } = storeToRefs(timeStore)
 
         .right-header {
             padding: 22px;
-            border: 1px dashed #dddddd;
             color: #868686;
             border-radius: 10px;
             display: flex;
             margin-top: 40px;
             align-items: center;
             justify-content: space-between;
+            background-color: rgba(146,230,245,0.30);
 
             .header-notice {
                 display: flex;
@@ -514,7 +528,7 @@ const { isDark } = storeToRefs(timeStore)
                 margin: 10px 10px 10px 0;
                 flex-shrink: 0;
                 cursor: pointer;
-                box-shadow: 0 1px 10px -6px gray;
+                box-shadow: 0 1px 20px -6px rgba(0, 0, 0, 0.5);
 
                 .item-img {
                     width: 100%;
@@ -526,7 +540,7 @@ const { isDark } = storeToRefs(timeStore)
                 .item-content {
                     width: 100%;
                     height: 130px;
-                    background-color: #fff;
+                    background-color: rgba(255, 255, 255, 0.1);
                     border-radius: 0 0 10px 10px;
                     padding: 10px 15px;
 
@@ -567,6 +581,7 @@ const { isDark } = storeToRefs(timeStore)
                 }
             }
         }
+
         .right-article {
             width: 100%;
             display: flex;
@@ -607,7 +622,7 @@ const { isDark } = storeToRefs(timeStore)
                 margin: 10px 10px 10px 0;
                 flex-shrink: 0;
                 cursor: pointer;
-                box-shadow: 0 1px 10px -6px gray;
+                box-shadow: 0 1px 20px -6px rgba(0, 0, 0, 0.5);
 
                 .item-img {
                     width: 100%;
@@ -619,7 +634,7 @@ const { isDark } = storeToRefs(timeStore)
                 .item-content {
                     width: 100%;
                     height: 130px;
-                    background-color: #fff;
+                    background-color: rgba(255, 255, 255, 0.1);
                     border-radius: 0 0 10px 10px;
                     padding: 10px 15px;
 

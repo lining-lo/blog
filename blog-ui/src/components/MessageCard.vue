@@ -1,10 +1,10 @@
 <template>
-    <div class="message-card" :style="{ backgroundColor: messageCardColors[card.imgurl] }">
+    <div class="message-card" :style="{ backgroundColor: messageCardColors[card.imgurl]}">
         <div class="top">
             <p class="time">{{ formattime(card.moment) }}</p>
             <p class="label">{{ messageLabels[card.label] }}</p>
         </div>
-        <p class="message">{{ card.message }}</p>
+        <p class="message" :style="{ color:isDark?'black':'#585858' }">{{ card.message }}</p>
         <div class="bottom">
             <div class="feedback">
                 <div class="like">
@@ -12,7 +12,7 @@
                     <span class="value">{{ card.like }}</span>
                 </div>
                 <div class="comment">
-                    <el-icon><ChatDotRound /></el-icon>
+                    <el-icon color="#949494"><ChatDotRound /></el-icon>
                     <span class="value">{{ card.comment }}</span>
                 </div>
             </div>
@@ -24,8 +24,16 @@
 <script setup lang='ts'>
 import {formattime} from '../utils/customize'
 import { messageLabels,messageCardColors } from '../utils/data';
+import { useTimeStore } from '../store'
+import { storeToRefs } from 'pinia'
+
 //获取父组件传递的参数
 const props = defineProps(['card'])
+
+//实例化 Store
+const timeStore = useTimeStore()
+//解构 State（自动转为响应式 ref）
+const { isDark } = storeToRefs(timeStore)
 
 </script>
 
