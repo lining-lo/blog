@@ -26,37 +26,33 @@
 
             <div class="left-welcome">
                 <div class="welcome-title">
-                    🎉欢迎 &nbsp;<span style="color: red;">江西省-南昌市</span> &nbsp;的小伙伴！
+                    🎉欢迎 &nbsp;<span style="color: #ff4d4f;">江西省-南昌市</span> &nbsp;的小伙伴！
                 </div>
                 <div class="welcome-content">
-                    <p><span>温度：</span><span style="color: red;">23℃</span><span style="margin-left: 20px;">天气：</span><span style="color: red;font-weight: 500;">小雨</span></p>
-                    <p><span>日期：</span><span style="color: red;font-weight: 500;">2025-6-23</span><span
-                            style="color: red;margin-left: 10px;font-weight: 500;">星期一</span></p>
-                    <p><span>风力：</span><span style="color: red;font-weight: 500;">东风≤3级</span></p>
+                    <p><span>温度：</span><span style="color: #ff4d4f;font-weight: 500;">23℃</span><span
+                            style="margin-left: 20px;">天气：</span><span
+                            style="color: #ff4d4f;font-weight: 500;">小雨</span>
+                    </p>
+                    <p><span>日期：</span><span style="color: #ff4d4f;font-weight: 500;">2025-6-23</span><span
+                            style="color: #ff4d4f;margin-left: 10px;font-weight: 500;">星期一</span></p>
+                    <p><span>风力：</span><span style="color: #ff4d4f;font-weight: 500;">东风≤3级</span></p>
                 </div>
             </div>
 
             <div class="left-news">
-
-            </div>
-
-            <div class="left-label">
-                <div class="label-title">
-                    <el-icon color="skyblue">
-                        <DocumentAdd />
-                    </el-icon><span>标签</span>
+                <div class="news-title">
+                    <div class="title-left">🎯热点</div>
+                    <div class="title-right">{{ newsUpdateTime === 0 ? "不久前更新" : `${newsUpdateTime}分钟前更新` }}</div>
                 </div>
-                <div class="label-content">
-                    <span v-for="(item, index) in 12" :key="index" :style="{ color: labelColors[index] }">我的博客</span>
+                <div class="news-item" v-for="(item, index) in news" :key="index">
+                    <div class="item-num">{{ index + 1 }}</div>
+                    <a :href="item.url" class="item-txt">{{ item.title }}</a>
                 </div>
             </div>
 
             <div class="left-message">
                 <div class="message-title">
-                    <el-icon color="chocolate">
-                        <Postcard />
-                    </el-icon>
-                    <div class="title">最新树洞</div>
+                    🚙最新树洞
                 </div>
                 <div class="message-content">
                     <div class="content-item">
@@ -77,12 +73,64 @@
                     </div>
                     <div class="content-item">
                         <div class="avator"></div>
+                        <div class="msg">不错哦不错哦不错哦不错哦不错哦不错哦</div>
+                    </div>
+                    <div class="content-item">
+                        <div class="avator"></div>
                         <div class="msg">不错哦不错哦</div>
                     </div>
                     <div class="content-item">
                         <div class="avator"></div>
                         <div class="msg">不错哦不错哦</div>
                     </div>
+                </div>
+            </div>
+
+            <div class="left-search">
+                <div class="search-title">🔍搜索</div>
+                <div class="search-input">
+                    <input type="text">
+                    <button>搜索</button>
+                </div>
+            </div>
+
+            <div class="left-label">
+                <div class="label-title">
+                    🤖标签
+                </div>
+                <div class="label-content">
+                    <span v-for="(item, index) in 12" :key="index" :style="{ color: labelColors[index] }">我的博客</span>
+                </div>
+            </div>
+
+            <div class="left-video">
+                <div class="video-title">
+                    📺视频
+                </div>
+                <div class="video-content">
+                    <button class="content-look" v-show="!isShowVideo" @click="updateVideoShow">点我看美女~</button>
+                    <div class="content-meinv" v-show="isShowVideo">
+                        <video :src="videoUrl" autoplay muted controls @ended="autoPlay"></video>
+                        <div class="meinv-btn">
+                            <button @click="isAutoplay = !isAutoplay">AUTO：{{ isAutoplay ? 'ON' : 'OFF' }}</button>
+                            <button @click="getVideo">NEXT</button>
+                        </div>
+                        <button class="meinv-close" @click="updateVideoShow">CLOSE</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="left-consulting">
+                <div class="consulting-title">🌐资讯</div>
+                <div class="consulting-content">
+                    <p><span>文章数量：</span><span>99</span></p>
+                    <p><span>标签总数：</span><span>6</span></p>
+                    <p><span>图片数目：</span><span>22</span></p>
+                    <p><span>获赞数量：</span><span>45</span></p>
+                    <p><span>评论总数：</span><span>19</span></p>
+                    <p><span>用户数目：</span><span>20</span></p>
+                    <p><span>访问次数：</span><span>212</span></p>
+                    <p><span>运行天数：</span><span>22</span></p>
                 </div>
             </div>
         </div>
@@ -214,11 +262,54 @@
 import { bannerImg, labelColors } from '../utils/data';
 import { useTimeStore } from '../store'
 import { storeToRefs } from 'pinia'
+import axios from 'axios'
+import { onMounted, ref } from 'vue';
 
 //实例化 Store
 const timeStore = useTimeStore()
 //解构 State（自动转为响应式 ref）
 const { isDark } = storeToRefs(timeStore)
+
+//视频
+const videoUrl = ref('')
+const isAutoplay = ref(true)
+const isShowVideo = ref(false)
+const updateVideoShow = () => {
+    isShowVideo.value = !isShowVideo.value
+}
+const getVideo = () => {
+    axios.get('https://v2.xxapi.cn/api/meinv').then((data) => {
+        videoUrl.value = data.data.data
+    })
+}
+const autoPlay = () => {
+    if (isAutoplay.value) {
+        getVideo()
+    }
+}
+
+//新闻
+const news = ref()
+const newsUpdateTime = ref()
+const getNews = () => {
+    axios.get('https://hot-api.2leo.top/douyin?cache=true').then((data) => {
+        news.value = data.data.data.splice(0, 10)
+
+        const targetTime = new Date(data.data.updateTime);
+        const targetTimestamp = targetTime.getTime(); // 毫秒时间戳
+        const now = new Date();
+        const nowTimestamp = now.getTime(); // 毫秒时间戳
+        const timeDiff = Math.round((nowTimestamp - targetTimestamp) / (1000 * 60));// 时间差(分钟)
+        newsUpdateTime.value = timeDiff
+
+    })
+}
+
+//挂载
+onMounted(() => {
+    getNews()
+    getVideo()
+})
 
 </script>
 <style lang='less' scoped>
@@ -327,89 +418,274 @@ const { isDark } = storeToRefs(timeStore)
             }
         }
 
-        .left-news{
+        .left-news {
             width: 100%;
-            height: 300px;
-            background-color: pink;
-            margin-top: 20px;
-        }
-
-        .left-label {
-            width: 100%;
-            max-width: 300px;
-            box-shadow: 0 1px 20px -6px rgba(0, 0, 0, 0.5);
-            margin: 10px 0;
+            background-color: rgba(142, 86, 137, 0.3);
+            margin-top: 12px;
             border-radius: 10px;
-            padding: 14px 30px;
+            padding: 4px 12px 10px 12px;
+            font-family: auto;
 
-            .label-title {
-                display: flex;
-                font-size: 20px;
-                align-items: center;
-                margin-top: 14px;
-                color: gray;
-            }
 
-            .label-content {
-                margin-top: 10px;
-                display: flex;
-                flex-wrap: wrap;
-                font-size: 13px;
-                font-family: none;
-                font-weight: 800;
-
-                span {
-                    margin: 1px 4px;
-                    cursor: pointer;
+            &>:nth-child(2) {
+                .item-num {
+                    background-color: #ff4d4f !important;
+                    color: #fff;
                 }
             }
+
+            &>:nth-child(3) {
+                .item-num {
+                    background-color: orange !important;
+                    color: #fff;
+                }
+            }
+
+            &>:nth-child(4) {
+                .item-num {
+                    background-color: rgb(207, 174, 114) !important;
+                    color: #fff;
+                }
+            }
+
+            .news-title {
+                margin-top: 14px;
+                margin-bottom: 5px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+
+                .title-left {
+                    font-size: 17px;
+                }
+
+                .title-right {
+                    font-size: 12px;
+                    color: #4f4f4f;
+                }
+            }
+
+            .news-item {
+                display: flex;
+                align-items: center;
+                padding: 4px 12px;
+                font-size: 14px;
+
+                .item-num {
+                    width: 24px;
+                    height: 24px;
+                    border-radius: 50%;
+                    background-color: #d9d9d9;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    margin-right: 8px;
+                    font-weight: 700;
+                }
+
+                .item-txt {
+                    cursor: pointer;
+
+                    &:hover {
+                        color: #1dd98d;
+                    }
+                }
+            }
+
         }
 
         .left-message {
             width: 100%;
-            height: 456px;
-            padding: 20px;
+            background-color: rgba(168, 230, 138, 0.30);
+            margin-top: 12px;
             border-radius: 10px;
-            margin-bottom: 30px;
-            box-shadow: 0 1px 20px -6px rgba(0, 0, 0, 0.5);
+            padding: 4px 12px 10px 12px;
+            font-family: auto;
 
             .message-title {
-                display: flex;
-                font-size: 20px;
-                align-items: center;
-                margin-bottom: 20px;
-
-                .title {
-                    margin-left: 5px;
-                    font-size: 20px;
-                    color: gray;
-                }
+                font-size: 17x;
+                margin-top: 14px;
+                margin-bottom: 5px;
             }
 
             .message-content {
                 width: 100%;
-                height: 46px;
 
                 .content-item {
                     width: 100%;
                     height: 100%;
                     display: flex;
                     align-items: center;
-                    margin: 5px 0;
+                    padding: 4px 12px;
+                    font-size: 14px;
 
                     .avator {
-                        width: 36px;
-                        height: 36px;
+                        width: 30px;
+                        height: 30px;
                         border-radius: 50%;
-                        margin-right: 5px;
+                        margin-right: 10px;
                         background-color: #53e5b9;
                     }
 
                     .msg {
-                        font-size: 16px;
-                        font-weight: 500;
-                        color: #373434;
+                        width: 220px;
+                        white-space: nowrap;
+                        /* 强制文本不换行 */
+                        overflow: hidden;
+                        /* 隐藏超出容器宽度的内容 */
+                        text-overflow: ellipsis;
+                        /* 为溢出的文本显示省略号 */
                     }
+                }
+            }
+        }
+
+        .left-search {
+            width: 100%;
+            background-color: rgb(172 209 209 / 30%);
+            margin-top: 12px;
+            border-radius: 10px;
+            padding: 4px 12px 10px 12px;
+            font-family: auto;
+
+            .search-title {
+                font-size: 17x;
+                margin-top: 14px;
+                margin-bottom: 5px;
+            }
+
+            .search-input {
+                padding: 4px 12px;
+                font-size: 14px;
+                display: flex;
+                align-items: center;
+
+                input {
+                    height: 28px;
+                    font-size: 14px;
+                    padding: 6px 12px;
+                    border-radius: 10px 0 0 10px;
+                    background-color: transparent;
+                    border: 2px solid #53e5b9;
+                    outline: none;
+                }
+
+                button {
+                    height: 28px;
+                    font-size: 12px;
+                    padding: 4px 10px;
+                    border-radius: 0 10px 10px 0;
+                    background-color: #53e5b9;
+                }
+            }
+        }
+
+        .left-label {
+            width: 100%;
+            background-color: rgb(234 226 100 / 30%);
+            margin-top: 12px;
+            border-radius: 10px;
+            padding: 4px 12px 10px 12px;
+            font-family: auto;
+
+            .label-title {
+                font-size: 17x;
+                margin-top: 14px;
+                margin-bottom: 5px;
+            }
+
+            .label-content {
+                width: 100%;
+                height: 100%;
+                padding: 4px 12px;
+                font-size: 12px;
+
+                span {
+                    margin: 4px 12px 4px 0;
+                    cursor: pointer;
+                }
+            }
+        }
+
+        .left-video {
+            width: 100%;
+            background-color: rgb(85 247 246 / 30%);
+            margin-top: 12px;
+            border-radius: 10px;
+            padding: 4px 12px 10px 12px;
+            font-family: auto;
+
+            .video-title {
+                font-size: 17x;
+                margin-top: 14px;
+                margin-bottom: 5px;
+            }
+
+            .video-content {
+                width: 100%;
+                height: 100%;
+                padding: 4px 12px;
+                font-size: 14px;
+
+                .content-look {
+                    width: 100%;
+                    height: 36px;
+                    background-color: #66e4f7;
+                    border-radius: 5px;
+                }
+
+                .content-meinv {
+                    video {
+                        width: 100%;
+                        max-height: 282px;
+                        background: #050606;
+                    }
+
+                    .meinv-btn {
+                        width: 100%;
+                        height: 25px;
+                        display: flex;
+                        justify-content: space-between;
+
+                        button {
+                            padding: 4px 10px;
+                            background-color: skyblue;
+                        }
+                    }
+
+                    .meinv-close {
+                        width: 100%;
+                        height: 36px;
+                        background-color: #66e4f7;
+                        margin-top: 5px;
+                    }
+                }
+            }
+        }
+
+        .left-consulting {
+            width: 100%;
+            background-color: rgba(190, 163, 192, 0.3);
+            margin-top: 12px;
+            border-radius: 10px;
+            padding: 4px 12px 10px 12px;
+            font-family: auto;
+
+            .consulting-title {
+                font-size: 17x;
+                margin-top: 14px;
+                margin-bottom: 5px;
+            }
+
+            .consulting-content {
+                width: 100%;
+                height: 100%;
+                padding: 4px 12px;
+                font-size: 14px;
+                p{
+                    margin-bottom: 7px;
+                    display: flex;
+                    justify-content: space-between;
                 }
             }
         }
@@ -445,7 +721,7 @@ const { isDark } = storeToRefs(timeStore)
             margin-top: 40px;
             align-items: center;
             justify-content: space-between;
-            background-color: rgba(146,230,245,0.30);
+            background-color: rgba(146, 230, 245, 0.30);
 
             .header-notice {
                 display: flex;
@@ -528,7 +804,7 @@ const { isDark } = storeToRefs(timeStore)
                 margin: 10px 10px 10px 0;
                 flex-shrink: 0;
                 cursor: pointer;
-                box-shadow: 0 1px 20px -6px rgba(0, 0, 0, 0.5);
+                box-shadow: 0 1px 8px -6px black;
 
                 .item-img {
                     width: 100%;
@@ -622,7 +898,7 @@ const { isDark } = storeToRefs(timeStore)
                 margin: 10px 10px 10px 0;
                 flex-shrink: 0;
                 cursor: pointer;
-                box-shadow: 0 1px 20px -6px rgba(0, 0, 0, 0.5);
+                box-shadow: 0 1px 8px -6px black;
 
                 .item-img {
                     width: 100%;

@@ -65,7 +65,7 @@ const isShow = ref(false)
 <style lang='less' scoped>
 .friend-container {
   width: 100%;
-  box-shadow: 0 1px 10px -6px black;
+  box-shadow: 0 1px 20px -6px rgba(0, 0, 0, 0.5);
   border-radius: 10px;
   margin: 40px 0;
   padding: 40px;
@@ -203,7 +203,6 @@ const isShow = ref(false)
       width: calc(25% - 10px);
       margin: 5px;
       border-radius: 10px;
-      background: hsla(0, 0%, 100%, .88);
       box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
 
       .item-img {
@@ -216,7 +215,7 @@ const isShow = ref(false)
       .item-msg {
         width: 100%;
         height: 40%;
-        background-color: #fff;
+        background-color: rgba(255, 255, 255, 0.1);
         border-radius: 0 0 10px 10px;
         padding: 10px 16px;
       }

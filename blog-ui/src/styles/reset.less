@@ -56,6 +56,25 @@ html {
     overflow: hidden;
 }
 
+/* 自定义滚动条样式 */
+::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+}
+
+::-webkit-scrollbar-track {
+    background: #262728;
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, #4F46E5, #EC4899);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(to bottom, #4338CA, #DB2777);
+}
+
 body {
     width: 100%;
     height: 100%;
