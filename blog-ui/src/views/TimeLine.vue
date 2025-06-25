@@ -1,21 +1,162 @@
 <template>
-    <div class="timeline">
-        <p class="timeline-maintime">2025</p>
-        <el-timeline style="max-width: 600px" class="timeline-list">
-            <el-timeline-item class="list-item" center="true" v-for="(item, index) in 5" :key="index" type="primary" color="#fff"
-                size="large" hollow="true">
-                <div class="item-content">
-                    <div class="content-left"></div>
-                    <div class="content-right">
-                        <p class="right-title">搭建自己的个人专属歌单</p>
-                        <p class="right-time">2025-11-11 12:26:44</p>
+    <div class="container-timeline">
+        <ol class="timeline-line">
+            <li class="line-item">
+                <div class="item-content left">
+                    <div class="content-avator"></div>
+                    <div class="content-main">
+                        <div class="main-left"></div>
+                        <div class="main-right">
+                            <div class="right-time">
+                                <el-icon>
+                                    <Calendar />
+                                </el-icon>
+                                <span style="margin-left: 4px;">2025-4-10&nbsp;20:22:36</span>
+                            </div>
+                            <div class="right-title">我的个人博客</div>
+                            <div class="right-info">
+                                <el-icon color="red">
+                                    <Loading />
+                                </el-icon><span style="margin-left: 4px;">4799热度</span>&nbsp;
+                                <el-icon color="orange">
+                                    <ChatDotSquare />
+                                </el-icon><span style="margin-left: 4px;">7评论</span>
+                            </div>
+                            <div class="right-info">
+                                <p>
+                                    <el-icon color="purple" style="margin-right: 4px;">
+                                        <FolderOpened />
+                                    </el-icon>BLOG
+                                </p>
+                                <p>
+                                    <el-icon color="green" style="margin-right: 4px;">
+                                        <HelpFilled />
+                                    </el-icon>使用指南
+                                </p>
+                            </div>
+                        </div>
+                        <div class="main-duihua" style="color: skyblue;"></div>
                     </div>
                 </div>
-            </el-timeline-item>
-        </el-timeline>
-        <div class="timeline-bottom">
-            <el-pagination background layout="prev, pager, next" :total="1000" />
-        </div>
+            </li>
+            <li class="line-item">
+                <div class="item-content right">
+                    <div class="content-avator"></div>
+                        <div class="content-main">
+                            <div class="main-left"></div>
+                            <div class="main-right">
+                                <div class="right-time">
+                                    <el-icon>
+                                        <Calendar />
+                                    </el-icon>
+                                    <span style="margin-left: 4px;">2025-4-10&nbsp;20:22:36</span>
+                                </div>
+                                <div class="right-title">我的个人博客</div>
+                                <div class="right-info">
+                                    <el-icon color="red">
+                                        <Loading />
+                                    </el-icon><span style="margin-left: 4px;">4799热度</span>&nbsp;
+                                    <el-icon color="orange">
+                                        <ChatDotSquare />
+                                    </el-icon><span style="margin-left: 4px;">7评论</span>
+                                </div>
+                                <div class="right-info">
+                                    <p>
+                                        <el-icon color="purple" style="margin-right: 4px;">
+                                            <FolderOpened />
+                                        </el-icon>BLOG
+                                    </p>
+                                    <p>
+                                        <el-icon color="green" style="margin-right: 4px;">
+                                            <HelpFilled />
+                                        </el-icon>使用指南
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="main-duihua" style="color: skyblue;"></div>
+                        </div>
+                        <div class="main-duihua" style="color: skyblue;"></div>
+                    </div>
+            </li>
+            <li class="line-item">
+                <div class="item-content left">
+                    <div class="content-avator"></div>
+                    <div class="content-main">
+                            <div class="main-left"></div>
+                            <div class="main-right">
+                                <div class="right-time">
+                                    <el-icon>
+                                        <Calendar />
+                                    </el-icon>
+                                    <span style="margin-left: 4px;">2025-4-10&nbsp;20:22:36</span>
+                                </div>
+                                <div class="right-title">我的个人博客</div>
+                                <div class="right-info">
+                                    <el-icon color="red">
+                                        <Loading />
+                                    </el-icon><span style="margin-left: 4px;">4799热度</span>&nbsp;
+                                    <el-icon color="orange">
+                                        <ChatDotSquare />
+                                    </el-icon><span style="margin-left: 4px;">7评论</span>
+                                </div>
+                                <div class="right-info">
+                                    <p>
+                                        <el-icon color="purple" style="margin-right: 4px;">
+                                            <FolderOpened />
+                                        </el-icon>BLOG
+                                    </p>
+                                    <p>
+                                        <el-icon color="green" style="margin-right: 4px;">
+                                            <HelpFilled />
+                                        </el-icon>使用指南
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="main-duihua" style="color: skyblue;"></div>
+                        </div>
+                        <div class="main-duihua" style="color: skyblue;"></div>
+                    </div>
+            </li>
+            <li class="line-item">
+                <div class="item-content right">
+                    <div class="content-avator"></div>
+                    <div class="content-main">
+                            <div class="main-left"></div>
+                            <div class="main-right">
+                                <div class="right-time">
+                                    <el-icon>
+                                        <Calendar />
+                                    </el-icon>
+                                    <span style="margin-left: 4px;">2025-4-10&nbsp;20:22:36</span>
+                                </div>
+                                <div class="right-title">我的个人博客</div>
+                                <div class="right-info">
+                                    <el-icon color="red">
+                                        <Loading />
+                                    </el-icon><span style="margin-left: 4px;">4799热度</span>&nbsp;
+                                    <el-icon color="orange">
+                                        <ChatDotSquare />
+                                    </el-icon><span style="margin-left: 4px;">7评论</span>
+                                </div>
+                                <div class="right-info">
+                                    <p>
+                                        <el-icon color="purple" style="margin-right: 4px;">
+                                            <FolderOpened />
+                                        </el-icon>BLOG
+                                    </p>
+                                    <p>
+                                        <el-icon color="green" style="margin-right: 4px;">
+                                            <HelpFilled />
+                                        </el-icon>使用指南
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="main-duihua" style="color: skyblue;"></div>
+                        </div>
+                        <div class="main-duihua" style="color: skyblue;"></div>
+                </div>
+            </li>
+        </ol>
     </div>
 </template>
 
@@ -23,71 +164,181 @@
 
 </script>
 <style lang='less' scoped>
-.timeline {
-    width: 70%;
-    margin: 40px auto;
-    box-shadow: 0 1px 10px -6px black;
-    border-radius: 10px;
-    padding: 40px 50px;
-    color: #4b4948;
-    font-family: auto;
+.container-timeline {
+    width: 100%;
+    position: relative;
+    padding: 100px 0;
+    margin: 40px 0;
 
-    .timeline-maintime {
-        font-size: 25px;
-        font-weight: 500;
-        color: #49b1f5;
-        margin-bottom: 14px;
+    &::before {
+        content: "";
+        width: 4px;
+        border-radius: 50%;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: orange;
     }
 
-    .timeline-list {
-        --el-timeline-node-size-large: 16px;
-        --el-timeline-node-color: #a9d5f4;
-        .list-item {
-            .item-content {
-                display: flex;
-                align-items: center;
-                margin-left: 20px;
+    .timeline-line {
+        width: 100%;
+        height: 100%;
 
-                .content-left {
-                    width: 100px;
-                    height: 100px;
+        .line-item {
+            position: relative;
+            margin: 5px 0;
+            width: 100%;
+            height: 140px;
+
+            .item-content {
+                position: absolute;
+                width: 50%;
+                height: 100%;
+                display: flex;
+
+                .content-avator {
+                    position: absolute;
+                    height: 36px;
+                    width: 36px;
                     background-color: #53e5b9;
+                    background-image: url(https://blogs.2leo.top/512x512.png);
+                    background-size: cover;
+                    background-position: center;
                 }
 
-                .content-right {
-                    margin-left: 14px;
+                .content-main {
+                    width: 400px;
+                    height: 100%;
+                    background-color: skyblue;
+                    padding: 10px;
+                    display: flex;
 
-                    .right-title {
-                        font-size: 16px;
-                        padding: 5px;
-                        font-weight: 700;
-
+                    .main-left {
+                        width: 120px;
+                        height: 120px;
+                        background-image: url(https://steamuserimages-a.akamaihd.net//ugc//853856987593738364//6CE56053C524C0113985CF22323937E3D2C304CD//);
+                        background-size: cover;
+                        background-position: center;
+                        margin-right: 10px;
                     }
 
-                    .right-time {
-                        padding: 5px;
-                        font-weight: 700;
+                    .main-right {
+                        width: 270px;
+                        height: 120px;
+                        background-color: rgba(255, 255, 255, 0.1);
+                        border-radius: 0 0 10px 10px;
+                        padding: 10px 15px;
+
+                        .right-time {
+                            display: flex;
+                            align-items: center;
+                            font-size: 12px;
+                            color: gray;
+                        }
+
+                        .right-title {
+                            margin: 10px 0;
+                            font-size: 18px;
+                            font-weight: 600;
+                        }
+
+                        .right-info {
+                            display: flex;
+                            align-items: center;
+                            font-size: 13px;
+                            color: gray;
+                        }
+
+                        .right-info {
+                            display: flex;
+                            align-items: center;
+
+                            p {
+                                margin-top: 12px;
+                                margin-right: 14px;
+                                font-size: 12px;
+                                padding: 2px 4px;
+                                background-color: #eeeeee;
+                                border-radius: 3px;
+                                display: flex;
+                                align-items: center;
+                            }
+                        }
+                    }
+
+                    .main-duihua {
+                        content: "";
+                        position: absolute;
+                        border-style: solid;
+                        top: 10px;
+                        height: 0;
+                        border: 8px solid transparent;
+                    }
+                }
+
+
+                &.left {
+                    left: 0;
+                    justify-content: end;
+
+                    .content-avator {
+                        right: 25px;
+                    }
+
+                    .content-main {
+                        margin-right: 92px;
+
+                        .main-duihua {
+                            right: 76px;
+                            border-left-color: skyblue;
+                        }
+                    }
+
+                    &::before {
+                        content: "";
+                        width: 12px;
+                        height: 12px;
+                        border: 4px solid #03a9f4;
+                        border-radius: 50%;
+                        position: absolute;
+                        top: 10px;
+                        right: -10px;
+                        background-color: #ffffff;
+                    }
+                }
+
+                &.right {
+                    right: 0;
+
+                    .content-avator {
+                        left: 25px;
+                    }
+
+                    .content-main {
+                        margin-left: 92px;
+
+                        .main-duihua {
+                            left: 76px;
+                            border-right-color: skyblue;
+                        }
+                    }
+
+                    &::before {
+                        content: "";
+                        width: 12px;
+                        height: 12px;
+                        border: 4px solid #03a9f4;
+                        border-radius: 50%;
+                        position: absolute;
+                        top: 10px;
+                        left: -10px;
+                        background-color: #ffffff;
                     }
                 }
             }
         }
     }
-
-    .timeline-bottom{
-        max-width: 360px;
-        margin: 0 auto;
-    }
 }
-
-/* 增加选择器优先级 */
-:deep(.el-timeline .el-timeline-item .el-timeline-item__tail) {
-  border-left-width: 3px !important;
-  border-left-color: var(--el-timeline-node-color, #c0c4cc) !important;
-}
-
-:deep(.el-timeline .el-timeline-item  .is-hollow) {
-    border-width: 3px !important;
-}
-
-
 </style>

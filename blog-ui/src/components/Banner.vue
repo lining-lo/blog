@@ -174,7 +174,7 @@ const wave2Bg = computed(() => {
         width: 100%;
         height: 100px;
         position: relative;
-        top: calc(50vh - 100px);
+        top: calc(50vh - 99px);
         overflow: hidden;
 
         .wave {
