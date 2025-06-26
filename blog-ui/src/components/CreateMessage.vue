@@ -9,17 +9,19 @@
             </div>
             <div class="createmessage-main">
                 <div class="main-colorlist">
-                    <div class="colorlist-item" v-for="(item, index) in createMessageCardColors" :key="index"
+                    <div :class="{ colorselected: createCardParams.color === index }" @click="getCardColor(index)"
+                        class="colorlist-item" v-for="(item, index) in createMessageCardColors" :key="index"
                         :style="{ background: item }"></div>
                 </div>
-                <div class="main-messagecard" :style="{ background: messageCardColors[3] }">
-                    <textarea class="messagecard-text" placeholder="留言..." maxlength="96"></textarea>
-                    <input class="messagecard-name" type="text" placeholder="作者">
+                <div class="main-messagecard" :style="{ background: messageCardColors[createCardParams.color] }">
+                    <textarea v-model="createCardParams.content" class="messagecard-text" placeholder="留言..." maxlength="96"></textarea>
+                    <input v-model="createCardParams.user_name" class="messagecard-name" type="text" placeholder="作者">
                 </div>
                 <div class="main-label">
                     <p class="label-title">选择标签</p>
                     <div class="label-list">
-                        <p class="list-item " v-for="(item, index) in messageLabels" :key="index">
+                        <p :class="{ labelselected: createCardParams.label === index }" @click="getCardLabel(index)"
+                            class="list-item " v-for="(item, index) in messageLabels" :key="index">
                             {{ item }}
                         </p>
                     </div>
@@ -34,7 +36,7 @@
                 </div>
                 <div class="main-footer">
                     <el-button type="info" class="cancel" round @click="emit('closePopup')">丢弃</el-button>
-                    <el-button class="submit" type="primary" round>确定</el-button>
+                    <el-button @click="sumbit" class="submit" type="primary" round>确定</el-button>
                 </div>
             </div>
         </div>
@@ -42,17 +44,56 @@
 </template>
 
 <script setup lang='ts'>
+import { nanoid } from 'nanoid';
+import { ElMessage } from 'element-plus'
+import { reactive } from 'vue';
 import { createMessageCardColors, messageCardColors, messageLabels } from '../utils/data';
+
 //获取父组件的参数
 const props = defineProps(['isShow'])
-
 //获取父组件方法
 const emit = defineEmits(['closePopup'])
+
+//表单参数
+const createCardParams = reactive({
+    id: '',
+    label: 0,
+    color: 0,
+    content: '',
+    user_id: '',
+    user_type: 1,
+    user_name: '',
+    createdate: ''
+})
+//选中获取卡片颜色
+const getCardColor = (index: number) => {
+    createCardParams.color = index
+}
+//选中获取卡片标签
+const getCardLabel = (index: number) => {
+    createCardParams.label = index
+}
+//创建卡片
+const sumbit = ()=>{
+    //拼装数据
+    createCardParams.id = nanoid(10)
+    createCardParams.user_id = nanoid(10)
+    createCardParams.user_name = '游客'
+    createCardParams.createdate = JSON.stringify(Date.now())
+    //校验数据
+    if (createCardParams.content.trim()==='') {
+        ElMessage.warning('内容输入不能为空')
+        return
+    }
+    
+}
+
 
 </script>
 
 <style lang='less' scoped>
 .modal {
+
     //入场
     &-enter {
         &-from {
@@ -93,7 +134,7 @@ const emit = defineEmits(['closePopup'])
     right: 0;
     top: 60px;
     z-index: 1000;
-    background: rgba(255, 255, 255, 0.80);
+    background: rgba(255, 255, 255);
     box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.08);
     backdrop-filter: blur(5px);
 
@@ -159,6 +200,7 @@ const emit = defineEmits(['closePopup'])
                 height: 172px;
                 width: 100%;
                 font-size: 16px;
+                outline: none;
             }
 
             .messagecard-name {
@@ -169,6 +211,7 @@ const emit = defineEmits(['closePopup'])
                 border: #fff 1px solid;
                 line-height: 20px;
                 font-size: 16px;
+                outline: none;
             }
         }
 

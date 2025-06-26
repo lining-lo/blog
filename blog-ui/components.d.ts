@@ -11,6 +11,7 @@ declare module 'vue' {
     Aa: typeof import('./src/components/aa.vue')['default']
     Banner: typeof import('./src/components/Banner.vue')['default']
     BottomBar: typeof import('./src/components/BottomBar.vue')['default']
+    CardDetail: typeof import('./src/components/CardDetail.vue')['default']
     CreateMessage: typeof import('./src/components/CreateMessage.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCard: typeof import('element-plus/es')['ElCard']

@@ -1,18 +1,21 @@
 <template>
     <div class="message-container">
         <div class="message-labels">
-            <p class="selected">全部</p>
-            <p v-for="(item, index) in messageLabels" :key="index">{{ item }}</p>
+            <p @click="selectLable(-1)" :class="{ selected: lableSelected === -1 }">全部</p>
+            <p @click="selectLable(index)" :class="{ selected: lableSelected === index }"
+                v-for="(item, index) in messageLabels" :key="index">{{ item }}</p>
         </div>
         <div class="message-card">
-            <message-card class="card-item" :card="item" v-for="(item, index) in messageCardsMock.data" :key="index" />
+            <message-card @click="selectCard(index)" :class="{ cardselected: cardSelected === index }" class="card-item" :card="item"
+                v-for="(item, index) in messageCardsMock.data" :key="index" />
         </div>
-        <div class="message-addbtn" @click="isShow = true">
+        <div class="message-addbtn" @click="isShowCreateCardPopup = true">
             <el-icon class="icon">
                 <Plus />
             </el-icon>
         </div>
-        <create-message v-if="isShow" :isShow="isShow" @closePopup="closePopup" />
+        <create-message v-if="isShowCreateCardPopup" :isShow="isShowCreateCardPopup" @closePopup="closeCreateCardPopup" />
+        <card-detail :card="messageCardsMock.data[cardSelected]"  v-if="isShowCardDetailPopup" @closePopup="closeCardDetailPopup" />
     </div>
 </template>
 
@@ -21,14 +24,52 @@ import { messageLabels } from '../utils/data';
 import { messageCardsMock } from '../../mock/mock'
 import CreateMessage from '../components/CreateMessage.vue';
 import MessageCard from '../components/MessageCard.vue';
+import CardDetail from '../components/CardDetail.vue';
 import { ref } from 'vue';
 
-//弹窗开关
-const isShow = ref(false)
+//创建卡片弹窗开关
+const isShowCreateCardPopup = ref(false)
+//关闭创建卡片弹窗
+const closeCreateCardPopup = () => {
+    isShowCardDetailPopup.value = false
+    isShowCreateCardPopup.value = false
+}
 
-//关闭弹窗
-const closePopup = () => {
-    isShow.value = false
+//创建卡片弹窗开关
+const isShowCardDetailPopup = ref(false)
+//关闭创建卡片弹窗
+const closeCardDetailPopup = () => {
+    isShowCardDetailPopup.value = false
+    isShowCreateCardPopup.value = false
+    cardSelected.value = -1
+}
+
+//选中的标签（默认未选-1）
+const lableSelected = ref(-1)
+//选择标签的方法
+const selectLable = (index: number) => {
+    lableSelected.value = index
+    //获取墙数据
+    //关闭弹窗
+    isShowCardDetailPopup.value = false
+    isShowCreateCardPopup.value = false
+    cardSelected.value = -1
+}
+
+//选中的卡片（默认未选-1）
+const cardSelected = ref(-1)
+//选择卡片的方法
+const selectCard = (index:number)=>{
+    //选中
+    if (cardSelected.value !== index) {
+        cardSelected.value = index
+        isShowCardDetailPopup.value = true
+    }else{
+        //取消选中
+        cardSelected.value = -1
+        isShowCardDetailPopup.value = false
+        isShowCreateCardPopup.value = false
+    }
 }
 
 </script>
@@ -94,7 +135,7 @@ const closePopup = () => {
         align-items: center;
         transition: all 0.3s;
         right: 23px;
-        top: 55%;
+        top: 63%;
         cursor: pointer;
 
         .icon {

@@ -21,10 +21,10 @@ const routes = [
         component: () => import('../views/TimeLine.vue')
       },
       {
-        path: '/classification',
-        name: 'classification',
-        meta: { name: '分类', msg: '世界万物皆可归档，每个维度都是认知的罗盘' },
-        component: () => import('../views/Classification.vue')
+        path: '/favorites',
+        name: 'favorites',
+        meta: { name: '收藏', msg: '世界万物皆可归档，每个维度都是认知的罗盘' },
+        component: () => import('../views/Favorites.vue')
       },
       {
         path: '/album',

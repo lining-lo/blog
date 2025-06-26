@@ -2,7 +2,7 @@
 export const headerbarRoutes = [
     { path: 'home', name: '首页', icon: 'Discount', color: '#ffe394' },
     { path: 'timeline', name: '时间轴', icon: 'AlarmClock', color: '#4d8ada' },
-    { path: 'classification', name: '分类', icon: 'Histogram', color: '#bf8a9e' },
+    { path: 'favorites', name: '收藏', icon: 'Histogram', color: '#bf8a9e' },
     { path: 'album', name: '相册', icon: 'Money', color: '#caa7f7' },
     { path: 'diary', name: '说说', icon: 'Lollipop', color: '#eb254b' },
     { path: 'treehole', name: '树洞', icon: 'Bicycle', color: '#ee6c2a' },
@@ -14,7 +14,7 @@ export const headerbarRoutes = [
 export const bannerImg = [
     [
         "url(src/assets/images/light-timeline.png)",
-        "url(src/assets/images/light-classification.png)",
+        "url(src/assets/images/light-favorites.png)",
         "url(src/assets/images/light-album.png)",
         "url(src/assets/images/light-diary.png)",
         "url(src/assets/images/light-treehole.png)",
@@ -23,7 +23,7 @@ export const bannerImg = [
     ],
     [
         "url(src/assets/images/dark-timeline.png)",
-        "url(src/assets/images/dark-classification.png)",
+        "url(src/assets/images/dark-favorites.png)",
         "url(src/assets/images/dark-album.png)",
         "url(src/assets/images/dark-diary.png)",
         "url(src/assets/images/dark-treehole.png)",
