@@ -1,29 +1,30 @@
 <template>
-    <div class="message-card" :style="{ backgroundColor: messageCardColors[card.imgurl]}">
+    <div class="message-card" :style="{ backgroundColor: messageCardColors[card.color] }">
         <div class="top">
-            <p class="time">{{ formattime(card.moment) }}</p>
+            <p class="time">{{ card.createdate }}</p>
             <p class="label">{{ messageLabels[card.label] }}</p>
         </div>
-        <p class="message" :style="{ color:isDark?'black':'#585858' }">{{ card.message }}</p>
+        <p class="message" :style="{ color: isDark ? 'black' : '#585858' }">{{ card.content }}</p>
         <div class="bottom">
             <div class="feedback">
                 <div class="like">
                     <span class="icon">❤</span>
-                    <span class="value">{{ card.like }}</span>
+                    <span class="value">{{ card.praiseCount[0].count }}</span>
                 </div>
                 <div class="comment">
-                    <el-icon color="#949494"><ChatDotRound /></el-icon>
-                    <span class="value">{{ card.comment }}</span>
+                    <el-icon color="#949494">
+                        <ChatDotRound />
+                    </el-icon>
+                    <span class="value">{{ card.commentCount[0].count }}</span>
                 </div>
             </div>
-            <p class="name">{{ card.name }}</p>
+            <p class="name">{{ card.user_name }}</p>
         </div>
     </div>
 </template>
 
 <script setup lang='ts'>
-import {formattime} from '../utils/customize'
-import { messageLabels,messageCardColors } from '../utils/data';
+import { messageLabels, messageCardColors } from '../utils/data';
 import { useTimeStore } from '../store'
 import { storeToRefs } from 'pinia'
 
@@ -60,7 +61,7 @@ const { isDark } = storeToRefs(timeStore)
 
     .message {
         height: 140px;
-        
+        width: 100%;
         font-size: 15px;
         color: #585858;
         cursor: pointer;

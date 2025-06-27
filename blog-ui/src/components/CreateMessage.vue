@@ -46,13 +46,15 @@
 <script setup lang='ts'>
 import { nanoid } from 'nanoid';
 import { ElMessage } from 'element-plus'
-import { reactive } from 'vue';
+import { getCurrentInstance, reactive } from 'vue';
 import { createMessageCardColors, messageCardColors, messageLabels } from '../utils/data';
+import {formattime} from '../utils/customize'
+const { proxy } = getCurrentInstance()
 
 //获取父组件的参数
 const props = defineProps(['isShow'])
 //获取父组件方法
-const emit = defineEmits(['closePopup'])
+const emit = defineEmits(['closePopup','getWall'])
 
 //表单参数
 const createCardParams = reactive({
@@ -74,18 +76,25 @@ const getCardLabel = (index: number) => {
     createCardParams.label = index
 }
 //创建卡片
-const sumbit = ()=>{
+const sumbit = async()=>{
     //拼装数据
     createCardParams.id = nanoid(10)
     createCardParams.user_id = nanoid(10)
     createCardParams.user_name = '游客'
-    createCardParams.createdate = JSON.stringify(Date.now())
+    createCardParams.createdate = formattime(Date.now())
     //校验数据
     if (createCardParams.content.trim()==='') {
         ElMessage.warning('内容输入不能为空')
         return
     }
-    
+    //发送请求
+    const result = await proxy.$api.insertWall(createCardParams)
+    //提示用户
+    ElMessage.success('新增留言成功')
+    //重新获取数据
+    emit('getWall')
+    //关闭弹窗
+    emit('closePopup')
 }
 
 
