@@ -84,7 +84,7 @@ const wave1Bg = computed(() => {
 })
 const wave2Bg = computed(() => {
     const params = isDark.value ? 40 : 255
-    return `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 100'%3E%3Cpath fill='rgba(${params},${params},${params},0.8)' fill-opacity='1' d='M0,50 C240,80 480,20 720,50 C960,80 1200,20 1440,50 L1440,100 L0,100 Z'%3E%3C/path%3E%3C/svg%3E")`;
+    return `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 100'%3E%3Cpath fill='rgba(${params},${params},${params})' fill-opacity='1' d='M0,50 C240,80 480,20 720,50 C960,80 1200,20 1440,50 L1440,100 L0,100 Z'%3E%3C/path%3E%3C/svg%3E")`;
 })
 
 </script>

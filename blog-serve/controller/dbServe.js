@@ -5,7 +5,7 @@ const db = require('../lib/db')
 // 新建评论
 exports.insertComment = async (request, response) => {
     const data = request.body
-    await db.insertComment([data.id, data.type, data.type_id, data.user_id, data.user_name, data.user_type, data.createdate, data.content, data.replier_id]).then(result => {
+    await db.insertComment([data.id, data.type, data.type_id, data.user_id, data.user_name, data.user_type, data.createdate, data.content, data.replier_id, data.replier_name]).then(result => {
         response.send({
             code: 200,
             message: result
@@ -22,7 +22,7 @@ exports.findCommentPage = async (request, response) => {
             message: result
         })
         console.log(result);
-        
+
     })
 }
 
@@ -45,7 +45,6 @@ exports.selectWallPage = async (request, response) => {
     await db.selectWallPage([(data.page - 1) * data.pagesize, data.pagesize]).then(async result => {
         // 查询各反馈总数据
         for (let i = 0; i < result.length; i++) {
-
             // 是否点赞
             result[i].isPraise = await db.isPraise([result[i].id, result[i].user_id, result[i].user_type])
             // 点赞总数
@@ -54,6 +53,58 @@ exports.selectWallPage = async (request, response) => {
             result[i].commentCount = await db.commentCount([result[i].id])
         }
         // 返回结果
+        response.send({
+            code: 200,
+            message: result
+        })
+    })
+}
+
+/**
+ * 用户相关
+ */
+// 新建用户
+exports.insertUser = async (request, response) => {
+    const data = request.body
+    await db.insertUser([data.id, data.username, data.password, data.createdate,data.imgurl]).then(result => {
+        response.send({
+            code: 200,
+            message: result
+        })
+    })
+}
+// 根据用户名查找用户
+exports.findUserByUserName = async (request, response) => {
+    const data = request.body
+    await db.findUserByUserName([data.username]).then(result => {
+        response.send({
+            code: 200,
+            message: result
+        })
+    })
+}
+// 用户登录
+exports.login = async (request, response) => {
+    const data = request.body
+    await db.login([data.username, data.password]).then(result => {
+        response.send({
+            code: 200,
+            message: result
+        })
+    })
+}
+// 获取ip地址
+exports.getIp = async (request, response) => {
+    response.send({
+        code: 200,
+        message: request.ip
+    })
+}
+// 修改用户信息
+exports.updateUser = async (request, response) => {
+    const data = request.body
+    data.imgurl = data.imgurl ? data.imgurl : ''
+    await db.updateUser([data.username, data.password, data.imgurl, data.permission, data.createdate, data.email, data.id]).then(result => {
         response.send({
             code: 200,
             message: result

@@ -317,6 +317,7 @@ onMounted(() => {
     width: 100%;
     height: 100%;
     display: flex;
+    margin-left: -20px;
 
     .home-left {
         padding: 0px 0 0 50px;

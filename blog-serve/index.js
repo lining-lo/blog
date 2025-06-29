@@ -21,7 +21,7 @@ app.use(cors())
 
 //引入路由
 require('./routes')(app)
-// require('./routes/files')(app)
+require('./routes/files')(app)
 // require('./routes/email')(app)
 
 //设置静态资源位置

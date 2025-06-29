@@ -23,4 +23,28 @@ module.exports = function (app) {
     app.post('/selectWallPage', (request, response) => {
         controller.selectWallPage(request, response)
     })
+
+    /**
+     * 用户相关
+     */
+    // 新建用户
+    app.post('/insertUser', (request, response) => {
+        controller.insertUser(request, response)
+    })
+    // 根据用户名查找用户
+    app.post('/findUserByUserName', (request, response) => {
+        controller.findUserByUserName(request, response)
+    })
+    // 用户登录
+    app.post('/login', (request, response) => {
+        controller.login(request, response)
+    })
+    // 获取ip地址
+    app.post('/getIp', (request, response) => {
+        controller.getIp(request, response)
+    })
+    // 修改用户信息
+    app.post('/updateUser', (request, response) => {
+        controller.updateUser(request, response)
+    }) 
 }

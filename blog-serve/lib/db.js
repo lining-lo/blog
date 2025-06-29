@@ -69,7 +69,8 @@ const createTables = async () => {
                     user_type INT NOT NULL COMMENT '用户类型 (0登录用户，1游客)',
                     createdate VARCHAR(100) NOT NULL COMMENT '创建时间',
                     content VARCHAR(100) NOT NULL COMMENT '评论内容',
-                    replier_id VARCHAR(100)  COMMENT '回复者ID',
+                    replier_id VARCHAR(100) COMMENT '回复者ID',
+                    replier_name VARCHAR(100) COMMENT '回复者名称',
                     PRIMARY KEY (id)
                 );`
         },
@@ -96,6 +97,19 @@ const createTables = async () => {
                     user_type INT NOT NULL COMMENT '用户类型 (0登录用户，1游客)',
                     createdate VARCHAR(100) NOT NULL COMMENT '创建时间',
                     PRIMARY KEY (id)
+                );`
+        },
+        {
+            name: 'user',
+            sql: `create table if not exists user( 
+                    id VARCHAR(100) NOT NULL,
+                    username VARCHAR(100) NOT NULL COMMENT '用户名',
+                    password VARCHAR(100) NOT NULL COMMENT '密码',
+                    imgurl VARCHAR(100) COMMENT '头像路径',
+                    permission INT DEFAULT 1 COMMENT '权限(0管理员,1普通用户)',
+                    createdate VARCHAR(100) NOT NULL COMMENT '创建时间',
+                    email VARCHAR(100) COMMENT '邮箱',
+                    PRIMARY KEY ( id )
                 );`
         },
     ];
@@ -131,17 +145,17 @@ module.exports = {
      * 评论相关
      */
     // 新建评论
-    insertComment:(values) => {
-        const sql = 'insert into comment set id=?,type=?,type_id=?,user_id=?,user_name=?,user_type=?,createdate=?,content=?,replier_id=?;'
+    insertComment: (values) => {
+        const sql = 'insert into comment set id=?,type=?,type_id=?,user_id=?,user_name=?,user_type=?,createdate=?,content=?,replier_id=?,replier_name=?;'
         return query(sql, values)
     },
     // 评论数
-    commentCount:(values) => {
+    commentCount: (values) => {
         const sql = 'SELECT count(*) as count FROM comment WHERE type_id=?;'
         return query(sql, values)
     },
     // 分页查询评论
-    findCommentPage:(values) => {
+    findCommentPage: (values) => {
         const sql = `SELECT * FROM comment WHERE type_id = ? ORDER BY createdate LIMIT ?,?`
         return query(sql, values)
     },
@@ -163,14 +177,38 @@ module.exports = {
     /**
      * 点赞相关
      */
-    //某条信息点赞数
+    // 某条信息点赞数
     praiseCount: (values) => {
         const sql = `SELECT count(*) as count from praise WHERE type_id = ?;`
         return query(sql, values)
     },
-    //是否点赞
+    // 是否点赞
     isPraise: async (values) => {
         const sql = `SELECT count(*) as count FROM praise WHERE type_id = ? AND user_id = ? AND user_type = ?;`
+        return query(sql, values)
+    },
+
+    /**
+     * 用户相关
+     */
+    // 新建用户
+    insertUser: async (values) => {
+        const sql = 'insert into user set id=?,username=?,password=?,createdate=?,imgurl=?;'
+        return query(sql, values)
+    },
+    // 根据用户名查找用户
+    findUserByUserName: async (values) => {
+        const sql = `SELECT * FROM user WHERE username = ?;`
+        return query(sql, values)
+    },
+    // 用户登录
+    login: async (values) => {
+        const sql = `SELECT * FROM user WHERE username=? AND password =?;`
+        return query(sql, values)
+    },
+    // 修改用户信息
+    updateUser:async(values) => {
+        const sql = `UPDATE user SET username = ?,password = ?,imgurl= ?,permission=?,createdate = ? ,email = ?  WHERE id = ?;`
         return query(sql, values)
     }
 };

@@ -34,8 +34,8 @@
                         <p class="recall" @click="item.isShow = !item.isShow">回复</p>
                     </div>
                     <p class="comment">
-                    <div v-if="item.replier_id !== '' && item.replier_id !== null" style="display: inline-block;"><span>回复 </span><span
-                            style="color: #0f91c8;">@{{ item.user_name }}</span>：</div>
+                    <div v-if="item.replier_id !== '' && item.replier_id !== null" style="display: inline-block;">
+                        <span>回复 </span><span style="color: #0f91c8;">@{{ item.replier_name }}</span>：</div>
                     {{ item.content }}
                     </p>
                     <div class="bottom" v-if="item.isShow">
@@ -74,7 +74,8 @@ const commentParams = reactive({
     user_type: 0,//先写死
     createdate: '',
     content: '',
-    replier_id: ''
+    replier_id: '',
+    replier_name: ''
 })
 // 初始化评论参数
 const initCommentParams = () => {
@@ -87,6 +88,7 @@ const initCommentParams = () => {
     commentParams.createdate = ''
     commentParams.content = ''
     commentParams.replier_id = ''
+    commentParams.replier_name = ''
     content.value = ''
     recallContent.value = ''
 }
@@ -126,6 +128,7 @@ const send = async () => {
     commentParams.createdate = formattime(Date.now())
     commentParams.content = recallContent.value
     commentParams.replier_id = 'sfsfsf' // 先写死
+    commentParams.replier_name = '游客' // 先写死
     // 校验
     if (commentParams.content.trim() === '') {
         ElMessage.warning('内容输入不能为空')
