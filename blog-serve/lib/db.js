@@ -67,6 +67,7 @@ const createTables = async () => {
                     user_id VARCHAR(100) NOT NULL COMMENT '评论者ID',
                     user_name VARCHAR(100) COMMENT '用户名称',
                     user_type INT NOT NULL COMMENT '用户类型 (0登录用户，1游客)',
+                    user_imgurl VARCHAR(100) COMMENT '用户头像',
                     createdate VARCHAR(100) NOT NULL COMMENT '创建时间',
                     content VARCHAR(100) NOT NULL COMMENT '评论内容',
                     replier_id VARCHAR(100) COMMENT '回复者ID',
@@ -146,7 +147,7 @@ module.exports = {
      */
     // 新建评论
     insertComment: (values) => {
-        const sql = 'insert into comment set id=?,type=?,type_id=?,user_id=?,user_name=?,user_type=?,createdate=?,content=?,replier_id=?,replier_name=?;'
+        const sql = 'insert into comment set id=?,type=?,type_id=?,user_id=?,user_name=?,user_type=?,user_imgurl=?,createdate=?,content=?,replier_id=?,replier_name=?;'
         return query(sql, values)
     },
     // 评论数
@@ -187,6 +188,11 @@ module.exports = {
         const sql = `SELECT count(*) as count FROM praise WHERE type_id = ? AND user_id = ? AND user_type = ?;`
         return query(sql, values)
     },
+    // 新建点赞
+    insertPraise: async (values) => {
+        const sql = `insert into praise set id=?,type_id=?,user_id=?,user_type=?,createdate=?;`
+        return query(sql, values)
+    },
 
     /**
      * 用户相关
@@ -207,8 +213,18 @@ module.exports = {
         return query(sql, values)
     },
     // 修改用户信息
-    updateUser:async(values) => {
+    updateUser: async (values) => {
         const sql = `UPDATE user SET username = ?,password = ?,imgurl= ?,permission=?,createdate = ? ,email = ?  WHERE id = ?;`
+        return query(sql, values)
+    },
+    // 根据用户名和邮箱查找用户
+    findUserByUserNameAndEmai: async (values) => {
+        const sql = `SELECT * from user WHERE username = ? and email = ?;`
+        return query(sql, values)
+    },
+    // 根据邮箱和用户名修改密码
+    updatePasswordByEmail: async (values) => {
+        const sql = `UPDATE user SET password = ? WHERE username = ? and email=?;`
         return query(sql, values)
     }
 };

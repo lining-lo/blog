@@ -6,18 +6,19 @@
                 v-for="(item, index) in messageLabels" :key="index">{{ item }}</p>
         </div>
         <div class="message-card">
-            <message-card @click="selectCard(item.id)" :class="{ cardselected: cardSelected === item.id }"
-                class="card-item" :card="item" v-for="item in wall" :key="item.id" />
+            <message-card @selectCard="selectCard" :class="{ cardselected: cardSelected === item.id }" class="card-item"
+                :card="item" v-for="item in wall" :key="item.id" />
         </div>
         <div class="message-addbtn" @click="isShowCreateCardPopup = true">
             <el-icon class="icon">
                 <Plus />
             </el-icon>
         </div>
-        <create-message @getWall="getWall" v-if="isShowCreateCardPopup" :isShow="isShowCreateCardPopup"
-            @closePopup="closeCreateCardPopup" />
-        <card-detail @getComment="getComment" :comment="comment" :card="wall[wall.findIndex(item => item.id === cardSelected)]"
-            v-if="isShowCardDetailPopup" @closePopup="closeCardDetailPopup" />
+        <create-message @selectLable="selectLable" @getWall="getWall" v-if="isShowCreateCardPopup"
+            :isShow="isShowCreateCardPopup" @closePopup="closeCreateCardPopup" />
+        <card-detail @getWall="getWall" @getComment="getComment" :comment="comment"
+            :card="wall[wall.findIndex(item => item.id === cardSelected)]" v-if="isShowCardDetailPopup"
+            @closePopup="closeCardDetailPopup" />
     </div>
 </template>
 
@@ -27,7 +28,16 @@ import CreateMessage from '../components/CreateMessage.vue';
 import MessageCard from '../components/MessageCard.vue';
 import CardDetail from '../components/CardDetail.vue';
 import { getCurrentInstance, onMounted, reactive, ref } from 'vue';
+import { useTimeStore, useUserStore } from '../store';
+import { storeToRefs } from 'pinia';
 const { proxy } = getCurrentInstance()
+
+// 实例化 Store
+const timeStore = useTimeStore()
+const userStore = useUserStore()
+// 解构 State（自动转为响应式 ref）
+const { isDark } = storeToRefs(timeStore)
+const { token } = storeToRefs(userStore)
 
 //创建卡片弹窗开关
 const isShowCreateCardPopup = ref(false)
@@ -37,9 +47,9 @@ const closeCreateCardPopup = () => {
     isShowCreateCardPopup.value = false
 }
 
-//创建卡片弹窗开关
+//卡片详情弹窗开关
 const isShowCardDetailPopup = ref(false)
-//关闭创建卡片弹窗
+//关闭卡片详情弹窗
 const closeCardDetailPopup = () => {
     isShowCardDetailPopup.value = false
     isShowCreateCardPopup.value = false
@@ -86,7 +96,9 @@ const initWall: any = []
 //分页查询墙的参数
 const wallParams = reactive({
     page: 1,
-    pagesize: 100
+    pagesize: 100,
+    user_id: token.value.type === 1 ? token.value.username : token.value.id,
+    user_type: token.value.type
 })
 //分页查询墙
 const getWall = async () => {
@@ -138,9 +150,9 @@ onMounted(() => {
         }
 
         .selected {
-            color: #202020;
+            color: #866f6f;
             font-weight: 600;
-            border: 1px solid #202020;
+            border: 1px solid #866f6f;
             border-radius: 16px;
         }
     }

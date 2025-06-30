@@ -3,7 +3,7 @@
         <div class="home-left">
             <div class="left-baseInfo">
                 <div class="baseInfo-avator">
-                    <img style="width: 120px;height: 120px;border-radius: 50%;" src="../assets/images/dark-treehole.png"
+                    <img style="width: 120px;height: 120px;border-radius: 50%;" src="../assets/images/avator.jpg"
                         alt="">
                 </div>
                 <p class="baseInfo-name">LO'S BLOG</p>
@@ -341,6 +341,8 @@ onMounted(() => {
                 height: 120px;
                 border-radius: 50%;
                 background-color: #53e5b9;
+                background-size: cover;
+                background-position: center;
             }
 
             .baseInfo-name {

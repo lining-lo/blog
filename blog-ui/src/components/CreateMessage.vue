@@ -1,8 +1,8 @@
 <template>
     <transition name="modal">
-        <div class="createmessage">
+        <div class="createmessage" :style="{ background: isDark ? `#26282a` : `#fff` }">
             <div class="createmessage-head">
-                <span class="title">写留言</span>
+                <span class="title" :style="{ color: isDark ? `#7c7575` : `#000000` }">写留言</span>
                 <el-icon @click="emit('closePopup')" class="icon" size="22">
                     <CloseBold />
                 </el-icon>
@@ -14,11 +14,13 @@
                         :style="{ background: item }"></div>
                 </div>
                 <div class="main-messagecard" :style="{ background: messageCardColors[createCardParams.color] }">
-                    <textarea v-model="createCardParams.content" class="messagecard-text" placeholder="留言..." maxlength="96"></textarea>
-                    <input v-model="createCardParams.user_name" class="messagecard-name" type="text" placeholder="作者">
+                    <textarea v-model="createCardParams.content" class="messagecard-text" placeholder="留言..."
+                        maxlength="96"></textarea>
+                    <input readonly v-model="createCardParams.user_name" class="messagecard-name" type="text"
+                        placeholder="作者">
                 </div>
                 <div class="main-label">
-                    <p class="label-title">选择标签</p>
+                    <p class="label-title" :style="{ color: isDark ? `#7c7575` : `#000000` }">选择标签</p>
                     <div class="label-list">
                         <p :class="{ labelselected: createCardParams.label === index }" @click="getCardLabel(index)"
                             class="list-item " v-for="(item, index) in messageLabels" :key="index">
@@ -27,14 +29,15 @@
                     </div>
                 </div>
                 <div class="main-statement">
-                    <p class="statement-title">免责声明</p>
+                    <p class="statement-title" :style="{ color: isDark ? `#7c7575` : `#000000` }">免责声明</p>
                     <p class="statement-text"> 留言评论是本人独自开发的，为便于与用户交流的留言平台。请不要利用此平台服务制作、上传、下载、复制、发布、传播或者转载如下内容：<br>
                         1、反对宪法所确定的基本原则的；<br>
                         2、危害国家安全，泄露国家秘密，颠覆国家政权，破坏国家 统一的；<br> 3、损害国家荣誉和利益的； <br>4、煽动民族仇恨、民族歧视，破坏民族团结的；<br>
                         5、破坏国家宗教政策，宣扬邪教和封建迷信的；<br> 6、散布谣言，扰乱社会秩序，破坏社会稳定的；<br> 7、散布淫秽、色情、赌博、暴力、凶杀、恐怖或者教唆犯罪的；<br>
                         8、侮辱或者诽谤他人，侵害他人合法权益的；<br> 9、含有法律、行政法规禁止的其他内容的信息。 </p>
                 </div>
-                <div class="main-footer">
+                <div class="main-footer"
+                    :style="{ background: isDark ? `rgba(5, 12, 14, 0.8)` : `rgba(255, 255, 255, 0.6)` }">
                     <el-button type="info" class="cancel" round @click="emit('closePopup')">丢弃</el-button>
                     <el-button @click="sumbit" class="submit" type="primary" round>确定</el-button>
                 </div>
@@ -48,13 +51,22 @@ import { nanoid } from 'nanoid';
 import { ElMessage } from 'element-plus'
 import { getCurrentInstance, reactive } from 'vue';
 import { createMessageCardColors, messageCardColors, messageLabels } from '../utils/data';
-import {formattime} from '../utils/customize'
+import { formattime } from '../utils/customize'
+import { useTimeStore, useUserStore } from '../store';
+import { storeToRefs } from 'pinia';
 const { proxy } = getCurrentInstance()
 
 //获取父组件的参数
 const props = defineProps(['isShow'])
 //获取父组件方法
-const emit = defineEmits(['closePopup','getWall'])
+const emit = defineEmits(['closePopup', 'getWall', 'selectLable'])
+
+// 实例化 Store
+const timeStore = useTimeStore()
+const userStore = useUserStore()
+// 解构 State（自动转为响应式 ref）
+const { isDark } = storeToRefs(timeStore)
+const { token } = storeToRefs(userStore)
 
 //表单参数
 const createCardParams = reactive({
@@ -63,8 +75,8 @@ const createCardParams = reactive({
     color: 0,
     content: '',
     user_id: '',
-    user_type: 1,
-    user_name: '',
+    user_type: token.value.type,
+    user_name: token.value.type === 1 ? `游客${token.value.username}` : token.value.username,
     createdate: ''
 })
 //选中获取卡片颜色
@@ -76,14 +88,13 @@ const getCardLabel = (index: number) => {
     createCardParams.label = index
 }
 //创建卡片
-const sumbit = async()=>{
+const sumbit = async () => {
     //拼装数据
     createCardParams.id = nanoid(10)
-    createCardParams.user_id = nanoid(10)
-    createCardParams.user_name = '游客'
-    createCardParams.createdate = formattime(Date.now())
+    createCardParams.user_id = token.value.type === 1 ? token.value.username : token.value.id,
+        createCardParams.createdate = formattime(Date.now())
     //校验数据
-    if (createCardParams.content.trim()==='') {
+    if (createCardParams.content.trim() === '') {
         ElMessage.warning('内容输入不能为空')
         return
     }
@@ -93,6 +104,7 @@ const sumbit = async()=>{
     ElMessage.success('新增留言成功')
     //重新获取数据
     emit('getWall')
+    emit('selectLable', '-1')
     //关闭弹窗
     emit('closePopup')
 }

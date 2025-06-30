@@ -25,6 +25,14 @@ module.exports = function (app) {
     })
 
     /**
+     * 点赞相关
+     */
+    // 新建点赞
+    app.post('/insertPraise', (request, response) => {
+        controller.insertPraise(request, response)
+    })
+
+    /**
      * 用户相关
      */
     // 新建用户
@@ -46,5 +54,13 @@ module.exports = function (app) {
     // 修改用户信息
     app.post('/updateUser', (request, response) => {
         controller.updateUser(request, response)
-    }) 
+    })
+    // 根据用户名和邮箱查找用户
+    app.post('/findUserByUserNameAndEmai', (request, response) => {
+        controller.findUserByUserNameAndEmai(request, response)
+    })
+    // 根据邮箱和用户名修改密码
+    app.post('/updatePasswordByEmail', (request, response) => {
+        controller.updatePasswordByEmail(request, response)
+    })
 }

@@ -12,7 +12,9 @@
             </div>
             <el-switch v-model="isDark" :active-action-icon="MoonNight" :inactive-action-icon="Sunny"
                 style="--el-switch-on-color: #6f5ac3; --el-switch-off-color: #f4c97a" />
-            <div class="right-avator" @click="outerVisible = true" :style="{backgroundImage: token.type === 0?`url(http://localhost:3000/${token.imgurl})`: '#53e5b9'}"></div>
+            <div class="right-avator" @click="outerVisible = true"
+                :style="{ backgroundImage: token.type === 0 ? `url(http://localhost:3000${token.imgurl})` : '#53e5b9' }">
+            </div>
             <el-dialog :show-close="false" v-model="outerVisible" width="800">
                 <div class="content" :style="{ background: isDark ? '#26282a' : '' }">
                     <div class="left" :style="{ backgroundImage: getbackground(), opacity: isDark ? 0.5 : 0.9 }"></div>
@@ -45,14 +47,17 @@
                         <div class="findpassword" v-if="token.type === 1 && match === 2">
                             <h4>找回密码</h4>
                             <div class="form">
-                                <input class="acc" type="text" placeholder="用户名">
-                                <input class="acc" type="text" placeholder="邮箱号">
+                                <input class="acc" v-model="findPasswordParams.username" type="text" placeholder="用户名">
+                                <input class="acc" v-model="findPasswordParams.email" type="text" placeholder="邮箱号">
                                 <div style="display: flex;width: 400px;align-items: baseline;cursor: pointer;">
-                                    <input class="acc" type="text" style="width: 320px;" placeholder="验证码">
-                                    <span style="margin-bottom: 20px;">获取验证码</span>
+                                    <input class="acc" type="text" v-model="findPasswordParams.code"
+                                        style="width: 320px;" placeholder="验证码">
+                                    <button :disabled="isSend" @click="sendCode" class="verifyCodeBtn"
+                                        style="margin-bottom: 20px;">获取验证码</button>
                                 </div>
-                                <input class="acc" type="password" placeholder="新密码">
-                                <button class="submit">FindPassword</button>
+                                <input class="acc" type="password" v-model="findPasswordParams.password"
+                                    placeholder="新密码">
+                                <button class="submit" @click="findPassword">FindPassword</button>
                             </div>
                             <div class="bottom">
                                 <span @click="match = 0">用户登录</span>
@@ -63,12 +68,12 @@
                             <h4>个人信息</h4>
                             <div class="upload">
                                 <input class="upload-file" id="file" type="file" accept="image/*" @change="uploadFile">
-                                <div class="upload-icon" v-if="!token.imgurl">
+                                <div class="upload-icon" v-if="!imgurl && !token.imgurl">
                                     <el-icon class="icon">
                                         <Plus />
                                     </el-icon>
                                 </div>
-                                <img :class="{ cleardark: isDark }" v-if="!imgurl"
+                                <img :class="{ cleardark: isDark }" v-if="imgurl || token.imgurl"
                                     :src="imgurl ? imgurl : `http://localhost:3000/${token.imgurl}`" alt="">
                             </div>
                             <div class="form">
@@ -135,7 +140,7 @@ const registParams = reactive({
     username: '',
     password: '',
     createdate: '',
-    imgurl:''
+    imgurl: '/photo/1751212892031.png'
 })
 // 注册用户方法
 const regist = async () => {
@@ -202,8 +207,84 @@ const login = async () => {
 // 退出登录
 const logout = async () => {
     userStore.clearToken()
+    outerVisible.value = false
     //刷新页面
     location.reload()
+}
+
+// 控制点击次数开关
+const isSend = ref(false)
+// 找回密码参数
+const findPasswordParams = reactive({
+    username: '',
+    email: '',
+    password: '',
+    code: ''
+})
+// 验证码
+const code = ref()
+// 发送验证码
+const sendCode = async () => {
+    //邮箱必须填写且格式正确
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+    if (findPasswordParams.email === '' || !emailRegex.test(findPasswordParams.email)) {
+        return ElMessage.error('请正确填写邮箱！')
+    }
+    //防止多次点击
+    isSend.value = true
+    //初始数据
+    const verifyCodeBtn = document.querySelector('.verifyCodeBtn');
+    let countdown = 60; // 倒计时秒数
+    //设置透明度为0.5
+    verifyCodeBtn.style.opacity = 0.5;
+    //发送验证码
+    const result = await proxy.$api.sendEmail(findPasswordParams)
+    code.value = result.data.message
+    //倒计时逻辑
+    const interval = setInterval(() => {
+        //设置按钮内容
+        countdown--;
+        verifyCodeBtn.textContent = `${countdown}秒后重试`;
+        //60s后
+        if (countdown <= 0) {
+            //清除定时器
+            clearInterval(interval);
+            //恢复按钮状态
+            isSend.value = false
+            //设置按钮内容
+            verifyCodeBtn.textContent = '获取验证码';
+            //重置倒计时
+            countdown = 60;
+            //设置透明度为1
+            verifyCodeBtn.style.opacity = 1;
+        }
+    }, 1000);
+}
+// 找回密码方法
+const findPassword = async () => {
+    // 表单校验
+    if (findPasswordParams.username === '' || findPasswordParams.email === '' || findPasswordParams.password === '') {
+        return ElMessage.error('请仔细填写信息！')
+    }
+    // 验证码错误
+    if (findPasswordParams.code != code.value) {
+        return ElMessage.error('验证码错误！')
+    }
+    // 发送请求查找用户
+    const findResult = await proxy.$api.findUserByUserNameAndEmai(findPasswordParams)
+    if (findResult.data.message.length === 0) {
+        return ElMessage.error('用户或邮箱不存在！')
+    }
+    // 发送更改密码请求
+    await proxy.$api.updatePasswordByEmail(findPasswordParams)
+    //关闭弹窗并清空数据
+    outerVisible.value = false
+    findPasswordParams.username = ''
+    findPasswordParams.email = ''
+    findPasswordParams.password = ''
+    findPasswordParams.code = ''
+    //提示用户
+    ElMessage.success('修改成功')
 }
 
 // 获取token
@@ -244,14 +325,13 @@ const updateUserParams = reactive({
 })
 // 修改用户
 const updateUser = async () => {
-    // 拼接数据
-    updateUserParams.imgurl = imgurl.value
     // 信息校验
     if (updateUserParams.username === '' || updateUserParams.password === '') {
         return ElMessage.error('密码不能为空')
     }
     // 上传图片
     if (imgurl.value) {
+        updateUserParams.imgurl = imgurl.value
         const formData = new FormData()
         formData.append('file', document.getElementById("file").files[0])
         const uploadResult = await proxy.$api.profile(formData)
@@ -272,28 +352,6 @@ const updateUser = async () => {
     userStore.setToken(JSON.stringify(token))
     ElMessage.success('修改成功')
     outerVisible.value = false
-    // //如果上传了图片
-    // if (imgurl.value) {
-    //     //将图片转为二进制
-    //     const formData = new FormData()
-    //     formData.append('file', document.getElementById("file").files[0])
-    //     //上传图片
-    //     const uploadResult = await proxy.$api.profile(formData)
-    //     userData.imgurl = uploadResult.data
-    // }
-    // //发送更新用户请求
-    // await proxy.$api.updateUser(userData)
-    // //重新获取用户信息
-    // getUserInfo()
-    // //更新仓库中用户信息
-    // store.commit('updateUserInfo', JSON.stringify({
-    //     username: userData.username,
-    //     imgurl: userData.imgurl,
-    // }))
-    // //关闭弹窗
-    // emit('toLogin', false)
-    // //提示用户
-    // proxy.$message({ message: '修改成功', type: 'success' })
 }
 </script>
 <style lang='less' scoped>
@@ -521,6 +579,10 @@ const updateUser = async () => {
                         color: rgb(144, 129, 241);
                         background-color: rgba(0, 0, 0, 0);
                         margin-bottom: 12px;
+                    }
+
+                    .verifyCodeBtn {
+                        font-size: 12px;
                     }
 
                     .submit {

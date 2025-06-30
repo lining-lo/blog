@@ -4,11 +4,12 @@
             <p class="time">{{ card.createdate }}</p>
             <p class="label">{{ messageLabels[card.label] }}</p>
         </div>
-        <p class="message" :style="{ color: isDark ? 'black' : '#585858' }">{{ card.content }}</p>
+        <p @click="emit('selectCard', card.id)" class="message" :style="{ color: isDark ? 'black' : '#585858' }">{{
+            card.content }}</p>
         <div class="bottom">
             <div class="feedback">
                 <div class="like">
-                    <span class="icon">❤</span>
+                    <span class="icon":class="{ addlike: card.isPraise[0].count !== 0 }" @click="addPraise">❤</span>
                     <span class="value">{{ card.praiseCount[0].count }}</span>
                 </div>
                 <div class="comment">
@@ -25,16 +26,44 @@
 
 <script setup lang='ts'>
 import { messageLabels, messageCardColors } from '../utils/data';
-import { useTimeStore } from '../store'
+import { useTimeStore, useUserStore } from '../store'
 import { storeToRefs } from 'pinia'
+import { getCurrentInstance, reactive } from 'vue';
+import { nanoid } from 'nanoid';
+import { formattime } from '../utils/customize';
 
-//获取父组件传递的参数
+const { proxy } = getCurrentInstance()
+
+// 获取父组件传递的参数
 const props = defineProps(['card'])
+// 获取父组件方法
+const emit = defineEmits(['selectCard'])
 
-//实例化 Store
+// 实例化 Store
 const timeStore = useTimeStore()
-//解构 State（自动转为响应式 ref）
+const userStore = useUserStore()
+// 解构 State（自动转为响应式 ref）
 const { isDark } = storeToRefs(timeStore)
+const { token } = storeToRefs(userStore)
+
+// 点赞参数
+const praiseParams = reactive({
+    id: nanoid(10),
+    type_id: props.card.id,
+    user_id: token.value.type === 1 ? token.value.username : token.value.id,
+    user_type: token.value.type,
+    createdate: formattime(Date.now())
+})
+// 点赞方法
+const addPraise = async () => {
+    // 点过一次赞不允许再点赞
+    if (props.card.isPraise[0].count === 0) {
+        const result = await proxy.$api.insertPraise(praiseParams)
+        props.card.praiseCount[0].count++
+        props.card.isPraise[0].count++
+    }
+    // console.log(props.card);
+}
 
 </script>
 

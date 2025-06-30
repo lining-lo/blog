@@ -5,7 +5,7 @@ const db = require('../lib/db')
 // 新建评论
 exports.insertComment = async (request, response) => {
     const data = request.body
-    await db.insertComment([data.id, data.type, data.type_id, data.user_id, data.user_name, data.user_type, data.createdate, data.content, data.replier_id, data.replier_name]).then(result => {
+    await db.insertComment([data.id, data.type, data.type_id, data.user_id, data.user_name, data.user_type, data.user_imgurl, data.createdate, data.content, data.replier_id, data.replier_name]).then(result => {
         response.send({
             code: 200,
             message: result
@@ -15,14 +15,11 @@ exports.insertComment = async (request, response) => {
 // 分页查询评论
 exports.findCommentPage = async (request, response) => {
     const data = request.body
-
     await db.findCommentPage([data.type_id, (data.page - 1) * data.pagesize, data.pagesize]).then(result => {
         response.send({
             code: 200,
             message: result
         })
-        console.log(result);
-
     })
 }
 
@@ -42,11 +39,13 @@ exports.insertWall = async (request, response) => {
 // 分页查询墙
 exports.selectWallPage = async (request, response) => {
     const data = request.body
+    console.log(data);
+
     await db.selectWallPage([(data.page - 1) * data.pagesize, data.pagesize]).then(async result => {
         // 查询各反馈总数据
         for (let i = 0; i < result.length; i++) {
             // 是否点赞
-            result[i].isPraise = await db.isPraise([result[i].id, result[i].user_id, result[i].user_type])
+            result[i].isPraise = await db.isPraise([result[i].id, data.user_id, data.user_type])
             // 点赞总数
             result[i].praiseCount = await db.praiseCount([result[i].id])
             // 评论总数
@@ -61,12 +60,26 @@ exports.selectWallPage = async (request, response) => {
 }
 
 /**
+ * 点赞相关
+ */
+// 新建点赞
+exports.insertPraise = async (request, response) => {
+    const data = request.body
+    await db.insertPraise([data.id, data.type_id, data.user_id, data.user_type, data.createdate]).then(result => {
+        response.send({
+            code: 200,
+            message: result
+        })
+    })
+}
+
+/**
  * 用户相关
  */
 // 新建用户
 exports.insertUser = async (request, response) => {
     const data = request.body
-    await db.insertUser([data.id, data.username, data.password, data.createdate,data.imgurl]).then(result => {
+    await db.insertUser([data.id, data.username, data.password, data.createdate, data.imgurl]).then(result => {
         response.send({
             code: 200,
             message: result
@@ -105,6 +118,26 @@ exports.updateUser = async (request, response) => {
     const data = request.body
     data.imgurl = data.imgurl ? data.imgurl : ''
     await db.updateUser([data.username, data.password, data.imgurl, data.permission, data.createdate, data.email, data.id]).then(result => {
+        response.send({
+            code: 200,
+            message: result
+        })
+    })
+}
+// 根据用户名和邮箱查找用户
+exports.findUserByUserNameAndEmai = async (request, response) => {
+    const data = request.body
+    await db.findUserByUserNameAndEmai([data.username, data.email]).then(result => {
+        response.send({
+            code: 200,
+            message: result
+        })
+    })
+}
+// 根据邮箱和用户名修改密码
+exports.updatePasswordByEmail = async (request, response) => {
+    const data = request.body
+    await db.updatePasswordByEmail([data.password, data.username, data.email]).then(result => {
         response.send({
             code: 200,
             message: result
