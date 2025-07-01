@@ -72,4 +72,25 @@ export default {
     updatePasswordByEmail(data: any) {
         return http.post('/updatePasswordByEmail', data)
     },
+
+    /**
+     * 友链相关相关
+     */
+    // 新建友链
+    insertLink(data: any) {
+        return http.post('/insertLink', data)
+    },
+    // 分页查询友链
+    selectLinkPage(data: any) {
+        return http.post('/selectLinkPage', data)
+    },
+
+    /**
+     * 图库相关
+     */
+    // 分页获取图库
+    selectAlbumPage(data: any) {
+        return http.post('/selectAlbumPage', data)
+    },
+    
 }

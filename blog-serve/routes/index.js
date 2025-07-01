@@ -63,4 +63,24 @@ module.exports = function (app) {
     app.post('/updatePasswordByEmail', (request, response) => {
         controller.updatePasswordByEmail(request, response)
     })
+
+    /**
+     * 友链相关相关
+     */
+    // 新建友链
+    app.post('/insertLink', (request, response) => {
+        controller.insertLink(request, response)
+    })
+    // 分页查询友链
+    app.post('/selectLinkPage', (request, response) => {
+        controller.selectLinkPage(request, response)
+    })
+
+    /**
+     * 图库相关
+     */
+    // 分页获取图库
+    app.post('/selectAlbumPage', (request, response) => {
+        controller.selectAlbumPage(request, response)
+    })
 }

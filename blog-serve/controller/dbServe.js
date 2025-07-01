@@ -39,8 +39,6 @@ exports.insertWall = async (request, response) => {
 // 分页查询墙
 exports.selectWallPage = async (request, response) => {
     const data = request.body
-    console.log(data);
-
     await db.selectWallPage([(data.page - 1) * data.pagesize, data.pagesize]).then(async result => {
         // 查询各反馈总数据
         for (let i = 0; i < result.length; i++) {
@@ -138,6 +136,46 @@ exports.findUserByUserNameAndEmai = async (request, response) => {
 exports.updatePasswordByEmail = async (request, response) => {
     const data = request.body
     await db.updatePasswordByEmail([data.password, data.username, data.email]).then(result => {
+        response.send({
+            code: 200,
+            message: result
+        })
+    })
+}
+
+/**
+ * 友链相关相关
+ */
+// 新建友链
+exports.insertLink = async (request, response) => {
+    const data = request.body
+    await db.insertLink([data.id, data.name, data.introduction, data.cover, data.url, data.createdate]).then(result => {
+        response.send({
+            code: 200,
+            message: result
+        })
+    })
+}
+// 分页查询友链
+exports.selectLinkPage = async (request, response) => {
+    const data = request.body
+    await db.selectLinkPage([(data.page - 1) * data.pagesize, data.pagesize]).then(async result => {
+        // 返回结果
+        response.send({
+            code: 200,
+            message: result
+        })
+    })
+}
+
+/**
+ * 图库相关
+ */
+// 分页获取图库
+exports.selectAlbumPage = async (request, response) => {
+    const data = request.body
+    await db.selectAlbumPage([(data.page - 1) * data.pagesize, data.pagesize]).then(async result => {
+        // 返回结果
         response.send({
             code: 200,
             message: result

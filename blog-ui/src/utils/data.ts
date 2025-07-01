@@ -108,3 +108,28 @@ export const portrait = [
     'linear-gradient(180deg,#FFDC83 0%,#F88816 100%)',
     'linear-gradient(180deg,#FFBA8D 1%,#EB6423 100%)',
 ];
+
+// 图片分类
+export const photoType = [
+    {
+        title:'风景',
+        msg:'记录沿途的风景',
+        cover:'src/assets/images/scenery.png'
+    },
+    {
+        title:'美食',
+        msg:'唯有美食不可辜负',
+        cover:'src/assets/images/foot.png'
+
+    },
+    {
+        title:'日常',
+        msg:'随手拍拍~~',
+        cover:'src/assets/images/daily.png'
+    },
+    {
+        title:'二次元',
+        msg:'动漫、手办、cosplay',
+        cover:'src/assets/images/erciyuan.png'
+    },
+]

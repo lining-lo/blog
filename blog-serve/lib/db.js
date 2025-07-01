@@ -113,6 +113,30 @@ const createTables = async () => {
                     PRIMARY KEY ( id )
                 );`
         },
+        {
+            name: 'link',
+            sql: `create table if not exists link( 
+                    id VARCHAR(100) NOT NULL,
+                    name VARCHAR(100) NOT NULL COMMENT '网站名称',
+                    introduction VARCHAR(100) NOT NULL COMMENT '简介',
+                    cover VARCHAR(100) NOT NULL COMMENT '封面',
+                    url VARCHAR(100) NOT NULL COMMENT '网址',
+                    state INT DEFAULT 1 COMMENT '权限(0通过,1审核中)',
+                    createdate VARCHAR(100) NOT NULL COMMENT '申请时间',
+                    passdate VARCHAR(100) COMMENT '申请时间',
+                    PRIMARY KEY ( id )
+                );`
+        },
+        {
+            name: 'album',
+            sql: `create table if not exists album( 
+                    id VARCHAR(100) NOT NULL,
+                    type INT NOT NULL COMMENT '所属类型 (-1所有，0风景、1美食、2日常、3二次元)',
+                    imgurl VARCHAR(100) NOT NULL COMMENT '地址',
+                    createdate VARCHAR(100) NOT NULL COMMENT '创建时间',
+                    PRIMARY KEY ( id )
+                );`
+        },
     ];
 
     for (const table of tables) {
@@ -226,5 +250,28 @@ module.exports = {
     updatePasswordByEmail: async (values) => {
         const sql = `UPDATE user SET password = ? WHERE username = ? and email=?;`
         return query(sql, values)
-    }
+    },
+
+    /**
+     * 友链相关
+     */
+    // 新建友链
+    insertLink: async (values) => {
+        const sql = `INSERT INTO link SET id=?,name=?,introduction=?,cover=?,url=?,createdate=?`
+        return query(sql, values)
+    },
+    // 分页查询友链
+    selectLinkPage: async (values) => {
+        const sql = `SELECT * FROM link WHERE state = 0 ORDER BY createdate DESC LIMIT ?,? `
+        return query(sql, values)
+    },
+
+    /**
+     * 图库相关
+     */
+    // 分页获取图库
+    selectAlbumPage: async (values) => {
+        const sql = `SELECT * FROM album ORDER BY createdate DESC LIMIT ?,? `
+        return query(sql, values)
+    },
 };
