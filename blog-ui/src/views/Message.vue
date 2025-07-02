@@ -113,6 +113,7 @@ let comment = ref()
 // 查找评论参数
 const findCommentParams = reactive({
     type_id: '',
+    type: 2,
     page: 1,
     pagesize: 100,
 })

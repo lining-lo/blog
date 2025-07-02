@@ -15,7 +15,7 @@ exports.insertComment = async (request, response) => {
 // 分页查询评论
 exports.findCommentPage = async (request, response) => {
     const data = request.body
-    await db.findCommentPage([data.type_id, (data.page - 1) * data.pagesize, data.pagesize]).then(result => {
+    await db.findCommentPage(data.type_id, data.type, data.page, data.pagesize).then(result => {
         response.send({
             code: 200,
             message: result

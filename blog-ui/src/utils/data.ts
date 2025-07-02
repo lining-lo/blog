@@ -66,10 +66,10 @@ export const labelColors = [
     "rgba(15, 36, 114, 0.94)", // 中蓝
     "rgba(57, 22, 111, 0.93)", // 中紫
     "rgba(97, 18, 95, 0.95)"  // 中粉
-  ];
+];
 
 // 留言墙标签
-export const messageLabels =  ['留言', '目标', '理想', '过去', '将来', '爱情', '亲情', '友情', '秘密', '信条', '无题'];
+export const messageLabels = ['留言', '目标', '理想', '过去', '将来', '爱情', '亲情', '友情', '秘密', '信条', '无题'];
 
 // 留言卡片背景颜色
 export const messageCardColors = [
@@ -93,43 +93,43 @@ export const createMessageCardColors = [
 
 // 游客头像背景
 export const portrait = [
-    'linear-gradient(180deg,#FFA9D9 0%,#E83D3D 100%)',
-    'linear-gradient(180deg,#FFA7EB 0%,#F026A8 100%)',
-    'Linear-gradient(180deg,#F5A8FF 0%,#BF23E5 100%)',
-    'linear-gradient(180deg,#DFA1FF 0%,#9A36F0 100%)',
-    'linear-gradient(180deg,#C9AAFF 0%,#6D3CF5 100%)',
-    'linear-gradient(180deg,#9EAAFF 0%,#3846F4 100%)',
-    'linear-gradient(180deg,#8CD8FF 0%,#2A6AF0 100%)',
-    'linear-gradient(180deg,#7BE7FF 2%,#1E85E2 100%)',
-    'linear-gradient(180deg,#92FDFF 0%,#14B2DD 100%)',
-    'linear-gradient(180deg,#89FED8 0%,#18C997 100%)',
-    'linear-gradient(180deg,#D7FFA7 0%,#5ED52A 100%)',
-    'linear-gradient(180deg,#FFED48 0%,#FD9E16 100%)',
-    'linear-gradient(180deg,#FFDC83 0%,#F88816 100%)',
-    'linear-gradient(180deg,#FFBA8D 1%,#EB6423 100%)',
+    'linear-gradient(180deg, #FF9A9E 0%, #FAD0C4 100%)', // 粉红到浅橙
+    'linear-gradient(180deg, #A1C4FD 0%, #C2E9FB 100%)', // 浅蓝到天蓝
+    'linear-gradient(180deg, #FFECD2 0%, #FCB69F 100%)', // 浅黄到橙红
+    'linear-gradient(180deg, #84FAB0 0%, #8FD3F4 100%)', // 浅绿到浅蓝
+    'linear-gradient(180deg, #D4FC79 0%, #96E6A1 100%)', // 黄绿到浅绿
+    'linear-gradient(180deg, #F0C27B 0%, #4B1248 100%)', // 橙黄到深紫
+    'linear-gradient(180deg, #FCCF31 0%, #F55555 100%)', // 亮黄到亮红
+    'linear-gradient(180deg, #FFAFBD 0%, #C9FFBF 100%)', // 粉红到浅绿
+    'linear-gradient(180deg, #B7F8DB 0%, #50A7C2 100%)', // 浅绿到深蓝
+    'linear-gradient(180deg, #F6D365 0%, #FDA085 100%)', // 金黄到橙红
+    'linear-gradient(180deg, #F8CEEC 0%, #A88BEB 100%)', // 浅粉到浅紫
+    'linear-gradient(180deg, #A1FFCE 0%, #FAFFD1 100%)', // 浅绿到浅黄
+    'linear-gradient(180deg, #FF8177 0%, #FF867A 100%)', // 亮红到浅红
+    'linear-gradient(180deg, #E0C3FC 0%, #8EC5FC 100%)', // 浅紫到浅蓝
 ];
 
 // 图片分类
 export const photoType = [
     {
-        title:'风景',
-        msg:'记录沿途的风景',
-        cover:'src/assets/images/scenery.png'
+        title: '风景',
+        msg: '记录沿途的风景',
+        cover: 'src/assets/images/scenery.png'
     },
     {
-        title:'美食',
-        msg:'唯有美食不可辜负',
-        cover:'src/assets/images/foot.png'
+        title: '美食',
+        msg: '唯有美食不可辜负',
+        cover: 'src/assets/images/foot.png'
 
     },
     {
-        title:'日常',
-        msg:'随手拍拍~~',
-        cover:'src/assets/images/daily.png'
+        title: '日常',
+        msg: '随手拍拍~~',
+        cover: 'src/assets/images/daily.png'
     },
     {
-        title:'二次元',
-        msg:'动漫、手办、cosplay',
-        cover:'src/assets/images/erciyuan.png'
+        title: '二次元',
+        msg: '动漫、手办、cosplay',
+        cover: 'src/assets/images/erciyuan.png'
     },
 ]

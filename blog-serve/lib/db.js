@@ -180,8 +180,16 @@ module.exports = {
         return query(sql, values)
     },
     // 分页查询评论
-    findCommentPage: (values) => {
-        const sql = `SELECT * FROM comment WHERE type_id = ? ORDER BY createdate LIMIT ?,?`
+    findCommentPage: (type_id, type, page, pagesize) => {
+        let sql = null
+        let values = null 
+        if (type === 3) {
+            sql = `SELECT * FROM comment WHERE type = ? ORDER BY createdate LIMIT ?,?`
+            values = [type, (page - 1) * pagesize, pagesize]
+        } else {
+            sql = `SELECT * FROM comment WHERE type_id = ? AND type = ? ORDER BY createdate LIMIT ?,?`
+            values = [type_id, type, (page - 1) * pagesize, pagesize]
+        }
         return query(sql, values)
     },
 
