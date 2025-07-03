@@ -83,4 +83,12 @@ module.exports = function (app) {
     app.post('/selectAlbumPage', (request, response) => {
         controller.selectAlbumPage(request, response)
     })
+
+    /**
+     * 说说相关
+     */
+    // 分页获取说说
+    app.post('/selectDiaryPage', (request, response) => {
+        controller.selectDiaryPage(request, response)
+    })
 }

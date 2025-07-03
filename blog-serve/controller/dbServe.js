@@ -182,3 +182,27 @@ exports.selectAlbumPage = async (request, response) => {
         })
     })
 }
+
+/**
+ * 说说相关
+ */
+// 分页获取说说
+exports.selectDiaryPage = async (request, response) => {
+    const data = request.body
+    await db.selectDiaryPage([(data.page - 1) * data.pagesize, data.pagesize]).then(async result => {
+        // 查询各反馈总数据
+        for (let i = 0; i < result.length; i++) {
+            // 是否点赞
+            result[i].isPraise = await db.isPraise([result[i].id, data.user_id, data.user_type])
+            // 点赞总数
+            result[i].praiseCount = await db.praiseCount([result[i].id])
+            // 评论总数
+            result[i].commentCount = await db.commentCount([result[i].id])
+        }
+        // 返回结果
+        response.send({
+            code: 200,
+            message: result
+        })
+    })
+}

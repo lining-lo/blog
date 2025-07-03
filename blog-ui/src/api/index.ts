@@ -92,5 +92,13 @@ export default {
     selectAlbumPage(data: any) {
         return http.post('/selectAlbumPage', data)
     },
+
+    /**
+     * 说说相关
+     */
+    // 分页获取说说
+    selectDiaryPage(data: any) {
+        return http.post('/selectDiaryPage', data)
+    },
     
 }

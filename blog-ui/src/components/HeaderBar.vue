@@ -13,7 +13,7 @@
             <el-switch v-model="isDark" :active-action-icon="MoonNight" :inactive-action-icon="Sunny"
                 style="--el-switch-on-color: #6f5ac3; --el-switch-off-color: #f4c97a" />
             <div class="right-avator" @click="outerVisible = true"
-                :style="{ backgroundImage: token.type === 0 ? `url(http://localhost:3000${token.imgurl})` : '#53e5b9' }">
+                :style="{ backgroundImage: token.type === 0 ? `url(http://localhost:3000${token.imgurl})` : `${portrait[token.imgurl]}` }">
             </div>
             <el-dialog :show-close="false" v-model="outerVisible" width="800">
                 <div class="content" :style="{ background: isDark ? '#26282a' : '' }">
@@ -97,7 +97,7 @@
 </template>
 
 <script setup lang='ts'>
-import { headerbarRoutes } from '../utils/data'
+import { headerbarRoutes, portrait } from '../utils/data'
 import { Sunny, MoonNight } from '@element-plus/icons-vue'
 import { useTimeStore, useUserStore } from '../store'
 import { storeToRefs } from 'pinia'
@@ -208,6 +208,15 @@ const login = async () => {
 const logout = async () => {
     userStore.clearToken()
     outerVisible.value = false
+    let token = {
+        type: 1,// 0登录用户，1游客
+        username: '',
+        imgurl: 0
+    }
+    const result = await proxy.$api.getIp()
+    token.username = encryptIpToPassword(result.data.message)
+    token.imgurl = Math.trunc(Math.random() * 14);
+    userStore.setToken(JSON.stringify(token))
     //刷新页面
     location.reload()
 }
@@ -680,7 +689,7 @@ const updateUser = async () => {
                         height: 100%;
                         border-radius: 50%;
                         object-fit: cover;
-                        object-position: center; 
+                        object-position: center;
                     }
                 }
 

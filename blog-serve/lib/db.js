@@ -137,6 +137,18 @@ const createTables = async () => {
                     PRIMARY KEY ( id )
                 );`
         },
+        {
+            name: 'diary',
+            sql: `create table if not exists diary(
+                    id VARCHAR(100) NOT NULL,
+                    content VARCHAR(1000) NOT NULL COMMENT '留言内容',
+                    imgurl VARCHAR(100) COMMENT '图片',
+                    user_id VARCHAR(100) NOT NULL COMMENT '发布者ID',
+                    user_name VARCHAR(100) COMMENT '发布者名称',
+                    createdate VARCHAR(100) NOT NULL COMMENT '创建时间',
+                    PRIMARY KEY (id)
+                    );`
+        },
     ];
 
     for (const table of tables) {
@@ -183,7 +195,7 @@ module.exports = {
     findCommentPage: (type_id, type, page, pagesize) => {
         let sql = null
         let values = null 
-        if (type === 3) {
+        if (type === 3 ) {
             sql = `SELECT * FROM comment WHERE type = ? ORDER BY createdate LIMIT ?,?`
             values = [type, (page - 1) * pagesize, pagesize]
         } else {
@@ -280,6 +292,15 @@ module.exports = {
     // 分页获取图库
     selectAlbumPage: async (values) => {
         const sql = `SELECT * FROM album ORDER BY createdate DESC LIMIT ?,? `
+        return query(sql, values)
+    },
+
+    /**
+     * 说说相关
+     */
+    // 分页获取说说
+    selectDiaryPage: async (values) => {
+        const sql = `SELECT * FROM Diary ORDER BY createdate DESC LIMIT ?,? `
         return query(sql, values)
     },
 };

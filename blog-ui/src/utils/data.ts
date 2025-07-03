@@ -133,3 +133,31 @@ export const photoType = [
         cover: 'src/assets/images/erciyuan.png'
     },
 ]
+
+// 用户等级
+export const userLevel = [
+    {
+        level:'src/assets/images/level_1.svg',
+        name:'炼气期',
+    },
+    {
+        level:'src/assets/images/level_2.svg',
+        name:'筑基期',
+    },
+    {
+        level:'src/assets/images/level_3.svg',
+        name:'结丹期',
+    },
+    {
+        level:'src/assets/images/level_4.svg',
+        name:'元婴期',
+    },
+    {
+        level:'src/assets/images/level_5.svg',
+        name:'化神期',
+    },
+    {
+        level:'src/assets/images/level_6.svg',
+        name:'仙人境',
+    },
+]
