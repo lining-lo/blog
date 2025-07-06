@@ -91,4 +91,28 @@ module.exports = function (app) {
     app.post('/selectDiaryPage', (request, response) => {
         controller.selectDiaryPage(request, response)
     })
+
+    /**
+     * 收藏相关
+     */
+    // 新建收藏
+    app.post('/insertFavorites', (request, response) => {
+        controller.insertFavorites(request, response)
+    })
+    // 分页查询收藏
+    app.post('/selectFavoritesPage', (request, response) => {
+        controller.selectFavoritesPage(request, response)
+    })
+
+    /**
+     * 文章相关
+     */
+    // 分页查询文章
+    app.post('/selectArticlePage', (request, response) => {
+        controller.selectArticlePage(request, response)
+    })
+    // 分页查询文章
+    app.post('/selectArticleById', (request, response) => {
+        controller.selectArticleById(request, response)
+    })
 }

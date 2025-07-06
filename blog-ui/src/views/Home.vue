@@ -26,16 +26,19 @@
 
             <div class="left-welcome">
                 <div class="welcome-title">
-                    🎉欢迎 &nbsp;<span style="color: #ff4d4f;">江西省-南昌市</span> &nbsp;的小伙伴！
+                    🎉欢迎 &nbsp;<span style="color: #ff4d4f;" v-if="weather">{{ weather.location }}</span> &nbsp;的小伙伴！
                 </div>
-                <div class="welcome-content">
-                    <p><span>温度：</span><span style="color: #ff4d4f;font-weight: 500;">23℃</span><span
-                            style="margin-left: 20px;">天气：</span><span
-                            style="color: #ff4d4f;font-weight: 500;">小雨</span>
+                <div class="welcome-content" @click="aa">
+                    <p><span>温度：</span><span style="color: #ff4d4f;font-weight: 500;" v-if="weather">{{
+                        weather.temperature }}</span><span style="margin-left: 20px;">天气：</span><span
+                            style="color: #ff4d4f;font-weight: 500;" v-if="weather">{{ weather.tq }}</span>
                     </p>
-                    <p><span>日期：</span><span style="color: #ff4d4f;font-weight: 500;">2025-6-23</span><span
-                            style="color: #ff4d4f;margin-left: 10px;font-weight: 500;">星期一</span></p>
-                    <p><span>风力：</span><span style="color: #ff4d4f;font-weight: 500;">东风≤3级</span></p>
+                    <p><span>日期：</span><span style="color: #ff4d4f;font-weight: 500;" v-if="weather">{{
+                        weather.time.substring(0, 10) }}</span><span
+                            style="color: #ff4d4f;margin-left: 10px;font-weight: 500;" v-if="weather">{{ weather.week
+                            }}</span></p>
+                    <p><span>风力：</span><span style="color: #ff4d4f;font-weight: 500;" v-if="weather">东风{{ weather.fl
+                            }}</span></p>
                 </div>
             </div>
 
@@ -166,40 +169,41 @@
                         <span style="margin-left: 4px;">首页</span>
                     </div>
                 </div>
-                <router-link to="article" class="article-item" v-for="(item, index) in 6" :key="index">
+                <div class="article-item" @click="toArticle(item)" v-for="(item, index) in topArticle" :key="index">
                     <div class="item-img">
-                        <img style="width: 100%;height: 100%;" src="../assets/images/dark-treehole.png" alt="">
+                        <img style="width: 100%;height: 100%;" :src="`http://localhost:3000${item.cover}`" alt="">
                     </div>
                     <div class="item-content">
                         <div class="content-time">
                             <el-icon>
                                 <Calendar />
                             </el-icon>
-                            <span style="margin-left: 4px;">2025-4-10&nbsp;20:22:36</span>
+                            <span style="margin-left: 4px;">{{ item.createdate }}</span>
                         </div>
-                        <div class="content-title">我的个人博客</div>
+                        <div class="content-title">{{ item.name }}</div>
+                        <div class="right-tip">{{ item.name }}</div>
                         <div class="content-info">
-                            <el-icon color="red">
-                                <Loading />
-                            </el-icon><span style="margin-left: 4px;">4799热度</span>&nbsp;
-                            <el-icon color="orange">
-                                <ChatDotSquare />
-                            </el-icon><span style="margin-left: 4px;">7评论</span>
+                            <span>👁️</span><span style="margin-left: 4px;">{{ item.count }}</span>&nbsp;
+                            <span>📑</span><span style="margin-left: 4px;">{{ item.commentCount[0].count
+                                }}</span>&nbsp;
+                            <span class="isLike" :class="{ addlike: item.isPraise[0].count !== 0 }"
+                                @click="addPraise($event, item)">❤</span><span style="margin-left: 4px;">{{
+                                    item.praiseCount[0].count }}</span>
                         </div>
                         <div class="content-label">
+                            <p>
+                                <el-icon color="green" style="margin-right: 4px;">
+                                    <HelpFilled />
+                                </el-icon>博客文章
+                            </p>
                             <p>
                                 <el-icon color="purple" style="margin-right: 4px;">
                                     <FolderOpened />
                                 </el-icon>BLOG
                             </p>
-                            <p>
-                                <el-icon color="green" style="margin-right: 4px;">
-                                    <HelpFilled />
-                                </el-icon>使用指南
-                            </p>
                         </div>
                     </div>
-                </router-link>
+                </div>
             </div>
             <div class="right-article">
                 <div class="article-header">
@@ -216,43 +220,46 @@
                         <span style="margin-left: 4px;">首页</span>
                     </div>
                 </div>
-                <router-link to="article" class="article-item" v-for="(item, index) in 6" :key="index">
+                <div class="article-item" @click="toArticle(item)" v-for="(item, index) in currentData" :key="index">
                     <div class="item-img">
-                        <img style="width: 100%;height: 100%;" src="../assets/images/light-treehole.png" alt="">
+                        <img style="width: 100%;height: 100%;" :src="`http://localhost:3000${item.cover}`" alt="">
                     </div>
                     <div class="item-content">
                         <div class="content-time">
                             <el-icon>
                                 <Calendar />
                             </el-icon>
-                            <span style="margin-left: 4px;">2025-4-10&nbsp;20:22:36</span>
+                            <span style="margin-left: 4px;">{{ item.createdate }}</span>
                         </div>
-                        <div class="content-title">我的个人博客</div>
+                        <div class="content-title">{{ item.name }}</div>
+                        <div class="right-tip">{{ item.name }}</div>
                         <div class="content-info">
-                            <el-icon color="red">
-                                <Loading />
-                            </el-icon><span style="margin-left: 4px;">4799热度</span>&nbsp;
-                            <el-icon color="orange">
-                                <ChatDotSquare />
-                            </el-icon><span style="margin-left: 4px;">7评论</span>
+                            <span>👁️</span><span style="margin-left: 4px;">{{ item.count }}</span>&nbsp;
+                            <span>📑</span><span style="margin-left: 4px;">{{ item.commentCount[0].count
+                            }}</span>&nbsp;
+                            <span class="isLike" :class="{ addlike: item.isPraise[0].count !== 0 }"
+                                @click="addPraise($event, item)">❤</span><span style="margin-left: 4px;">{{
+                                    item.praiseCount[0].count }}</span>
                         </div>
                         <div class="content-label">
-                            <p>
-                                <el-icon color="purple" style="margin-right: 4px;">
-                                    <FolderOpened />
-                                </el-icon>BLOG
-                            </p>
                             <p>
                                 <el-icon color="green" style="margin-right: 4px;">
                                     <HelpFilled />
                                 </el-icon>使用指南
                             </p>
+                            <p>
+                                <el-icon color="purple" style="margin-right: 4px;">
+                                    <FolderOpened />
+                                </el-icon>BLOG
+                            </p>
                         </div>
                     </div>
-                </router-link>
+                </div>
             </div>
             <div class="right-pager">
-                <el-pagination background="#53e5b9" layout="prev, pager, next" :total="1000" />
+                <el-pagination v-model:current-page="currentPage" v-model:page-size="pageSize" background
+                    layout=" prev, pager, next" :total="hotArticle.length" @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange" />
             </div>
         </div>
     </div>
@@ -260,17 +267,27 @@
 
 <script setup lang='ts'>
 import { bannerImg, labelColors } from '../utils/data';
-import { useTimeStore } from '../store'
+import { useArticleStore, useTimeStore, useUserStore } from '../store'
 import { storeToRefs } from 'pinia'
 import axios from 'axios'
-import { onMounted, ref } from 'vue';
+import { computed, getCurrentInstance, onMounted, reactive, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { nanoid } from 'nanoid';
+import { formattime } from '../utils/customize';
+import { ElMessage } from 'element-plus';
 
-//实例化 Store
+const { proxy } = getCurrentInstance()
+
+// 实例化 Store
 const timeStore = useTimeStore()
-//解构 State（自动转为响应式 ref）
+const userStore = useUserStore()
+const articleStore = useArticleStore()
+// 解构 State（自动转为响应式 ref）
 const { isDark } = storeToRefs(timeStore)
+const { token } = storeToRefs(userStore)
+const { article } = storeToRefs(articleStore)
 
-//视频
+// 视频
 const videoUrl = ref('')
 const isAutoplay = ref(true)
 const isShowVideo = ref(false)
@@ -287,29 +304,109 @@ const autoPlay = () => {
         getVideo()
     }
 }
-
-//新闻
+// 新闻
 const news = ref()
 const newsUpdateTime = ref()
 const getNews = () => {
     axios.get('https://hot-api.2leo.top/douyin?cache=true').then((data) => {
         news.value = data.data.data.splice(0, 10)
-
         const targetTime = new Date(data.data.updateTime);
         const targetTimestamp = targetTime.getTime(); // 毫秒时间戳
         const now = new Date();
         const nowTimestamp = now.getTime(); // 毫秒时间戳
         const timeDiff = Math.round((nowTimestamp - targetTimestamp) / (1000 * 60));// 时间差(分钟)
         newsUpdateTime.value = timeDiff
-
     })
 }
-
-//挂载
+// 天气
+const weather = ref()
+const getWeather = () => {
+    axios.get('https://info.2leo.top/api/visitor.info').then((data) => {
+        weather.value = data.data
+        // console.log(weather.value);
+    })
+}
+// 挂载
 onMounted(() => {
     getNews()
     getVideo()
+    getWeather()
+    articleStore.getArticle()
+    console.log(nanoid(10), formattime(Date.now()));
+
 })
+
+// 获取置顶文章
+const topArticle = computed(() => {
+    // 先过滤非置顶文章，再按观看次数排序
+    return article.value
+        .filter(item => item.top === 0) // 过滤非置顶文章
+        .sort((a, b) => {
+            // 确保观看次数存在，默认为0
+            const countA = a.count || 0;
+            const countB = b.count || 0;
+            return countB - countA; // 降序排列（从高到低）
+        }).splice(0, 6);
+})
+// 获取根据观看次数排序的文章
+const hotArticle = computed(() => {
+    return article.value
+        .sort((a, b) => {
+            // 确保观看次数存在，默认为0
+            const countA = a.count || 0;
+            const countB = b.count || 0;
+            return countB - countA; // 降序排列（从高到低）
+        });
+})
+// 分页状态
+const currentPage = ref(1);
+const pageSize = ref(6);
+// 计算当前页数据
+const currentData = computed(() => {
+    const start = (currentPage.value - 1) * pageSize.value;
+    const end = start + pageSize.value;
+    return hotArticle.value.slice(start, end);
+});
+// 页码变化时的处理
+const handleCurrentChange = (val: any) => {
+    currentPage.value = val;
+};
+
+const router = useRouter()
+// 查看文章
+const toArticle = (item: any) => {
+    router.push({
+        name: 'article',
+        query: { id: item.id }
+    });
+}
+
+
+// 点赞参数
+const praiseParams = reactive({
+    id: nanoid(10),
+    type_id: '',
+    user_id: token.value.type === 1 ? token.value.username : token.value.id,
+    user_type: token.value.type,
+    createdate: formattime(Date.now())
+})
+// 点赞方法
+const addPraise = async (event: any, item: any) => {
+    event.stopPropagation();
+    praiseParams.type_id = item.id
+    praiseParams.id = nanoid(10)
+    // 点过一次赞不允许再点赞
+    if (item.isPraise[0].count === 0) {
+        try {
+            const result = await proxy.$api.insertPraise(praiseParams)
+            item.praiseCount[0].count++
+            item.isPraise[0].count++
+        } catch (error) {
+            console.error('点赞失败:', error)
+            ElMessage.error('点赞失败')
+        }
+    }
+}
 
 </script>
 <style lang='less' scoped>
@@ -385,7 +482,7 @@ onMounted(() => {
                 cursor: pointer;
                 align-items: center;
                 margin-top: 16px;
-                transition: all 0.5;
+                transition: all 0.5s;
 
                 &:hover {
                     background-color: #ff4362;
@@ -396,10 +493,10 @@ onMounted(() => {
         .left-welcome {
             width: 100%;
             margin: 10px 0;
-            border-radius: 10px;
+            border-radius: 5px;
             padding: 4px 12px 10px 12px;
             font-family: auto;
-
+            box-shadow: 0 1px 16px -10px rgba(0, 0, 0, 0.5);
             background: rgba(252, 175, 162, 0.30);
 
             .welcome-title {
@@ -425,10 +522,10 @@ onMounted(() => {
             width: 100%;
             background-color: rgba(142, 86, 137, 0.3);
             margin-top: 12px;
-            border-radius: 10px;
+            border-radius: 5px;
             padding: 4px 12px 10px 12px;
             font-family: auto;
-
+            box-shadow: 0 1px 16px -10px rgba(0, 0, 0, 0.5);
 
             &>:nth-child(2) {
                 .item-num {
@@ -501,9 +598,10 @@ onMounted(() => {
             width: 100%;
             background-color: rgba(168, 230, 138, 0.30);
             margin-top: 12px;
-            border-radius: 10px;
+            border-radius: 5px;
             padding: 4px 12px 10px 12px;
             font-family: auto;
+            box-shadow: 0 1px 16px -10px rgba(0, 0, 0, 0.5);
 
             .message-title {
                 font-size: 17x;
@@ -547,9 +645,10 @@ onMounted(() => {
             width: 100%;
             background-color: rgb(172 209 209 / 30%);
             margin-top: 12px;
-            border-radius: 10px;
+            border-radius: 5px;
             padding: 4px 12px 10px 12px;
             font-family: auto;
+            box-shadow: 0 1px 16px -10px rgba(0, 0, 0, 0.5);
 
             .search-title {
                 font-size: 17x;
@@ -587,9 +686,10 @@ onMounted(() => {
             width: 100%;
             background-color: rgb(234 226 100 / 30%);
             margin-top: 12px;
-            border-radius: 10px;
+            border-radius: 5px;
             padding: 4px 12px 10px 12px;
             font-family: auto;
+            box-shadow: 0 1px 16px -10px rgba(0, 0, 0, 0.5);
 
             .label-title {
                 font-size: 17x;
@@ -614,9 +714,10 @@ onMounted(() => {
             width: 100%;
             background-color: rgb(85 247 246 / 30%);
             margin-top: 12px;
-            border-radius: 10px;
+            border-radius: 5px;
             padding: 4px 12px 10px 12px;
             font-family: auto;
+            box-shadow: 0 1px 16px -10px rgba(0, 0, 0, 0.5);
 
             .video-title {
                 font-size: 17x;
@@ -670,9 +771,10 @@ onMounted(() => {
             width: 100%;
             background-color: rgba(190, 163, 192, 0.3);
             margin-top: 12px;
-            border-radius: 10px;
+            border-radius: 5px;
             padding: 4px 12px 10px 12px;
             font-family: auto;
+            box-shadow: 0 1px 16px -10px rgba(0, 0, 0, 0.5);
 
             .consulting-title {
                 font-size: 17x;
@@ -685,7 +787,8 @@ onMounted(() => {
                 height: 100%;
                 padding: 4px 12px;
                 font-size: 14px;
-                p{
+
+                p {
                     margin-bottom: 7px;
                     display: flex;
                     justify-content: space-between;
@@ -719,12 +822,13 @@ onMounted(() => {
         .right-header {
             padding: 22px;
             color: #868686;
-            border-radius: 10px;
+            border-radius: 5px;
             display: flex;
             margin-top: 40px;
             align-items: center;
             justify-content: space-between;
             background-color: rgba(146, 230, 245, 0.30);
+            box-shadow: 0 1px 16px -10px rgba(0, 0, 0, 0.5);
 
             .header-notice {
                 display: flex;
@@ -771,7 +875,7 @@ onMounted(() => {
             width: 100%;
             display: flex;
             flex-wrap: wrap;
-            justify-content: space-between;
+            // justify-content: space-between;
 
             .recommend-header {
                 width: 100%;
@@ -806,17 +910,39 @@ onMounted(() => {
                 overflow: hidden;
                 margin: 10px 10px 10px 0;
                 flex-shrink: 0;
-                cursor: pointer;
-                box-shadow: 0 1px 8px -6px black;
+                box-shadow: 0 1px 16px -10px rgba(0, 0, 0, 0.5);
+                cursor: default;
+                transition: all 0.5s;
+
+                &:hover {
+                    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
+                }
 
                 .item-img {
                     width: 100%;
                     height: 170px;
-                    background-color: #ad6e4c;
                     border-radius: 10px 10px 0 0;
+                    background-image: url(../assets/images/loading.gif);
+                    background-size: cover;
+                    background-position: center;
+                    overflow: hidden;
+                    z-index: 5;
+
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                        object-position: center;
+                        transition: transform 0.5s ease;
+
+                        &:hover {
+                            transform: scale(1.2);
+                        }
+                    }
                 }
 
                 .item-content {
+                    position: relative;
                     width: 100%;
                     height: 130px;
                     background-color: rgba(255, 255, 255, 0.1);
@@ -831,9 +957,35 @@ onMounted(() => {
                     }
 
                     .content-title {
-                        margin: 10px 0;
-                        font-size: 18px;
+                        margin: 12px 0;
+                        font-size: 17px;
                         font-weight: 600;
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                        overflow: hidden;
+                        color: gray;
+
+                        &:hover {
+                            +.right-tip {
+                                opacity: 1 !important;
+                            }
+                        }
+                    }
+
+                    .right-tip {
+                        position: absolute;
+                        top: -20px;
+                        border-radius: 5px;
+                        color: #4090c9;
+                        padding: 5px 10px;
+                        letter-spacing: 1px;
+                        font-weight: 600;
+                        line-height: 1.5;
+                        font-size: 14px;
+                        opacity: 0;
+                        transition: all 0.5s;
+                        white-space: nowrap;
+                        background: linear-gradient(24deg, #e8d8b9, #eccec5, #a3e9eb, #bdbdf0, #eec1ea);
                     }
 
                     .content-info {
@@ -841,20 +993,42 @@ onMounted(() => {
                         align-items: center;
                         font-size: 13px;
                         color: gray;
+
+                        .isLike {
+                            cursor: pointer;
+                            z-index: 999;
+
+                            &.addlike {
+                                color: red;
+                            }
+
+                            &:hover {
+                                color: red;
+                            }
+                        }
                     }
 
                     .content-label {
+                        display: flex;
+                        align-items: center;
                         display: flex;
                         align-items: center;
 
                         p {
                             margin-top: 12px;
                             margin-right: 14px;
+                            font-size: 13px;
                             padding: 2px 4px;
                             background-color: #eeeeee;
                             border-radius: 3px;
                             display: flex;
                             align-items: center;
+                            transition: all 0.5s;
+
+                            &:hover {
+                                background-color: #ffa500;
+                                color: #fff;
+                            }
                         }
                     }
                 }
@@ -865,7 +1039,7 @@ onMounted(() => {
             width: 100%;
             display: flex;
             flex-wrap: wrap;
-            justify-content: space-between;
+            // justify-content: space-between;
 
             .article-header {
                 width: 100%;
@@ -900,17 +1074,39 @@ onMounted(() => {
                 overflow: hidden;
                 margin: 10px 10px 10px 0;
                 flex-shrink: 0;
-                cursor: pointer;
-                box-shadow: 0 1px 8px -6px black;
+                cursor: default;
+                box-shadow: 0 1px 16px -10px rgba(0, 0, 0, 0.5);
+                transition: all 0.5s;
+
+                &:hover {
+                    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
+                }
 
                 .item-img {
                     width: 100%;
                     height: 170px;
-                    background-color: #ad6e4c;
                     border-radius: 10px 10px 0 0;
+                    background-image: url(../assets/images/loading.gif);
+                    background-size: cover;
+                    background-position: center;
+                    overflow: hidden;
+                    z-index: 5;
+
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                        object-position: center;
+                        transition: transform 0.5s ease;
+
+                        &:hover {
+                            transform: scale(1.2);
+                        }
+                    }
                 }
 
                 .item-content {
+                    position: relative;
                     width: 100%;
                     height: 130px;
                     background-color: rgba(255, 255, 255, 0.1);
@@ -925,9 +1121,35 @@ onMounted(() => {
                     }
 
                     .content-title {
-                        margin: 10px 0;
-                        font-size: 18px;
+                        margin: 12px 0;
+                        font-size: 17px;
                         font-weight: 600;
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                        overflow: hidden;
+                        color: gray;
+
+                        &:hover {
+                            +.right-tip {
+                                opacity: 1 !important;
+                            }
+                        }
+                    }
+
+                    .right-tip {
+                        position: absolute;
+                        top: -20px;
+                        border-radius: 5px;
+                        color: #4090c9;
+                        padding: 5px 10px;
+                        letter-spacing: 1px;
+                        font-weight: 600;
+                        line-height: 1.5;
+                        font-size: 14px;
+                        opacity: 0;
+                        transition: all 0.5s;
+                        white-space: nowrap;
+                        background: linear-gradient(24deg, #e8d8b9, #eccec5, #a3e9eb, #bdbdf0, #eec1ea);
                     }
 
                     .content-info {
@@ -935,6 +1157,19 @@ onMounted(() => {
                         align-items: center;
                         font-size: 13px;
                         color: gray;
+
+                        .isLike {
+                            cursor: pointer;
+                            z-index: 999;
+
+                            &.addlike {
+                                color: red;
+                            }
+
+                            &:hover {
+                                color: red;
+                            }
+                        }
                     }
 
                     .content-label {
@@ -944,11 +1179,18 @@ onMounted(() => {
                         p {
                             margin-top: 12px;
                             margin-right: 14px;
+                            font-size: 12px;
                             padding: 2px 4px;
                             background-color: #eeeeee;
                             border-radius: 3px;
                             display: flex;
                             align-items: center;
+                            transition: all 0.5s;
+
+                            &:hover {
+                                background-color: #ffa500;
+                                color: #fff;
+                            }
                         }
                     }
                 }
@@ -959,7 +1201,7 @@ onMounted(() => {
             display: flex;
             width: 100%;
             height: 50px;
-            padding-left: 20px;
+            justify-content: center;
         }
     }
 }

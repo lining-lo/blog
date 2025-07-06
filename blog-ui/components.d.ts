@@ -35,5 +35,6 @@ declare module 'vue' {
     MessageCard: typeof import('./src/components/MessageCard.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Tool: typeof import('./src/components/Tool.vue')['default']
   }
 }

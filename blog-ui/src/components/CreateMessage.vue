@@ -114,18 +114,14 @@ const sumbit = async () => {
 
 <style lang='less' scoped>
 .modal {
-
     //入场
     &-enter {
         &-from {
             transform: translateX(360px);
         }
-
         &-active {
             transition: all 0.2s ease-out;
-
         }
-
         &-to {
             transform: translateX(0px);
         }
@@ -136,12 +132,9 @@ const sumbit = async () => {
         &-from {
             transform: translateX(0px);
         }
-
         &-active {
             transition: all 0.2s ease-in;
-
         }
-
         &-to {
             transform: translateX(360px);
         }
@@ -154,7 +147,7 @@ const sumbit = async () => {
     position: fixed;
     right: 0;
     top: 60px;
-    z-index: 1000;
+    z-index: 9999;
     background: rgba(255, 255, 255);
     box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.08);
     backdrop-filter: blur(5px);

@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import api from '../api'
 
 export const useTimeStore = defineStore('time', {
   state: () => {
@@ -32,5 +33,42 @@ export const useUserStore = defineStore('user', {
         imgurl: Math.trunc(Math.random() * 14)
       }
     }
+  },
+})
+
+export const useArticleStore = defineStore('article', {
+  state: () => {
+    return {
+      article: []
+    }
+  },
+  actions: {
+    async getArticle() {
+      const userStore = useUserStore(); // 获取用户Store实例
+      // 获取文章参数
+      const articlePageParams = {
+        page: 1,
+        pagesize: 100,
+        // 从userStore中获取token
+        user_id: userStore.token.type === 1 ? userStore.token.username : userStore.token.id,
+        user_type: userStore.token.type
+      };
+      // 获取文章方法
+      const result = await api.selectArticlePage(articlePageParams)
+      this.article = result.data.message
+    },
+  },
+})
+
+
+export const useToolStore = defineStore('tool', {
+  state: () => {
+    return {
+      isShowCatalog: false,
+      isShowCreateMessage:false
+    }
+  },
+  actions: {
+    
   },
 })

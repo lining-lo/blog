@@ -73,7 +73,7 @@
                       <button class="title-right" @click="toReCall(commentItem)"
                         v-if="token.type === 0 ? commentItem.user_id !== token.id : commentItem.user_id !== token.username">回复</button>
                     </div>
-                    <div class="right-liuyan" :style="{ color: isDark ? '#fff' : '#000000' }">
+                    <div class="right-liuyan" :style="{ color: isDark ? '#fff' : '#000000',backgroundColor:isDark?'#5b5b5ccf':'#f7f9fe' }">
                       <div v-if="commentItem.replier_id !== '' && commentItem.replier_id !== null"
                         style="display: inline-block;">
                         <span>回复 </span><span style="color: #0f91c8;">@{{ commentItem.replier_name }}</span>：
@@ -600,6 +600,8 @@ const getLevel = async (item: any) => {
                 .right-liuyan {
                   margin-top: 8px;
                   line-height: 1.5;
+                  background: #f7f9fe;
+                  padding: 10px;
                 }
               }
             }

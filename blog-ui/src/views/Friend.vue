@@ -318,8 +318,8 @@ onMounted(() => {
         width: 100%;
         height: 60%;
         // background-color: #f5f7fa;
-        background-image: url(../assets/images/loading.gif);
         border-radius: 10px 10px 0 0;
+        background-image: url(../assets/images/loading.gif);
         background-size: cover;
         background-position: center;
         overflow: hidden;

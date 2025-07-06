@@ -100,5 +100,24 @@ export default {
     selectDiaryPage(data: any) {
         return http.post('/selectDiaryPage', data)
     },
-    
+
+    /**
+     * 收藏相关
+     */
+    // 分页获取收藏
+    selectFavoritesPage(data: any) {
+        return http.post('/selectFavoritesPage', data)
+    },
+
+     /**
+     * 文章相关
+     */
+    // 分页获取文章
+    selectArticlePage(data: any) {
+        return http.post('/selectArticlePage', data)
+    },
+    // // 根据id查找文章
+    selectArticleById(data: any) {
+        return http.post('/selectArticleById', data)
+    },
 }

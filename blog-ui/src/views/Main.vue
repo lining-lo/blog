@@ -5,6 +5,7 @@
         <router-view/>
     </div>
     <router-view v-else/>
+    <tool v-if="route.name !== 'treehole'"/>
     <footer-bar v-if="route.name !== 'treehole'"/>
 </template>
 
@@ -12,6 +13,7 @@
 import HeaderBar from '../components/HeaderBar.vue';
 import FooterBar from '../components/FooterBar.vue';
 import Banner from '../components/Banner.vue';
+import Tool from '../components/Tool.vue';
 import { useRoute } from 'vue-router';
 //实例化route
 const route = useRoute()

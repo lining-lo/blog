@@ -69,7 +69,34 @@ const routes = [
 // 创建路由实例
 const router = createRouter({
   history: createWebHistory(), // 浏览器历史模式
-  routes
+  routes,
 })
+
+// 后置路由守卫
+router.afterEach(() => {
+  // 获取当前滚动位置
+  const startScroll = document.body.scrollTop || document.documentElement.scrollTop;
+  const duration = 500; // 动画持续时间（毫秒）
+  const startTime = performance.now();
+  // 动画函数
+  const animateScroll = (currentTime:any) => {
+    const elapsedTime = currentTime - startTime;
+    // 计算动画进度（0-1）
+    const progress = Math.min(elapsedTime / duration, 1);
+    // 使用缓动函数使动画更平滑（减速效果）
+    const easeOutProgress = progress * (2 - progress);
+    // 计算当前应该滚动到的位置
+    const currentScroll = startScroll - (startScroll * easeOutProgress);
+    // 执行滚动
+    document.body.scrollTop = currentScroll;
+    document.documentElement.scrollTop = currentScroll;
+    // 如果动画未完成，继续下一帧
+    if (progress < 1) {
+      requestAnimationFrame(animateScroll);
+    }
+  };
+  // 开始动画
+  requestAnimationFrame(animateScroll);
+});
 
 export default router

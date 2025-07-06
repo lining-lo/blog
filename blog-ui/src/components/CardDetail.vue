@@ -161,7 +161,7 @@ const send = async (item: any) => {
     position: fixed;
     right: 0;
     top: 60px;
-    z-index: 1000;
+    z-index: 9999;
     background: rgba(255, 255, 255);
     box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.08);
     backdrop-filter: blur(5px);

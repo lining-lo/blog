@@ -9,13 +9,13 @@
             <message-card @selectCard="selectCard" :class="{ cardselected: cardSelected === item.id }" class="card-item"
                 :card="item" v-for="item in wall" :key="item.id" />
         </div>
-        <div class="message-addbtn" @click="isShowCreateCardPopup = true">
+        <!-- <div class="message-addbtn" @click="isShowCreatePopup = true">
             <el-icon class="icon">
                 <Plus />
             </el-icon>
-        </div>
-        <create-message @selectLable="selectLable" @getWall="getWall" v-if="isShowCreateCardPopup"
-            :isShow="isShowCreateCardPopup" @closePopup="closeCreateCardPopup" />
+        </div> -->
+        <create-message @selectLable="selectLable" @getWall="getWall" v-if="isShowCreateMessage"
+            :isShow="isShowCreateMessage" @closePopup="closeCreateCardPopup" />
         <card-detail @getWall="getWall" @getComment="getComment" :comment="comment"
             :card="wall[wall.findIndex(item => item.id === cardSelected)]" v-if="isShowCardDetailPopup"
             @closePopup="closeCardDetailPopup" />
@@ -28,23 +28,23 @@ import CreateMessage from '../components/CreateMessage.vue';
 import MessageCard from '../components/MessageCard.vue';
 import CardDetail from '../components/CardDetail.vue';
 import { getCurrentInstance, onMounted, reactive, ref } from 'vue';
-import { useTimeStore, useUserStore } from '../store';
+import { useTimeStore, useToolStore, useUserStore } from '../store';
 import { storeToRefs } from 'pinia';
 const { proxy } = getCurrentInstance()
 
 // 实例化 Store
 const timeStore = useTimeStore()
 const userStore = useUserStore()
+const toolStore = useToolStore()
 // 解构 State（自动转为响应式 ref）
 const { isDark } = storeToRefs(timeStore)
 const { token } = storeToRefs(userStore)
+const { isShowCreateMessage } = storeToRefs(toolStore)
 
-//创建卡片弹窗开关
-const isShowCreateCardPopup = ref(false)
 //关闭创建卡片弹窗
 const closeCreateCardPopup = () => {
     isShowCardDetailPopup.value = false
-    isShowCreateCardPopup.value = false
+    isShowCreateMessage.value = false
 }
 
 //卡片详情弹窗开关
@@ -52,7 +52,7 @@ const isShowCardDetailPopup = ref(false)
 //关闭卡片详情弹窗
 const closeCardDetailPopup = () => {
     isShowCardDetailPopup.value = false
-    isShowCreateCardPopup.value = false
+    isShowCreateMessage.value = false
     cardSelected.value = '-1'
 }
 
@@ -69,7 +69,7 @@ const selectLable = (index: any) => {
     }
     //关闭弹窗
     isShowCardDetailPopup.value = false
-    isShowCreateCardPopup.value = false
+    isShowCreateMessage.value = false
     cardSelected.value = '-1'
 }
 
@@ -86,7 +86,7 @@ const selectCard = (index: any) => {
         //取消选中
         cardSelected.value = '-1'
         isShowCardDetailPopup.value = false
-        isShowCreateCardPopup.value = false
+        isShowCreateMessage.value = false
     }
 }
 

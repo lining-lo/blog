@@ -452,6 +452,7 @@ const updateUser = async () => {
     padding: 0;
     border-radius: 10px;
     box-shadow: 0 1px 20px -6px rgba(0, 0, 0, 0.5);
+    z-index: 9999 !important;
 
     .el-dialog__header {
         display: none;

@@ -149,6 +149,34 @@ const createTables = async () => {
                     PRIMARY KEY (id)
                     );`
         },
+        {
+            name: 'favorites',
+            sql: `create table if not exists favorites( 
+                    id VARCHAR(100) NOT NULL,
+                    label INT DEFAULT 0 COMMENT '标签(0前端,1后端,2工具)',
+                    name VARCHAR(100) NOT NULL COMMENT '名称',
+                    introduction VARCHAR(100) NOT NULL COMMENT '介绍',
+                    icon VARCHAR(100) NOT NULL COMMENT '图标',
+                    url VARCHAR(100) NOT NULL COMMENT '地址',
+                    createdate VARCHAR(100) NOT NULL COMMENT '创建时间',
+                    PRIMARY KEY ( id )
+                );`
+        },
+        {
+            name: 'article',
+            sql: `create table if not exists article( 
+                    id VARCHAR(100) NOT NULL,
+                    name VARCHAR(100) NOT NULL COMMENT '标题',
+                    label INT DEFAULT 0 COMMENT '标签(0前端,1后端,2生活,3AI)',
+                    content VARCHAR(5000) NOT NULL COMMENT '内容',
+                    cover VARCHAR(100) NOT NULL COMMENT '封面',
+                    top int DEFAULT 1 COMMENT '是否置顶(0置顶)',
+                    count int DEFAULT 0 COMMENT '查看次数',
+                    createdate VARCHAR(100) NOT NULL COMMENT '创建时间',
+                    updatedate VARCHAR(100) NOT NULL COMMENT '修改时间',
+                    PRIMARY KEY ( id )
+             );`
+        },
     ];
 
     for (const table of tables) {
@@ -194,8 +222,8 @@ module.exports = {
     // 分页查询评论
     findCommentPage: (type_id, type, page, pagesize) => {
         let sql = null
-        let values = null 
-        if (type === 3 ) {
+        let values = null
+        if (type === 3) {
             sql = `SELECT * FROM comment WHERE type = ? ORDER BY createdate LIMIT ?,?`
             values = [type, (page - 1) * pagesize, pagesize]
         } else {
@@ -301,6 +329,35 @@ module.exports = {
     // 分页获取说说
     selectDiaryPage: async (values) => {
         const sql = `SELECT * FROM Diary ORDER BY createdate DESC LIMIT ?,? `
+        return query(sql, values)
+    },
+
+    /**
+     * 收藏相关
+     */
+    // 新建收藏
+    insertFavorites: async (values) => {
+        const sql = `INSERT INTO favorites SET id=?,label=?,name=?,introduction=?,icon=?,url=?,createdate=?`
+        return query(sql, values)
+    },
+    // 分页查询收藏
+    selectFavoritesPage: async (values) => {
+        const sql = `SELECT * FROM  favorites ORDER BY createdate DESC LIMIT ?,? `
+        return query(sql, values)
+    },
+
+    /**
+     * 文章相关
+     */
+    // 分页查询文章
+    selectArticlePage: async (values) => {
+        const sql = `SELECT * FROM article ORDER BY createdate DESC LIMIT ?,? `
+        return query(sql, values)
+    },
+    // 根据id查找文章
+    selectArticleById: async (values) => {
+        const sql = `SELECT * FROM article where id = ? `
+        query('UPDATE article SET count = count + 1 WHERE id = ?', values)
         return query(sql, values)
     },
 };
