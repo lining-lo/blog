@@ -392,7 +392,7 @@ const getLevel = async (item: any) => {
     transform: translateX(-50%);
     background-size: cover;
     background-position: center;
-    background-image: url(/src/assets/images/zhuangshi2.png);
+    background-image: url(/src/assets/images/zhuangshi2.webp);
   }
 
   .diary-list {

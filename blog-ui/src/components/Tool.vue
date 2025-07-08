@@ -3,30 +3,82 @@
         <span v-if="route.name === 'message'" @click="showCreateMessage">📫</span>
         <span v-if="route.name === 'article'" @click="showCatalog">🕹️</span>
         <span @click="toTop">🚁</span>
-        <span>🔍</span>
+        <span @click="outerVisible = true">🔍</span>
         <span @click="toListen">🎸</span>
         <span @click="toChat">📻</span>
+        <el-dialog :show-close="false" v-model="outerVisible" width="600">
+            <div class="search"
+                :style="{ opacity: isDark ? 0.8 : 1, backgroundImage: `url(src/assets/images/${isDark ? 'dark' : 'light'}-search.webp)` }">
+                <div class="search-title">🔍搜索</div>
+                <div class="search-input">
+                    <input type="text">
+                    <button>搜索</button>
+                </div>
+                <!-- <div class="search-content">
+                    <div class="search-item">
+                        <p class="title">常用文字和<span class="selected">文字</span></p>
+                        <p class="text" style="margin: 5px 0;">色鬼色i收购饿哦色哥哥是关键是，<span
+                                class="selected">文字</span>。是否十六分萨勒夫，帅哥帅哥帅哥色色方式是否十六分字体算法来计算拉法基奥利弗就奥利弗奶妈裂缝冷身上了
+                        </p>
+                    </div>
+                    <div class="search-item">
+                        <p class="title">常用文字和<span class="selected">文字</span></p>
+                        <p style="margin: 5px 0;">色鬼色i收购饿哦色哥哥是关键是，<span
+                                class="selected">文字</span>。是否十六分萨勒夫，帅哥帅哥帅哥色色方式是否十六分字体算法来计算拉法基奥利弗就奥利弗奶妈裂缝冷身上了
+                        </p>
+                    </div>
+                    <div class="search-item">
+                        <p class="title">常用文字和<span class="selected">文字</span></p>
+                        <p style="margin: 5px 0;">色鬼色i收购饿哦色哥哥是关键是，<span
+                                class="selected">文字</span>。是否十六分萨勒夫，帅哥帅哥帅哥色色方式是否十六分字体算法来计算拉法基奥利弗就奥利弗奶妈裂缝冷身上了
+                        </p>
+                    </div>
+                    <div class="search-item">
+                        <p class="title">常用文字和<span class="selected">文字</span></p>
+                        <p style="margin: 5px 0;">色鬼色i收购饿哦色哥哥是关键是，<span
+                                class="selected">文字</span>。是否十六分萨勒夫，帅哥帅哥帅哥色色方式是否十六分字体算法来计算拉法基奥利弗就奥利弗奶妈裂缝冷身上了
+                        </p>
+                    </div>
+                </div> -->
+                <div class="search-recommend">
+                    <div class="news-item" v-for="(item, index) in hotArticle" :key="index">
+                        <div class="item-num">{{ index + 1 }}</div>
+                        <div class="item-txt" @click="toArticle(item)">{{item.name}}</div>
+                    </div>
+                </div>
+                <div class="search-tip" style="margin-top: 16px;color: aliceblue;">
+                    一共找到12条结果
+                </div>
+            </div>
+        </el-dialog>
     </div>
 </template>
 
 <script setup lang='ts'>
 import { ElMessage } from 'element-plus';
-import { ref, reactive } from 'vue'
-import { useRoute } from 'vue-router';
-import { useToolStore } from '../store';
+import { ref, reactive, onMounted, computed } from 'vue'
+import { useRoute, useRouter } from 'vue-router';
+import { useArticleStore, useTimeStore, useToolStore } from '../store';
 import { storeToRefs } from 'pinia';
 
 //实例化route
 const route = useRoute()
 
+const outerVisible = ref(false)
+
 // 实例化 Store
-const toolStore= useToolStore()
+const toolStore = useToolStore()
+const timeStore = useTimeStore()
+const articleStore = useArticleStore()
 // 解构 State（自动转为响应式 ref）
-const { isShowCatalog,isShowCreateMessage } = storeToRefs(toolStore)
-const showCatalog = ()=>{
+const { isShowCatalog, isShowCreateMessage } = storeToRefs(toolStore)
+const { isDark,componentKey } = storeToRefs(timeStore)
+const { article } = storeToRefs(articleStore)
+
+const showCatalog = () => {
     isShowCatalog.value = !isShowCatalog.value
 }
-const showCreateMessage = ()=>{
+const showCreateMessage = () => {
     isShowCreateMessage.value = !isShowCreateMessage.value
 }
 
@@ -57,13 +109,39 @@ const toTop = () => {
     requestAnimationFrame(animateScroll);
 };
 
-const toListen = ()=>{
+const toListen = () => {
     ElMessage.warning('音乐播放器尚未开发，敬请期待！')
 }
 
-const toChat = ()=>{
+const toChat = () => {
     ElMessage.warning('在线聊天室尚未开发，敬请期待！')
 }
+
+// 挂载
+onMounted(()=>{
+    articleStore.getArticle();
+})
+// 获取根据观看次数排序的文章
+const hotArticle = computed(() => {
+    return article.value
+        .sort((a, b) => {
+            // 确保观看次数存在，默认为0
+            const countA = a.count || 0;
+            const countB = b.count || 0;
+            return countB - countA; // 降序排列（从高到低）
+        }).slice(0,10);
+})
+const router = useRouter()
+// 查看文章
+const toArticle = (item: any) => {
+    router.push({
+        name: 'article',
+        query: { id: item.id }
+    });
+    componentKey.value += 1
+    outerVisible.value = false
+}
+
 </script>
 <style lang='less' scoped>
 .tool {
@@ -82,6 +160,151 @@ const toChat = ()=>{
         -moz-user-select: none;
         -ms-user-select: none;
         cursor: pointer;
+    }
+}
+
+::v-deep .el-dialog {
+    padding: 0;
+    border-radius: 10px;
+    box-shadow: 0 1px 20px -6px rgba(0, 0, 0, 0.5);
+    z-index: 9999 !important;
+    background-color: black;
+
+    .el-dialog__header {
+        display: none;
+    }
+
+    .search {
+        width: 100%;
+        margin: 0 auto;
+        border-radius: 10px;
+        padding: 20px 50px;
+        background-image: url(../assets/images/light-search.webp);
+        background-size: cover;
+        background-position: center;
+        font-family: auto;
+        cursor: default;
+
+        .search-title {
+            font-size: 17x;
+            margin-top: 14px;
+            margin-bottom: 5px;
+            color: #9485f2;
+        }
+
+        .search-input {
+            padding: 4px 12px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+
+            input {
+                height: 28px;
+                width: 412px;
+                font-size: 14px;
+                padding: 6px 12px;
+                border-radius: 10px 0 0 10px;
+                background-color: transparent;
+                border: 2px solid #9485f2;
+                color: #9485f2;
+                outline: none;
+            }
+
+            button {
+                height: 28px;
+                font-size: 12px;
+                padding: 4px 20px;
+                border-radius: 0 10px 10px 0;
+                background-color: #9485f2;
+                font-size: 12px;
+                color: #fff;
+            }
+        }
+
+        .search-content {
+            width: 100%;
+            height: 300px;
+            overflow: auto;
+            padding: 0 5px;
+
+            .search-item {
+                margin: 12px 0;
+                padding: 4px 14px;
+                background-color: rgba(40, 40, 40, 0.4);
+                color: #fff;
+
+                .title {
+                    font-size: 16px;
+                    font-weight: 600;
+                    cursor: pointer;
+                }
+
+                .selected {
+                    color: #e34b4f;
+                    font-weight: 600;
+                    // background-color: gray;
+                    padding: 0 2px;
+                }
+            }
+        }
+
+        .search-recommend {
+            width: 100%;
+            height: 300px;
+            overflow: auto;
+            margin-top: 10px;
+
+            &>:nth-child(1) {
+                .item-num {
+                    background-color: #ff4d4f !important;
+                    color: #fff;
+                }
+            }
+
+            &>:nth-child(2) {
+                .item-num {
+                    background-color: orange !important;
+                    color: #fff;
+                }
+            }
+
+            &>:nth-child(3) {
+                .item-num {
+                    background-color: rgb(207, 174, 114) !important;
+                    color: #fff;
+                }
+            }
+
+            .news-item {
+                display: flex;
+                align-items: center;
+                margin: 10px 12px;
+                padding: 2px 10px;
+                font-size: 14px;
+                background-color: rgba(40, 40, 40, 0.4);
+                color: #fff;
+
+                .item-num {
+                    width: 24px;
+                    height: 24px;
+                    border-radius: 50%;
+                    background-color: #d9d9d9;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    margin-right: 8px;
+                    font-weight: 700;
+                }
+
+                .item-txt {
+                    cursor: pointer;
+                    letter-spacing: 1px;
+                    &:hover {
+                        color:#e34b4f;
+                    }
+                }
+            }
+        }
     }
 }
 </style>

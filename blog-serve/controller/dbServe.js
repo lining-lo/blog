@@ -5,8 +5,6 @@ const db = require('../lib/db')
 // 新建评论
 exports.insertComment = async (request, response) => {
     const data = request.body
-    console.log(data);
-    
     await db.insertComment([data.id, data.type, data.type_id, data.user_id, data.user_name, data.user_type, data.user_imgurl, data.createdate, data.content, data.replier_id, data.replier_name]).then(result => {
         response.send({
             code: 200,
@@ -177,6 +175,13 @@ exports.selectLinkPage = async (request, response) => {
 exports.selectAlbumPage = async (request, response) => {
     const data = request.body
     await db.selectAlbumPage([(data.page - 1) * data.pagesize, data.pagesize]).then(async result => {
+        // 查询各反馈总数据
+        for (let i = 0; i < result.length; i++) {
+            // 是否点赞
+            result[i].isPraise = await db.isPraise([result[i].id, data.user_id, data.user_type])
+            // 点赞总数
+            result[i].praiseCount = await db.praiseCount([result[i].id])
+        }
         // 返回结果
         response.send({
             code: 200,
@@ -261,6 +266,47 @@ exports.selectArticlePage = async (request, response) => {
 exports.selectArticleById = async (request, response) => {
     const data = request.body
     await db.selectArticleById([data.id]).then(result => {
+        response.send({
+            code: 200,
+            message: result
+        })
+    })
+}
+
+/**
+ * 网站信息相关
+ */
+// 获取网站信息
+exports.selectInfo = async (request, response) => {
+    await db.selectInfo().then(async result => {
+        // 文章数量
+        result[0].articleCount = await db.selectArticleCount()
+        // 标签数量
+        result[0].labelCount = await db.selectLabelCount()
+        // 图库数量
+        result[0].albumCount = await db.selectAlbumCount()
+        // 点赞数量
+        result[0].praiseCount = await db.selectPraiseCount()
+        // 评论数量
+        result[0].commentCount = await db.selectCommentCount()
+        // 用户数量
+        result[0].userCount = await db.selectUserCount()
+        response.send({
+            code: 200,
+            message: result
+        })
+    })
+}
+
+
+/**
+ * 分类（标签）相关
+ */
+// 分页获取标签
+exports.selectLabelPage = async (request, response) => {
+    const data = request.body
+    await db.selectLabelPage([(data.page - 1) * data.pagesize, data.pagesize]).then(async result => {
+        // 返回结果
         response.send({
             code: 200,
             message: result

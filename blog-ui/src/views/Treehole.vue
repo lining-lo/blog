@@ -43,7 +43,7 @@ const { token } = storeToRefs(userStore)
 
 //获取背景图片
 const imgurl = computed(() => {
-    const url = `url(/src/assets/images/${isDark.value ? 'dark' : 'light'}-${String(route.name)}.png)`;
+    const url = `url(/src/assets/images/${isDark.value ? 'dark' : 'light'}-${String(route.name)}.webp)`;
     return url;
 })
 

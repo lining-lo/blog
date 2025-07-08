@@ -115,4 +115,20 @@ module.exports = function (app) {
     app.post('/selectArticleById', (request, response) => {
         controller.selectArticleById(request, response)
     })
+
+    /**
+     * 网站信息相关
+     */
+    // 获取网站信息
+    app.post('/selectInfo', (request, response) => {
+        controller.selectInfo(request, response)
+    })
+
+    /**
+     * 分类（标签）相关
+     */
+    // 分页获取标签
+    app.post('/selectLabelPage', (request, response) => {
+        controller.selectLabelPage(request, response)
+    })
 }

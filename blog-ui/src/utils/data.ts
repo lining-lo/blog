@@ -13,22 +13,22 @@ export const headerbarRoutes = [
 // 轮播图
 export const bannerImg = [
     [
-        "url(src/assets/images/light-timeline.png)",
-        "url(src/assets/images/light-favorites.png)",
-        "url(src/assets/images/light-album.png)",
-        "url(src/assets/images/light-diary.png)",
-        "url(src/assets/images/light-treehole.png)",
-        "url(src/assets/images/light-friend.png)",
-        "url(src/assets/images/light-message.png)"
+        "url(src/assets/images/light-timeline.webp)",
+        "url(src/assets/images/light-favorites.webp)",
+        "url(src/assets/images/light-album.webp)",
+        "url(src/assets/images/light-diary.webp)",
+        "url(src/assets/images/light-treehole.webp)",
+        "url(src/assets/images/light-friend.webp)",
+        "url(src/assets/images/light-message.webp)"
     ],
     [
-        "url(src/assets/images/dark-timeline.png)",
-        "url(src/assets/images/dark-favorites.png)",
-        "url(src/assets/images/dark-album.png)",
-        "url(src/assets/images/dark-diary.png)",
-        "url(src/assets/images/dark-treehole.png)",
-        "url(src/assets/images/dark-friend.png)",
-        "url(src/assets/images/dark-message.png)"
+        "url(src/assets/images/dark-timeline.webp)",
+        "url(src/assets/images/dark-favorites.webp)",
+        "url(src/assets/images/dark-album.webp)",
+        "url(src/assets/images/dark-diary.webp)",
+        "url(src/assets/images/dark-treehole.webp)",
+        "url(src/assets/images/dark-friend.webp)",
+        "url(src/assets/images/dark-message.webp)"
     ],
 ]
 
@@ -114,23 +114,23 @@ export const photoType = [
     {
         title: '风景',
         msg: '记录沿途的风景',
-        cover: 'src/assets/images/scenery.png'
+        cover: 'src/assets/images/scenery.webp'
     },
     {
         title: '美食',
         msg: '唯有美食不可辜负',
-        cover: 'src/assets/images/foot.png'
+        cover: 'src/assets/images/foot.webp'
 
     },
     {
         title: '日常',
         msg: '随手拍拍~~',
-        cover: 'src/assets/images/daily.png'
+        cover: 'src/assets/images/daily.webp'
     },
     {
         title: '二次元',
         msg: '动漫、手办、cosplay',
-        cover: 'src/assets/images/erciyuan.png'
+        cover: 'src/assets/images/erciyuan.webp'
     },
 ]
 
@@ -159,5 +159,29 @@ export const userLevel = [
     {
         level:'src/assets/images/level_6.svg',
         name:'仙人境',
+    },
+]
+
+// 留言类型
+export const commentType = [
+    {
+        name:'文章',
+        color:'primary'
+    },
+    {
+        name:'说说',
+        color:'success'
+    },
+    {
+        name:'留言墙',
+        color:'info'
+    },
+    {
+        name:'树洞',
+        color:'warning'
+    },
+    {
+        name:'相册',
+        color:'dange'
     },
 ]

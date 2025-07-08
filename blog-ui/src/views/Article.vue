@@ -104,10 +104,10 @@
 </template>
 
 <script setup lang='ts'>
-import { computed, getCurrentInstance, nextTick, onMounted, reactive, ref } from 'vue';
+import { computed, getCurrentInstance, nextTick, onBeforeMount, onMounted, reactive, ref } from 'vue';
 import { MdPreview, MdCatalog } from 'md-editor-v3';
 import 'md-editor-v3/lib/preview.css';
-import { useRoute, useRouter } from 'vue-router';
+import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router';
 import { useArticleStore, useTimeStore, useToolStore, useUserStore } from '../store';
 import { storeToRefs } from 'pinia';
 import { ElMessage } from 'element-plus';
@@ -131,39 +131,10 @@ const articleStore = useArticleStore()
 // 实例化 Store
 const toolStore = useToolStore()
 // 解构 State（自动转为响应式 ref）
-const { isDark } = storeToRefs(timeStore)
+const { isDark,componentKey } = storeToRefs(timeStore)
 const { token } = storeToRefs(userStore)
 const { article } = storeToRefs(articleStore)
 const { isShowCatalog } = storeToRefs(toolStore)
-
-// 控制目录开关
-const isShow = ref(false)
-// 滚动条回到顶部
-const toTop = () => {
-  // 获取当前滚动位置
-  const startScroll = document.body.scrollTop || document.documentElement.scrollTop;
-  const duration = 500; // 动画持续时间（毫秒）
-  const startTime = performance.now();
-  // 动画函数
-  const animateScroll = (currentTime) => {
-    const elapsedTime = currentTime - startTime;
-    // 计算动画进度（0-1）
-    const progress = Math.min(elapsedTime / duration, 1);
-    // 使用缓动函数使动画更平滑（减速效果）
-    const easeOutProgress = progress * (2 - progress);
-    // 计算当前应该滚动到的位置
-    const currentScroll = startScroll - (startScroll * easeOutProgress);
-    // 执行滚动
-    document.body.scrollTop = currentScroll;
-    document.documentElement.scrollTop = currentScroll;
-    // 如果动画未完成，继续下一帧
-    if (progress < 1) {
-      requestAnimationFrame(animateScroll);
-    }
-  };
-  // 开始动画
-  requestAnimationFrame(animateScroll);
-};
 
 const route = useRoute();
 // 文章id
@@ -181,7 +152,14 @@ onMounted(() => {
   getArticle()
   getComment()
 })
-
+// 同路由参数变化时执行（替代 onMounted 的触发）
+onBeforeRouteUpdate(async(to, from) => {
+  // to：目标路由信息，from：来源路由信息
+  // 重新处理数据
+  await nextTick();
+  await getArticle();
+  await getComment();
+})
 // 上一篇文章
 const lastArticle = computed(() => {
   const articleId = route.query.id as string | undefined;
@@ -221,7 +199,7 @@ const nextArticle = computed(() => {
 
 // 点赞参数
 const praiseParams = reactive({
-  id: nanoid(10),
+  id: '',
   type_id: '',
   user_id: token.value.type === 1 ? token.value.username : token.value.id,
   user_type: token.value.type,
@@ -229,6 +207,7 @@ const praiseParams = reactive({
 })
 // 点赞方法
 const addPraise = async () => {
+  praiseParams.id = nanoid(10)
   praiseParams.type_id = article_id.value
   // 点过一次赞不允许再点赞
   if (currentArticle.value.isPraise[0].count === 0) {
@@ -265,6 +244,7 @@ const getComment = async () => {
       commentItems.push(commentItem)
     }
     comment.value = commentItems
+    articleStore.getArticle()
   } catch (error) {
     console.error('获取评论失败:', error)
     ElMessage.error('获取评论失败')
@@ -349,7 +329,6 @@ const send = async () => {
     const result = await proxy.$api.insertComment(commentParams)
     // 重新获取数据
     await getComment()
-    articleStore.getArticle
     outerVisible.value = false
     // 清空数据
     initCommentParams()
@@ -447,8 +426,10 @@ const changeArticle = async (type: number) => {
     name: 'article',
     query: { id: targetArticle.id }
   });
-  await nextTick();
-  getArticle();
+  componentKey.value += 1
+  // await nextTick();
+  // await getArticle();
+  // await getComment();
 };
 
 </script>
@@ -469,6 +450,10 @@ const changeArticle = async (type: number) => {
       // font-family: fangsong;
       img {
         pointer-events: none;
+      }
+      p{
+        margin-bottom: .5rem;
+        line-height: 2.25rem;
       }
 
       .md-editor-code {
@@ -503,7 +488,6 @@ const changeArticle = async (type: number) => {
     overflow: auto;
 
     ::v-deep .md-editor-catalog {
-
       .md-editor-catalog-indicator {
         height: 20px;
         width: 1.5px;

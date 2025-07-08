@@ -10,18 +10,18 @@
                 <div class="baseInfo-content">
                     <p>
                         <span>文章</span>
-                        <span class="count">102</span>
+                        <span class="count">{{ info.articleCount[0].count }}</span>
                     </p>
                     <p>
                         <span>分类</span>
-                        <span class="count">6</span>
+                        <span class="count">{{ info.labelCount[0].count }}</span>
                     </p>
                     <p>
                         <span>访问量</span>
-                        <span class="count">158465</span>
+                        <span class="count">{{ info.count }}</span>
                     </p>
                 </div>
-                <a class="baseInfo-note" href="https://lining-lo.github.io/">⭐我的笔记</a>
+                <a class="baseInfo-note" target="_blank" href="https://lining-lo.github.io/">📖在线笔记</a>
             </div>
 
             <div class="left-welcome">
@@ -49,51 +49,33 @@
                 </div>
                 <div class="news-item" v-for="(item, index) in news" :key="index">
                     <div class="item-num">{{ index + 1 }}</div>
-                    <a :href="item.url" class="item-txt">{{ item.title }}</a>
+                    <a target="_blank" :href="item.url" class="item-txt">{{ item.title }}</a>
                 </div>
             </div>
 
             <div class="left-message">
                 <div class="message-title">
-                    🚙最新树洞
+                    🏖️最新评论
                 </div>
                 <div class="message-content">
-                    <div class="content-item">
-                        <div class="avator"></div>
-                        <div class="msg">不错哦</div>
+                    <div class="content-list">
+                        <div class="list-item" v-for="item in comment" :key="item.id">
+                            <div class="avator"
+                                :style="{ backgroundImage: item.user_type === 0 ? `url(http://localhost:3000${item.user_imgurl})` : `${portrait[item.user_imgurl]}` }">
+                            </div>
+                            <div class="msg">{{ item.content }}</div>
+                            <el-tag :type="commentType[item.type].color" style="opacity: 0.5;">{{
+                                commentType[item.type].name }}</el-tag>
+                        </div>
+                        <div class="list-item" v-for="item in comment" :key="item.id">
+                            <div class="avator"
+                                :style="{ backgroundImage: item.user_type === 0 ? `url(http://localhost:3000${item.user_imgurl})` : `${portrait[item.user_imgurl]}` }">
+                            </div>
+                            <div class="msg">{{ item.content }}</div>
+                            <el-tag :type="commentType[item.type].color" style="opacity: 0.5;">{{
+                                commentType[item.type].name }}</el-tag>
+                        </div>
                     </div>
-                    <div class="content-item">
-                        <div class="avator"></div>
-                        <div class="msg">不错哦</div>
-                    </div>
-                    <div class="content-item">
-                        <div class="avator"></div>
-                        <div class="msg">不错哦</div>
-                    </div>
-                    <div class="content-item">
-                        <div class="avator"></div>
-                        <div class="msg">不错哦</div>
-                    </div>
-                    <div class="content-item">
-                        <div class="avator"></div>
-                        <div class="msg">不错哦不错哦不错哦不错哦不错哦不错哦</div>
-                    </div>
-                    <div class="content-item">
-                        <div class="avator"></div>
-                        <div class="msg">不错哦不错哦</div>
-                    </div>
-                    <div class="content-item">
-                        <div class="avator"></div>
-                        <div class="msg">不错哦不错哦</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="left-search">
-                <div class="search-title">🔍搜索</div>
-                <div class="search-input">
-                    <input type="text">
-                    <button>搜索</button>
                 </div>
             </div>
 
@@ -123,17 +105,17 @@
                 </div>
             </div>
 
-            <div class="left-consulting">
+            <div class="left-consulting" v-if="!isShowVideo">
                 <div class="consulting-title">🌐资讯</div>
                 <div class="consulting-content">
-                    <p><span>文章数量：</span><span>99</span></p>
-                    <p><span>标签总数：</span><span>6</span></p>
-                    <p><span>图片数目：</span><span>22</span></p>
-                    <p><span>获赞数量：</span><span>45</span></p>
-                    <p><span>评论总数：</span><span>19</span></p>
-                    <p><span>用户数目：</span><span>20</span></p>
-                    <p><span>访问次数：</span><span>212</span></p>
-                    <p><span>运行天数：</span><span>22</span></p>
+                    <p><span>文章数量：</span><span>0{{ info.articleCount[0].count }}</span></p>
+                    <p><span>标签总数：</span><span>00{{ info.labelCount[0].count }}</span></p>
+                    <p><span>图片数目：</span><span>0{{ info.albumCount[0].count }}</span></p>
+                    <p><span>获赞数量：</span><span>0{{ info.praiseCount[0].count }}</span></p>
+                    <p><span>评论总数：</span><span>{{ info.commentCount[0].count }}</span></p>
+                    <p><span>用户数目：</span><span>00{{ info.userCount[0].count }}</span></p>
+                    <p><span>访问次数：</span><span>{{ info.count }}</span></p>
+                    <p><span>运行天数：</span><span>00{{ getRuntime(info.createdate) }}</span></p>
                 </div>
             </div>
         </div>
@@ -266,14 +248,14 @@
 </template>
 
 <script setup lang='ts'>
-import { bannerImg, labelColors } from '../utils/data';
-import { useArticleStore, useTimeStore, useUserStore } from '../store'
+import { bannerImg, commentType, labelColors, portrait } from '../utils/data';
+import { useArticleStore, useInfoStore, useTimeStore, useUserStore } from '../store'
 import { storeToRefs } from 'pinia'
 import axios from 'axios'
 import { computed, getCurrentInstance, onMounted, reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { nanoid } from 'nanoid';
-import { formattime } from '../utils/customize';
+import { formattime, getRuntime } from '../utils/customize';
 import { ElMessage } from 'element-plus';
 
 const { proxy } = getCurrentInstance()
@@ -282,10 +264,12 @@ const { proxy } = getCurrentInstance()
 const timeStore = useTimeStore()
 const userStore = useUserStore()
 const articleStore = useArticleStore()
+const infoStore = useInfoStore()
 // 解构 State（自动转为响应式 ref）
 const { isDark } = storeToRefs(timeStore)
 const { token } = storeToRefs(userStore)
 const { article } = storeToRefs(articleStore)
+const { info } = storeToRefs(infoStore)
 
 // 视频
 const videoUrl = ref('')
@@ -331,9 +315,10 @@ onMounted(() => {
     getNews()
     getVideo()
     getWeather()
+    getComment()
     articleStore.getArticle()
-    console.log(nanoid(10), formattime(Date.now()));
-
+    console.log(nanoid(10),formattime(Date.now()));
+    
 })
 
 // 获取置顶文章
@@ -408,6 +393,21 @@ const addPraise = async (event: any, item: any) => {
     }
 }
 
+// 评论数据
+let comment = ref()
+// 查找评论参数
+const findCommentParams = reactive({
+    type_id: '',
+    type: -1,
+    page: 1,
+    pagesize: 20,
+})
+// 分页查找评论
+const getComment = async () => {
+    const result = await proxy.$api.findCommentPage(findCommentParams)
+    comment.value = result.data.message
+    // console.log('comment', comment.value);
+}
 </script>
 <style lang='less' scoped>
 .home-container {
@@ -424,14 +424,39 @@ const addPraise = async (event: any, item: any) => {
             margin: 40px 0;
             width: 100%;
             height: 340px;
-            background: linear-gradient(45deg, #e8d8b9, #eccec5, #a3e9eb, #bdbdf0, #eec1ea);
-            background-size: 400% 400%;
+            background: linear-gradient(-45deg, #e8d8b9, #eccec5, #a3e9eb, #bdbdf0, #eec1ea);
+            background-size: 500% 500%;
             box-shadow: 0 1px 20px -6px rgba(0, 0, 0, 0.5);
             border-radius: 10px;
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 20px 0;
+
+            /* 关键动画设置 */
+            animation: gradientShift 20s ease infinite;
+
+            @keyframes gradientShift {
+                0% {
+                    background-position: 0% 50%;
+                }
+
+                25% {
+                    background-position: 100% 50%;
+                }
+
+                50% {
+                    background-position: 100% 100%;
+                }
+
+                75% {
+                    background-position: 0% 100%;
+                }
+
+                100% {
+                    background-position: 0% 50%;
+                }
+            }
 
             .baseInfo-avator {
                 width: 120px;
@@ -440,6 +465,11 @@ const addPraise = async (event: any, item: any) => {
                 background-color: #53e5b9;
                 background-size: cover;
                 background-position: center;
+                transition: all 0.3s;
+
+                &:hover {
+                    transform: rotate(360deg);
+                }
             }
 
             .baseInfo-name {
@@ -474,7 +504,7 @@ const addPraise = async (event: any, item: any) => {
                 display: block;
                 width: 60%;
                 height: 35px;
-                background-color: #53e5b9;
+                background-color: #7cbfcf;
                 border-radius: 20px;
                 color: #fff;
                 display: flex;
@@ -482,10 +512,30 @@ const addPraise = async (event: any, item: any) => {
                 cursor: pointer;
                 align-items: center;
                 margin-top: 16px;
-                transition: all 0.5s;
+                position: relative;
+                overflow: hidden;
+                z-index: 1;
+
+                &:before {
+                    background: linear-gradient(90deg, #ff4b2b, #ff416c);
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    bottom: 0;
+                    left: 0;
+                    content: "";
+                    transform: scaleX(0);
+                    transform-origin: 0;
+                    transition: transform 0.5s ease-out;
+                    transition-timing-function: cubic-bezier(0.45, 1.64, 0.47, 0.66);
+                    border-radius: 20px;
+                    z-index: -1;
+                }
 
                 &:hover {
-                    background-color: #ff4362;
+                    &:before {
+                        transform: scaleX(1);
+                    }
                 }
             }
         }
@@ -494,10 +544,16 @@ const addPraise = async (event: any, item: any) => {
             width: 100%;
             margin: 10px 0;
             border-radius: 5px;
-            padding: 4px 12px 10px 12px;
+            padding: 1px 12px 6px 12px;
             font-family: auto;
             box-shadow: 0 1px 16px -10px rgba(0, 0, 0, 0.5);
             background: rgba(252, 175, 162, 0.30);
+            transition: all 0.3s;
+            cursor: default;
+
+            &:hover {
+                box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
+            }
 
             .welcome-title {
                 display: flex;
@@ -521,11 +577,17 @@ const addPraise = async (event: any, item: any) => {
         .left-news {
             width: 100%;
             background-color: rgba(142, 86, 137, 0.3);
-            margin-top: 12px;
+            margin-top: 20px;
             border-radius: 5px;
             padding: 4px 12px 10px 12px;
             font-family: auto;
             box-shadow: 0 1px 16px -10px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s;
+            cursor: default;
+
+            &:hover {
+                box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
+            }
 
             &>:nth-child(2) {
                 .item-num {
@@ -596,88 +658,83 @@ const addPraise = async (event: any, item: any) => {
 
         .left-message {
             width: 100%;
-            background-color: rgba(168, 230, 138, 0.30);
-            margin-top: 12px;
+            height: 391px;
+            background-color: #2eaed575;
+            margin-top: 20px;
+            border-bottom: 8px;
             border-radius: 5px;
             padding: 4px 12px 10px 12px;
             font-family: auto;
             box-shadow: 0 1px 16px -10px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s;
+            cursor: default;
+
+            &:hover {
+                box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
+            }
 
             .message-title {
                 font-size: 17x;
                 margin-top: 14px;
-                margin-bottom: 5px;
+                margin-bottom: 12px;
             }
 
             .message-content {
                 width: 100%;
+                height: 322px;
+                overflow: hidden;
 
-                .content-item {
+                &:hover {
+                    .content-list {
+                        animation-play-state: paused;
+                    }
+                }
+
+                .content-list {
                     width: 100%;
-                    height: 100%;
-                    display: flex;
-                    align-items: center;
-                    padding: 4px 12px;
-                    font-size: 14px;
+                    animation: scrollUp 15s linear infinite;
 
-                    .avator {
-                        width: 30px;
-                        height: 30px;
-                        border-radius: 50%;
-                        margin-right: 10px;
-                        background-color: #53e5b9;
+                    @keyframes scrollUp {
+                        0% {
+                            transform: translateY(0);
+                            /* 初始在容器底部外 */
+                        }
+
+                        100% {
+                            transform: translateY(-50%);
+                            /* 最终移到容器顶部外 */
+                        }
                     }
 
-                    .msg {
-                        width: 220px;
-                        white-space: nowrap;
-                        /* 强制文本不换行 */
-                        overflow: hidden;
-                        /* 隐藏超出容器宽度的内容 */
-                        text-overflow: ellipsis;
-                        /* 为溢出的文本显示省略号 */
+                    .list-item {
+                        width: 100%;
+                        height: 46px;
+                        display: flex;
+                        align-items: center;
+                        padding: 2px 0;
+                        font-size: 14px;
+
+                        .avator {
+                            width: 36px;
+                            height: 36px;
+                            background-size: cover;
+                            background-position: center;
+                            border-radius: 50%;
+                            margin-right: 10px;
+                            background-color: #53e5b9;
+                        }
+
+                        .msg {
+                            width: 186px;
+                            white-space: nowrap;
+                            /* 强制文本不换行 */
+                            overflow: hidden;
+                            /* 隐藏超出容器宽度的内容 */
+                            text-overflow: ellipsis;
+                            /* 为溢出的文本显示省略号 */
+                            margin-right: 15px;
+                        }
                     }
-                }
-            }
-        }
-
-        .left-search {
-            width: 100%;
-            background-color: rgb(172 209 209 / 30%);
-            margin-top: 12px;
-            border-radius: 5px;
-            padding: 4px 12px 10px 12px;
-            font-family: auto;
-            box-shadow: 0 1px 16px -10px rgba(0, 0, 0, 0.5);
-
-            .search-title {
-                font-size: 17x;
-                margin-top: 14px;
-                margin-bottom: 5px;
-            }
-
-            .search-input {
-                padding: 4px 12px;
-                font-size: 14px;
-                display: flex;
-                align-items: center;
-
-                input {
-                    height: 28px;
-                    font-size: 14px;
-                    padding: 6px 12px;
-                    border-radius: 10px 0 0 10px;
-                    background-color: transparent;
-                    border: 2px solid #53e5b9;
-                    outline: none;
-                }
-
-                button {
-                    height: 28px;
-                    font-size: 12px;
-                    padding: 4px 10px;
-                    border-radius: 0 10px 10px 0;
-                    background-color: #53e5b9;
                 }
             }
         }
@@ -685,11 +742,17 @@ const addPraise = async (event: any, item: any) => {
         .left-label {
             width: 100%;
             background-color: rgb(234 226 100 / 30%);
-            margin-top: 12px;
+            margin-top: 20px;
             border-radius: 5px;
             padding: 4px 12px 10px 12px;
             font-family: auto;
             box-shadow: 0 1px 16px -10px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s;
+            cursor: default;
+
+            &:hover {
+                box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
+            }
 
             .label-title {
                 font-size: 17x;
@@ -713,11 +776,17 @@ const addPraise = async (event: any, item: any) => {
         .left-video {
             width: 100%;
             background-color: rgb(85 247 246 / 30%);
-            margin-top: 12px;
+            margin-top: 20px;
             border-radius: 5px;
             padding: 4px 12px 10px 12px;
             font-family: auto;
             box-shadow: 0 1px 16px -10px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s;
+            cursor: default;
+
+            &:hover {
+                box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
+            }
 
             .video-title {
                 font-size: 17x;
@@ -770,11 +839,17 @@ const addPraise = async (event: any, item: any) => {
         .left-consulting {
             width: 100%;
             background-color: rgba(190, 163, 192, 0.3);
-            margin-top: 12px;
+            margin-top: 20px;
             border-radius: 5px;
             padding: 4px 12px 10px 12px;
             font-family: auto;
             box-shadow: 0 1px 16px -10px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s;
+            cursor: default;
+
+            &:hover {
+                box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
+            }
 
             .consulting-title {
                 font-size: 17x;
@@ -912,7 +987,6 @@ const addPraise = async (event: any, item: any) => {
                 flex-shrink: 0;
                 box-shadow: 0 1px 16px -10px rgba(0, 0, 0, 0.5);
                 cursor: default;
-                transition: all 0.5s;
 
                 &:hover {
                     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
@@ -996,7 +1070,6 @@ const addPraise = async (event: any, item: any) => {
 
                         .isLike {
                             cursor: pointer;
-                            z-index: 999;
 
                             &.addlike {
                                 color: red;
@@ -1160,7 +1233,6 @@ const addPraise = async (event: any, item: any) => {
 
                         .isLike {
                             cursor: pointer;
-                            z-index: 999;
 
                             &.addlike {
                                 color: red;

@@ -2,21 +2,22 @@
     <div class="banner" :style="{ backgroundImage: imgurl, opacity: isDark && route.name === 'article' ? 0.3 : 1 }">
         <div class="title-container">
             <!-- 路由标题 -->
-            <div class="title-route" v-if="route.name !== 'article' && route.name !== 'photos'">
-                <p class="route-name">{{ route.meta.name }}</p>
-                <p class="route-msg">{{ route.meta.msg }}</p>
+            <div class="title-route" v-if="route.name !== 'article'">
+                <p class="route-name  animate__animated animate__bounce">{{ route.meta.name }}</p>
+                <p class="route-msg  animate__animated animate__zoomIn">{{ route.meta.msg }}</p>
             </div>
             <!-- 文章标题 -->
             <div class="title-article" v-if="route.name === 'article'">
-                <p class="article-name" v-if="currentArticle">{{ currentArticle.name }}</p>
-                <p class="article-msg">
+                <p class="article-name animate__animated animate__bounce" v-if="currentArticle">{{ currentArticle.name
+                    }}</p>
+                <p class="article-msg animate__animated animate__flash">
                     🦸🏻<span style="margin-left: 4px;">lining-lo</span> |
                     📅<span style="margin-left: 4px;" v-if="currentArticle">{{ currentArticle.createdate }}</span> |
                     👁️<span style="margin-left: 4px;" v-if="currentArticle">{{ currentArticle.count }}</span> |
                     ❤️<span style="margin-left: 4px;" v-if="currentArticle">{{ currentArticle.praiseCount[0].count
-                    }}</span> |
+                        }}</span> |
                     📑<span style="margin-left: 4px;" v-if="currentArticle">{{ currentArticle.commentCount[0].count
-                    }}</span>
+                        }}</span>
                 </p>
                 <div class="labels">
                     <p class="labels-item"><el-icon color="green" style="margin-right: 4px;">
@@ -33,7 +34,7 @@
             <div class="wave wave2" :style="{ backgroundImage: wave2Bg }"></div>
         </div>
         <div class="bottom-container" v-if="route.name === 'home'" @click="scollToContent">
-            <el-icon :size="40" color="skyblue">
+            <el-icon :size="40" :style="{ color: isDark ?  '#1a3551' :'skyblue'}">
                 <ArrowDownBold />
             </el-icon>
         </div>
@@ -96,9 +97,9 @@ const imgurl = computed(() => {
             ? `url(http://localhost:3000${currentArticle.value.cover})`
             : `url(/src/assets/images/default-article-cover.png)`; // 默认封面图路径
     } else if (route.name === 'photos') {
-        url = `url(/src/assets/images/light-treehole.png)`;
+        url = `url(/src/assets/images/light-treehole.webp`;
     } else {
-        url = `url(/src/assets/images/${isDark.value ? 'dark' : 'light'}-${String(route.name)}.png)`;
+        url = `url(/src/assets/images/${isDark.value ? 'dark' : 'light'}-${String(route.name)}.webp)`;
     }
     return url;
 })
@@ -264,6 +265,20 @@ const scollToContent = () => {
         bottom: 0;
         left: 50%;
         cursor: pointer;
+        position: absolute;
+        animation: float 1s ease-in-out infinite;
+    }
+
+    @keyframes float {
+
+        0%,
+        100% {
+            transform: translateX(-100%) translateY(0);
+        }
+
+        50% {
+            transform: translateX(-100%) translateY(-10px);
+        }
     }
 }
 </style>

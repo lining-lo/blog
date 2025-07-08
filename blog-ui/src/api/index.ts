@@ -109,15 +109,23 @@ export default {
         return http.post('/selectFavoritesPage', data)
     },
 
-     /**
-     * 文章相关
-     */
+    /**
+    * 文章相关
+    */
     // 分页获取文章
     selectArticlePage(data: any) {
         return http.post('/selectArticlePage', data)
     },
-    // // 根据id查找文章
+    // 根据id查找文章
     selectArticleById(data: any) {
         return http.post('/selectArticleById', data)
+    },
+
+    /**
+     * 网站信息相关
+     */
+    // 获取网站信息
+    selectInfo() {
+        return http.post('/selectInfo')
     },
 }

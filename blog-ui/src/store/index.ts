@@ -1,9 +1,15 @@
 import { defineStore } from 'pinia'
 import api from '../api'
 
+/**
+ * 暗黑模式相关
+ */
 export const useTimeStore = defineStore('time', {
   state: () => {
-    return { isDark: false }
+    return {
+      isDark: false,
+      componentKey: 0
+    }
   },
   actions: {
     changeTime() {
@@ -12,6 +18,9 @@ export const useTimeStore = defineStore('time', {
   },
 })
 
+/**
+ * 用户相关
+ */
 export const useUserStore = defineStore('user', {
   state: () => {
     return {
@@ -36,6 +45,9 @@ export const useUserStore = defineStore('user', {
   },
 })
 
+/**
+ * 文章相关
+ */
 export const useArticleStore = defineStore('article', {
   state: () => {
     return {
@@ -60,15 +72,35 @@ export const useArticleStore = defineStore('article', {
   },
 })
 
-
+/**
+ * 右下角的工具相关
+ */
 export const useToolStore = defineStore('tool', {
   state: () => {
     return {
       isShowCatalog: false,
-      isShowCreateMessage:false
+      isShowCreateMessage: false
     }
   },
   actions: {
-    
+
+  },
+})
+
+/**
+ * 网站信息相关
+ */
+export const useInfoStore = defineStore('info', {
+  state: () => {
+    return {
+      info: {},
+    }
+  },
+  actions: {
+    async selectInfo() {
+      // 获取文章方法
+      const result = await api.selectInfo()
+      this.info = result.data.message[0]
+    }
   },
 })

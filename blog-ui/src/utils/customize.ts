@@ -56,3 +56,13 @@ export const getObjectURL = (file:any) => {
   }
   return url;
 }
+
+// 计算运行的天数
+export const getRuntime = (start:any) => {
+  const startDate = new Date(start);
+  const now = new Date();
+  // 计算时间差（毫秒）
+  const timeDiff = now - startDate;
+  // 将毫秒转换为天数（1天 = 24小时 * 60分钟 * 60秒 * 1000毫秒）
+  return Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+}

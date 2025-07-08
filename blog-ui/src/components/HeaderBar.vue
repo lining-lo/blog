@@ -5,10 +5,10 @@
         </p>
         <div class="header-right">
             <div class="right-routes">
-                <router-link :to="item.path" class="route" v-for="item in headerbarRoutes" :key="item.path">
+                <button @click="toRoute(item.path)" class="route" v-for="item in headerbarRoutes" :key="item.path">
                     <component class="route-icon" :is="item.icon" :style="{ color: item.color }"></component>
                     <span class="route-name">{{ item.name }}</span>
-                </router-link>
+                </button>
             </div>
             <el-switch v-model="isDark" :active-action-icon="MoonNight" :inactive-action-icon="Sunny"
                 style="--el-switch-on-color: #6f5ac3; --el-switch-off-color: #f4c97a" />
@@ -105,6 +105,7 @@ import { getCurrentInstance, onMounted, reactive, ref } from 'vue'
 import { nanoid } from 'nanoid'
 import { formattime, encryptIpToPassword, getObjectURL } from '../utils/customize'
 import { ElMessage } from 'element-plus'
+import { useRouter } from 'vue-router'
 
 const outerVisible = ref(false)
 const { proxy } = getCurrentInstance()
@@ -114,8 +115,15 @@ const { proxy } = getCurrentInstance()
 const timeStore = useTimeStore()
 const userStore = useUserStore()
 // 解构 State（自动转为响应式 ref）
-const { isDark } = storeToRefs(timeStore)
+const { isDark, componentKey } = storeToRefs(timeStore)
 const { token } = storeToRefs(userStore)
+
+const router = useRouter()
+// 路由跳转
+const toRoute = async(path: any) => {
+    componentKey.value += 1
+    router.push(path)
+}
 
 // 控制登录0、注册1、找回密码2、用户信息3的开关
 const match = ref(0)
@@ -123,13 +131,13 @@ const match = ref(0)
 const getbackground = () => {
     let url = ''
     if (token.value.type === 1 && match.value === 0) {
-        url = `url(/src/assets/images/login.png)`;
+        url = `url(/src/assets/images/login.webp)`;
     } else if (token.value.type === 1 && match.value === 1) {
-        url = `url(/src/assets/images/regist.png)`;
+        url = `url(/src/assets/images/regist.webp)`;
     } else if (token.value.type === 1 && match.value === 2) {
         url = `url(/src/assets/images/findpassword.png)`;
     } else {
-        url = `url(/src/assets/images/person.png)`;
+        url = `url(/src/assets/images/person.webp)`;
     }
     return url
 }

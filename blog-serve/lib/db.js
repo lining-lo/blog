@@ -62,7 +62,7 @@ const createTables = async () => {
             name: 'comment',
             sql: `create table if not exists comment(
                     id VARCHAR(100) NOT NULL,
-                    type int NOT NULL COMMENT '类型（0文章、1说说、2留言墙、3树洞）',
+                    type int NOT NULL COMMENT '类型（-1所有、0文章、1说说、2留言墙、3树洞、4相册）',
                     type_id VARCHAR(100) NOT NULL COMMENT '所属类型的ID（文章ID、说说ID、留言墙ID、树洞ID）',
                     user_id VARCHAR(100) NOT NULL COMMENT '评论者ID',
                     user_name VARCHAR(100) COMMENT '用户名称',
@@ -132,6 +132,7 @@ const createTables = async () => {
             sql: `create table if not exists album( 
                     id VARCHAR(100) NOT NULL,
                     type INT NOT NULL COMMENT '所属类型 (-1所有，0风景、1美食、2日常、3二次元)',
+                    name VARCHAR(100) NOT NULL COMMENT '标题',
                     imgurl VARCHAR(100) NOT NULL COMMENT '地址',
                     createdate VARCHAR(100) NOT NULL COMMENT '创建时间',
                     PRIMARY KEY ( id )
@@ -176,6 +177,24 @@ const createTables = async () => {
                     updatedate VARCHAR(100) NOT NULL COMMENT '修改时间',
                     PRIMARY KEY ( id )
              );`
+        },
+        {
+            name: 'info',
+            sql: `create table if not exists info( 
+                    id VARCHAR(100) NOT NULL,
+                    count int DEFAULT 0 COMMENT '查看次数',
+                    createdate VARCHAR(100) NOT NULL COMMENT '建站日期',
+                    PRIMARY KEY ( id )
+                );`
+        },
+        {
+            name: 'label',
+            sql: `create table if not exists label(
+                    id INT NOT NULL AUTO_INCREMENT,
+                    name VARCHAR(100) NOT NULL COMMENT '名称',
+                    createdate VARCHAR(100) NOT NULL COMMENT '时间',
+                    PRIMARY KEY ( id )
+                );`
         },
     ];
 
@@ -223,16 +242,23 @@ module.exports = {
     findCommentPage: (type_id, type, page, pagesize) => {
         let sql = null
         let values = null
-        if (type === 3) {
+        if (type === 3) {// 查询树洞
             sql = `SELECT * FROM comment WHERE type = ? ORDER BY createdate LIMIT ?,?`
             values = [type, (page - 1) * pagesize, pagesize]
-        } else {
+        }else if(type === -1){// 查询所有
+            sql = `SELECT * FROM comment ORDER BY createdate DESC LIMIT ?,?`
+            values = [(page - 1) * pagesize, pagesize]
+        }else {// 查询除树洞的所有
             sql = `SELECT * FROM comment WHERE type_id = ? AND type = ? ORDER BY createdate LIMIT ?,?`
             values = [type_id, type, (page - 1) * pagesize, pagesize]
         }
         return query(sql, values)
     },
-
+    // 查看评论数量
+    selectCommentCount: async () => {
+        const sql = `SELECT count(*) as count FROM comment`
+        return query(sql, [])
+    },
     /**
      * 留言墙相关
      */
@@ -264,6 +290,11 @@ module.exports = {
     insertPraise: async (values) => {
         const sql = `insert into praise set id=?,type_id=?,user_id=?,user_type=?,createdate=?;`
         return query(sql, values)
+    },
+    // 查看点赞数量
+    selectPraiseCount: async () => {
+        const sql = `SELECT count(*) as count FROM praise`
+        return query(sql, [])
     },
 
     /**
@@ -299,6 +330,11 @@ module.exports = {
         const sql = `UPDATE user SET password = ? WHERE username = ? and email=?;`
         return query(sql, values)
     },
+    // 查看点赞数量
+    selectUserCount: async () => {
+        const sql = `SELECT count(*) as count FROM user`
+        return query(sql, [])
+    },
 
     /**
      * 友链相关
@@ -321,6 +357,11 @@ module.exports = {
     selectAlbumPage: async (values) => {
         const sql = `SELECT * FROM album ORDER BY createdate DESC LIMIT ?,? `
         return query(sql, values)
+    },
+    // 查看图库数量
+    selectAlbumCount: async () => {
+        const sql = `SELECT count(*) as count FROM album`
+        return query(sql, [])
     },
 
     /**
@@ -359,5 +400,34 @@ module.exports = {
         const sql = `SELECT * FROM article where id = ? `
         query('UPDATE article SET count = count + 1 WHERE id = ?', values)
         return query(sql, values)
+    },
+    // 查询文章数量
+    selectArticleCount: async () => {
+        const sql = `SELECT count(*) as count FROM article`
+        return query(sql, [])
+    },
+
+    /**
+     * 网站信息相关
+     */
+    // 获取网站信息
+    selectInfo: async () => {
+        const sql = `SELECT * FROM info`
+        query('UPDATE info SET count = count + 1', [])
+        return query(sql, [])
+    },
+
+    /**
+     * 分类（标签）相关
+     */
+    // 分页获取标签
+    selectLabelPage: async (values) => {
+        const sql = `SELECT * FROM label ORDER BY createdate DESC LIMIT ?,? `
+        return query(sql, values)
+    },
+    // 查询标签数量
+    selectLabelCount: async () => {
+        const sql = `SELECT count(*) as count FROM label`
+        return query(sql, [])
     },
 };
