@@ -28,14 +28,10 @@
                             </div>
                             <div class="right-info">
                                 <p>
-                                    <el-icon color="green" style="margin-right: 4px;">
-                                        <HelpFilled />
-                                    </el-icon>博客文章
+                                    🥝 博客文章
                                 </p>
-                                <p>
-                                    <el-icon color="purple" style="margin-right: 4px;">
-                                        <FolderOpened />
-                                    </el-icon>BLOG
+                                <p v-if="article && labels">
+                                    🏷️ {{labels[item.label].name}}
                                 </p>
                             </div>
                         </div>
@@ -73,6 +69,7 @@ const { article } = storeToRefs(articleStore)
 
 // 挂载
 onMounted(() => {
+    getLabels()
     articleStore.getArticle()
 })
 
@@ -110,6 +107,20 @@ const addPraise = async (event: any, item: any) => {
             ElMessage.error('点赞失败')
         }
     }
+}
+
+// 标签数据
+let labels = ref()
+// 查找标签参数
+const selectLabelPageParams = reactive({
+    page: 1,
+    pagesize: 100,
+})
+// 分页查找标签
+const getLabels = async () => {
+    const result = await proxy.$api.selectLabelPage(selectLabelPageParams)
+    labels.value = result.data.message
+    console.log('labels', labels.value);
 }
 </script>
 <style lang='less' scoped>
@@ -275,7 +286,7 @@ const addPraise = async (event: any, item: any) => {
                             p {
                                 margin-top: 12px;
                                 margin-right: 14px;
-                                font-size: 12px;
+                                font-size: 11px;
                                 padding: 2px 4px;
                                 background-color: #eeeeee;
                                 border-radius: 3px;

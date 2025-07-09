@@ -38,7 +38,7 @@
                             style="color: #ff4d4f;margin-left: 10px;font-weight: 500;" v-if="weather">{{ weather.week
                             }}</span></p>
                     <p><span>风力：</span><span style="color: #ff4d4f;font-weight: 500;" v-if="weather">东风{{ weather.fl
-                            }}</span></p>
+                    }}</span></p>
                 </div>
             </div>
 
@@ -84,7 +84,8 @@
                     🤖标签
                 </div>
                 <div class="label-content">
-                    <span v-for="(item, index) in 12" :key="index" :style="{ color: labelColors[index] }">我的博客</span>
+                    <span @click="toClassification(item)" v-for="(item, index) in labels" :key="index"
+                        :style="{ color: labelColors[index] }">{{ item.name }}</span>
                 </div>
             </div>
 
@@ -109,7 +110,6 @@
                 <div class="consulting-title">🌐资讯</div>
                 <div class="consulting-content">
                     <p><span>文章数量：</span><span>0{{ info.articleCount[0].count }}</span></p>
-                    <p><span>标签总数：</span><span>00{{ info.labelCount[0].count }}</span></p>
                     <p><span>图片数目：</span><span>0{{ info.albumCount[0].count }}</span></p>
                     <p><span>获赞数量：</span><span>0{{ info.praiseCount[0].count }}</span></p>
                     <p><span>评论总数：</span><span>{{ info.commentCount[0].count }}</span></p>
@@ -167,21 +167,17 @@
                         <div class="content-info">
                             <span>👁️</span><span style="margin-left: 4px;">{{ item.count }}</span>&nbsp;
                             <span>📑</span><span style="margin-left: 4px;">{{ item.commentCount[0].count
-                                }}</span>&nbsp;
+                            }}</span>&nbsp;
                             <span class="isLike" :class="{ addlike: item.isPraise[0].count !== 0 }"
                                 @click="addPraise($event, item)">❤</span><span style="margin-left: 4px;">{{
                                     item.praiseCount[0].count }}</span>
                         </div>
                         <div class="content-label">
                             <p>
-                                <el-icon color="green" style="margin-right: 4px;">
-                                    <HelpFilled />
-                                </el-icon>博客文章
+                                🥝 博客文章
                             </p>
-                            <p>
-                                <el-icon color="purple" style="margin-right: 4px;">
-                                    <FolderOpened />
-                                </el-icon>BLOG
+                            <p v-if="topArticle && labels">
+                                🏷️ {{ labels[item.label].name }}
                             </p>
                         </div>
                     </div>
@@ -218,21 +214,17 @@
                         <div class="content-info">
                             <span>👁️</span><span style="margin-left: 4px;">{{ item.count }}</span>&nbsp;
                             <span>📑</span><span style="margin-left: 4px;">{{ item.commentCount[0].count
-                            }}</span>&nbsp;
+                                }}</span>&nbsp;
                             <span class="isLike" :class="{ addlike: item.isPraise[0].count !== 0 }"
                                 @click="addPraise($event, item)">❤</span><span style="margin-left: 4px;">{{
                                     item.praiseCount[0].count }}</span>
                         </div>
                         <div class="content-label">
                             <p>
-                                <el-icon color="green" style="margin-right: 4px;">
-                                    <HelpFilled />
-                                </el-icon>使用指南
+                                🥝 博客文章
                             </p>
-                            <p>
-                                <el-icon color="purple" style="margin-right: 4px;">
-                                    <FolderOpened />
-                                </el-icon>BLOG
+                            <p v-if="currentData && labels">
+                                🏷️ {{ labels[item.label].name }}
                             </p>
                         </div>
                     </div>
@@ -266,7 +258,7 @@ const userStore = useUserStore()
 const articleStore = useArticleStore()
 const infoStore = useInfoStore()
 // 解构 State（自动转为响应式 ref）
-const { isDark } = storeToRefs(timeStore)
+const { isDark, componentKey } = storeToRefs(timeStore)
 const { token } = storeToRefs(userStore)
 const { article } = storeToRefs(articleStore)
 const { info } = storeToRefs(infoStore)
@@ -316,9 +308,9 @@ onMounted(() => {
     getVideo()
     getWeather()
     getComment()
+    getLabels()
     articleStore.getArticle()
-    console.log(nanoid(10),formattime(Date.now()));
-    
+    // console.log(nanoid(10),formattime(Date.now()));
 })
 
 // 获取置顶文章
@@ -407,6 +399,33 @@ const getComment = async () => {
     const result = await proxy.$api.findCommentPage(findCommentParams)
     comment.value = result.data.message
     // console.log('comment', comment.value);
+}
+
+// 标签数据
+let labels = ref()
+// 查找标签参数
+const selectLabelPageParams = reactive({
+    page: 1,
+    pagesize: 100,
+})
+// 分页查找标签
+const getLabels = async () => {
+    const result = await proxy.$api.selectLabelPage(selectLabelPageParams)
+    labels.value = result.data.message
+    // console.log('labels', labels.value);
+}
+
+// 前往分类
+const toClassification = (item: any) => {
+    router.push({
+        name: 'classification',
+        query: { 
+            id: item.id, 
+            name: item.name, 
+            count: article.value.filter(a => a.label === item.id).length
+         }
+    });
+    componentKey.value += 1
 }
 </script>
 <style lang='less' scoped>
@@ -769,6 +788,7 @@ const getComment = async () => {
                 span {
                     margin: 4px 12px 4px 0;
                     cursor: pointer;
+                    display: inline-block;
                 }
             }
         }
@@ -864,7 +884,7 @@ const getComment = async () => {
                 font-size: 14px;
 
                 p {
-                    margin-bottom: 7px;
+                    margin-bottom: 5px;
                     display: flex;
                     justify-content: space-between;
                 }

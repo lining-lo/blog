@@ -11,43 +11,25 @@
                 :style="{ opacity: isDark ? 0.8 : 1, backgroundImage: `url(src/assets/images/${isDark ? 'dark' : 'light'}-search.webp)` }">
                 <div class="search-title">🔍搜索</div>
                 <div class="search-input">
-                    <input type="text">
-                    <button>搜索</button>
+                    <input type="text" v-model="searchKeyword" @keyup.enter="filteredArticles">
+                    <button @click="filteredArticles">搜索</button>
                 </div>
-                <!-- <div class="search-content">
-                    <div class="search-item">
-                        <p class="title">常用文字和<span class="selected">文字</span></p>
-                        <p class="text" style="margin: 5px 0;">色鬼色i收购饿哦色哥哥是关键是，<span
-                                class="selected">文字</span>。是否十六分萨勒夫，帅哥帅哥帅哥色色方式是否十六分字体算法来计算拉法基奥利弗就奥利弗奶妈裂缝冷身上了
-                        </p>
+                <div class="search-content" v-if="!isShowRecomment">
+                    <div class="search-item" v-for="item in searchResult" :key="item.id">
+                        <p class="title" @click="toArticle(item)" v-html="item.name"></p>
+                        <p class="text" style="margin: 5px 0;" v-html="item.content"></p>
                     </div>
-                    <div class="search-item">
-                        <p class="title">常用文字和<span class="selected">文字</span></p>
-                        <p style="margin: 5px 0;">色鬼色i收购饿哦色哥哥是关键是，<span
-                                class="selected">文字</span>。是否十六分萨勒夫，帅哥帅哥帅哥色色方式是否十六分字体算法来计算拉法基奥利弗就奥利弗奶妈裂缝冷身上了
-                        </p>
-                    </div>
-                    <div class="search-item">
-                        <p class="title">常用文字和<span class="selected">文字</span></p>
-                        <p style="margin: 5px 0;">色鬼色i收购饿哦色哥哥是关键是，<span
-                                class="selected">文字</span>。是否十六分萨勒夫，帅哥帅哥帅哥色色方式是否十六分字体算法来计算拉法基奥利弗就奥利弗奶妈裂缝冷身上了
-                        </p>
-                    </div>
-                    <div class="search-item">
-                        <p class="title">常用文字和<span class="selected">文字</span></p>
-                        <p style="margin: 5px 0;">色鬼色i收购饿哦色哥哥是关键是，<span
-                                class="selected">文字</span>。是否十六分萨勒夫，帅哥帅哥帅哥色色方式是否十六分字体算法来计算拉法基奥利弗就奥利弗奶妈裂缝冷身上了
-                        </p>
-                    </div>
-                </div> -->
-                <div class="search-recommend">
-                    <div class="news-item" v-for="(item, index) in hotArticle" :key="index">
+                </div>
+                <div class="search-recommend" v-else>
+                    <div class="news-item"
+                        :style="{ backgroundColor: isDark ? 'rgba(207, 185, 185, 0.4)' : 'rgba(40, 40, 40, 0.4)' }"
+                        v-for="(item, index) in hotArticle" :key="index">
                         <div class="item-num">{{ index + 1 }}</div>
-                        <div class="item-txt" @click="toArticle(item)">{{item.name}}</div>
+                        <div class="item-txt" @click="toArticle(item)">{{ item.name }}</div>
                     </div>
                 </div>
-                <div class="search-tip" style="margin-top: 16px;color: aliceblue;">
-                    一共找到12条结果
+                <div class="search-tip" style="margin-top: 16px;color: aliceblue;" v-if="!isShowRecomment">
+                    一共找到 {{ searchResult.length }} 条结果
                 </div>
             </div>
         </el-dialog>
@@ -56,7 +38,7 @@
 
 <script setup lang='ts'>
 import { ElMessage } from 'element-plus';
-import { ref, reactive, onMounted, computed } from 'vue'
+import { ref, reactive, onMounted, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router';
 import { useArticleStore, useTimeStore, useToolStore } from '../store';
 import { storeToRefs } from 'pinia';
@@ -72,7 +54,7 @@ const timeStore = useTimeStore()
 const articleStore = useArticleStore()
 // 解构 State（自动转为响应式 ref）
 const { isShowCatalog, isShowCreateMessage } = storeToRefs(toolStore)
-const { isDark,componentKey } = storeToRefs(timeStore)
+const { isDark, componentKey } = storeToRefs(timeStore)
 const { article } = storeToRefs(articleStore)
 
 const showCatalog = () => {
@@ -118,10 +100,10 @@ const toChat = () => {
 }
 
 // 挂载
-onMounted(()=>{
+onMounted(() => {
     articleStore.getArticle();
 })
-// 获取根据观看次数排序的文章
+// 推荐的文章
 const hotArticle = computed(() => {
     return article.value
         .sort((a, b) => {
@@ -129,7 +111,7 @@ const hotArticle = computed(() => {
             const countA = a.count || 0;
             const countB = b.count || 0;
             return countB - countA; // 降序排列（从高到低）
-        }).slice(0,10);
+        }).slice(0, 10);
 })
 const router = useRouter()
 // 查看文章
@@ -141,6 +123,100 @@ const toArticle = (item: any) => {
     componentKey.value += 1
     outerVisible.value = false
 }
+// 控制推荐|搜索的显示
+const isShowRecomment = ref(true)
+// 搜索的关键字
+const searchKeyword = ref('')
+// 搜索到的文章
+const searchResult = ref([])
+watch(searchKeyword, (newValue, oldValue) => {
+    if (newValue.length === 0) {
+        isShowRecomment.value = true
+    }
+})
+// 搜索文章的方法
+const filteredArticles = () => {
+    // 关键词为空时返回全部文章  
+    if (!searchKeyword.value.trim()) {
+        return ElMessage.warning('请输入要搜索的内容')
+    }
+    const keyword = searchKeyword.value.toLowerCase().trim()
+    // 搜索的的结果
+    const result = article.value.filter(item => {
+        // 在标题或内容中搜索关键词（忽略大小写）
+        return item.name.toLowerCase().includes(keyword) ||
+            item.content.toLowerCase().includes(keyword)
+    })
+    // 复制一份查找的结果做处理，避免污染数据
+    const copyResult = JSON.parse(JSON.stringify(result))
+    // 对结果高亮处理
+    for (let i = 0; i < copyResult.length; i++) {
+        copyResult[i].name = highlightMatchTitle(copyResult[i].name)
+        copyResult[i].content = highlightMatchContent(copyResult[i].content)
+    }
+    searchResult.value = copyResult
+    isShowRecomment.value = false
+}
+const highlightMatchTitle = (text: any) => {
+    const regex = new RegExp(searchKeyword.value, 'gi')
+    return text.replace(regex, match => `<span class="highlight">${match}</span>`)
+}
+const highlightMatchContent = (text: string) => {
+    // 1. 处理原始内容为空的情况
+    if (!text) {
+        return '<span class="empty-content">无内容预览</span>';
+    }
+
+    // 2. 关键词为空时返回前50字预览
+    if (!searchKeyword.value.trim()) {
+        return text.length > 50 ? text.substring(0, 50) + '...' : text;
+    }
+
+    const keyword = searchKeyword.value.trim();
+    // 3. 转义正则特殊字符（避免语法错误）
+    const escapedKeyword = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    // 只匹配第一个结果（不加 'g' 修饰符）
+    const regex = new RegExp(escapedKeyword, 'i'); // 仅忽略大小写，不全局匹配
+
+    // 4. 查找第一个匹配位置
+    const matchResult = text.match(regex);
+    if (!matchResult) {
+        // 无匹配时返回前30字
+        return text.length > 30 ? text.substring(0, 30) + '...' : text;
+    }
+
+    // 5. 提取第一个匹配的信息
+    const firstMatch = matchResult[0]; // 第一个匹配的文本
+    const matchIndex = matchResult.index as number; // 第一个匹配的起始位置
+    const matchLength = firstMatch.length; // 第一个匹配的长度
+
+    // 6. 计算截取范围（上下文+匹配内容）
+    const contextBefore = 10; // 匹配前显示10个字符
+    const contextAfter = 20; // 匹配后显示20个字符
+    const startIndex = Math.max(0, matchIndex - contextBefore);
+    const endIndex = Math.min(
+        matchIndex + matchLength + contextAfter,
+        text.length
+    );
+
+    // 7. 处理截取范围异常（避免空字符串）
+    if (startIndex >= endIndex) {
+        return text.length > 30 ? text.substring(0, 30) + '...' : text;
+    }
+
+    // 8. 截取片段并高亮第一个匹配
+    const snippet = text.substring(startIndex, endIndex);
+    // 仅替换第一个匹配（因 regex 无 'g' 修饰符）
+    const highlightedSnippet = snippet.replace(regex, (match) =>
+        `<span class="highlight">${match}</span>`
+    );
+
+    // 9. 添加省略号（表示截断）
+    const prefix = startIndex > 0 ? '...' : '';
+    const suffix = endIndex < text.length ? '...' : '';
+
+    return prefix + highlightedSnippet + suffix;
+};
 
 </script>
 <style lang='less' scoped>
@@ -239,18 +315,15 @@ const toArticle = (item: any) => {
                     cursor: pointer;
                 }
 
-                .selected {
+                .highlight {
                     color: #e34b4f;
-                    font-weight: 600;
-                    // background-color: gray;
-                    padding: 0 2px;
                 }
             }
         }
 
         .search-recommend {
             width: 100%;
-            height: 300px;
+            height: 314px;
             overflow: auto;
             margin-top: 10px;
 
@@ -299,8 +372,9 @@ const toArticle = (item: any) => {
                 .item-txt {
                     cursor: pointer;
                     letter-spacing: 1px;
+
                     &:hover {
-                        color:#e34b4f;
+                        color: #e34b4f;
                     }
                 }
             }

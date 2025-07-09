@@ -305,7 +305,7 @@ exports.selectInfo = async (request, response) => {
 // 分页获取标签
 exports.selectLabelPage = async (request, response) => {
     const data = request.body
-    await db.selectLabelPage([(data.page - 1) * data.pagesize, data.pagesize]).then(async result => {
+    await db.selectLabelPage([(data.page - 1) * data.pagesize, data.pagesize]).then(result => {
         // 返回结果
         response.send({
             code: 200,

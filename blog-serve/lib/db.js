@@ -190,7 +190,7 @@ const createTables = async () => {
         {
             name: 'label',
             sql: `create table if not exists label(
-                    id INT NOT NULL AUTO_INCREMENT,
+                    id INT NOT NULL,
                     name VARCHAR(100) NOT NULL COMMENT '名称',
                     createdate VARCHAR(100) NOT NULL COMMENT '时间',
                     PRIMARY KEY ( id )

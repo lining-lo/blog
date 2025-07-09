@@ -131,7 +131,7 @@ const articleStore = useArticleStore()
 // 实例化 Store
 const toolStore = useToolStore()
 // 解构 State（自动转为响应式 ref）
-const { isDark,componentKey } = storeToRefs(timeStore)
+const { isDark, componentKey } = storeToRefs(timeStore)
 const { token } = storeToRefs(userStore)
 const { article } = storeToRefs(articleStore)
 const { isShowCatalog } = storeToRefs(toolStore)
@@ -152,14 +152,14 @@ onMounted(() => {
   getArticle()
   getComment()
 })
-// 同路由参数变化时执行（替代 onMounted 的触发）
-onBeforeRouteUpdate(async(to, from) => {
-  // to：目标路由信息，from：来源路由信息
-  // 重新处理数据
-  await nextTick();
-  await getArticle();
-  await getComment();
-})
+// // 同路由参数变化时执行（替代 onMounted 的触发）
+// onBeforeRouteUpdate(async (to, from) => {
+//   // to：目标路由信息，from：来源路由信息
+//   // 重新处理数据
+//   await nextTick();
+//   await getArticle();
+//   await getComment();
+// })
 // 上一篇文章
 const lastArticle = computed(() => {
   const articleId = route.query.id as string | undefined;
@@ -193,7 +193,6 @@ const nextArticle = computed(() => {
 
   const index = article.value.findIndex(item => item.id === articleId);
   if (index === -1) return null;
-
   return index + 1 < article.value.length ? article.value[index + 1] : null;
 });
 
@@ -384,7 +383,7 @@ const getLevel = async (item: any) => {
 
 const router = useRouter()
 const changeArticle = async (type: number) => {
-  const articleId = route.query.id as string | undefined;
+  const articleId = route.query.id as string | undefined
   if (!articleId) {
     ElMessage.error('文章ID错误');
     return;
@@ -427,9 +426,6 @@ const changeArticle = async (type: number) => {
     query: { id: targetArticle.id }
   });
   componentKey.value += 1
-  // await nextTick();
-  // await getArticle();
-  // await getComment();
 };
 
 </script>
@@ -451,7 +447,8 @@ const changeArticle = async (type: number) => {
       img {
         pointer-events: none;
       }
-      p{
+
+      p {
         margin-bottom: .5rem;
         line-height: 2.25rem;
       }

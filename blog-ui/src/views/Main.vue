@@ -2,7 +2,7 @@
     <header-bar/>
     <banner v-if="route.name !== 'treehole'" :key="componentKey" />
     <div class="main-container" v-if="route.name !== 'treehole'">
-        <router-view />
+        <router-view :key="route.fullPath"/>
     </div>
     <router-view v-else />
     <tool v-if="route.name !== 'treehole'" />

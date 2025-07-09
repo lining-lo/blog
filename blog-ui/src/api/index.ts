@@ -128,4 +128,12 @@ export default {
     selectInfo() {
         return http.post('/selectInfo')
     },
+
+    /**
+    * 分类（标签）相关
+    */
+    // 分页获取标签
+    selectLabelPage(data: any) {
+        return http.post('/selectLabelPage', data)
+    },
 }

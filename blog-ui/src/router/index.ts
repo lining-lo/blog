@@ -61,7 +61,13 @@ const routes = [
         name: 'article',
         meta: { name: '', msg: '' },
         component: () => import('../views/Article.vue')
-      }
+      },
+      {
+        path: '/classification',
+        name: 'classification',
+        meta: { name: '分类', msg: '' },
+        component: () => import('../views/Classification.vue')
+      },
     ]
   },
 ]
@@ -79,7 +85,7 @@ router.afterEach(() => {
   const duration = 500; // 动画持续时间（毫秒）
   const startTime = performance.now();
   // 动画函数
-  const animateScroll = (currentTime:any) => {
+  const animateScroll = (currentTime: any) => {
     const elapsedTime = currentTime - startTime;
     // 计算动画进度（0-1）
     const progress = Math.min(elapsedTime / duration, 1);

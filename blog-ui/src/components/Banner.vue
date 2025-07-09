@@ -2,30 +2,31 @@
     <div class="banner" :style="{ backgroundImage: imgurl, opacity: isDark && route.name === 'article' ? 0.3 : 1 }">
         <div class="title-container">
             <!-- 路由标题 -->
-            <div class="title-route" v-if="route.name !== 'article'">
+            <div class="title-route" v-if="route.name !== 'article' ">
                 <p class="route-name  animate__animated animate__bounce">{{ route.meta.name }}</p>
-                <p class="route-msg  animate__animated animate__zoomIn">{{ route.meta.msg }}</p>
+                <p class="route-msg  animate__animated animate__zoomIn" v-if="route.name !== 'classification'">{{ route.meta.msg }}</p>
+                <p class="route-msg  animate__animated animate__zoomIn" v-else>该分类：{{ route.query.name }} ~ 共计{{ route.query.count }}篇文章</p>
             </div>
             <!-- 文章标题 -->
             <div class="title-article" v-if="route.name === 'article'">
                 <p class="article-name animate__animated animate__bounce" v-if="currentArticle">{{ currentArticle.name
-                    }}</p>
+                }}</p>
                 <p class="article-msg animate__animated animate__flash">
                     🦸🏻<span style="margin-left: 4px;">lining-lo</span> |
                     📅<span style="margin-left: 4px;" v-if="currentArticle">{{ currentArticle.createdate }}</span> |
                     👁️<span style="margin-left: 4px;" v-if="currentArticle">{{ currentArticle.count }}</span> |
                     ❤️<span style="margin-left: 4px;" v-if="currentArticle">{{ currentArticle.praiseCount[0].count
-                        }}</span> |
+                    }}</span> |
                     📑<span style="margin-left: 4px;" v-if="currentArticle">{{ currentArticle.commentCount[0].count
-                        }}</span>
+                    }}</span>
                 </p>
                 <div class="labels">
-                    <p class="labels-item"><el-icon color="green" style="margin-right: 4px;">
-                            <HelpFilled />
-                        </el-icon><span>博客文章</span></p>
-                    <p class="labels-item"><el-icon color="purple" style="margin-right: 4px;">
-                            <FolderOpened />
-                        </el-icon><span>BLOG</span></p>
+                    <p class="labels-item">
+                        🥝 博客文章
+                    </p>
+                    <p class="labels-item" v-if="currentArticle && labels">
+                        🏷️ {{ labels[currentArticle.label].name }}
+                    </p>
                 </div>
             </div>
         </div>
@@ -34,7 +35,7 @@
             <div class="wave wave2" :style="{ backgroundImage: wave2Bg }"></div>
         </div>
         <div class="bottom-container" v-if="route.name === 'home'" @click="scollToContent">
-            <el-icon :size="40" :style="{ color: isDark ?  '#1a3551' :'skyblue'}">
+            <el-icon :size="40" :style="{ color: isDark ? '#1a3551' : 'skyblue' }">
                 <ArrowDownBold />
             </el-icon>
         </div>
@@ -45,7 +46,9 @@
 import { useRoute } from 'vue-router';
 import { useArticleStore, useTimeStore, useUserStore } from '../store'
 import { storeToRefs } from 'pinia'
-import { computed, onMounted } from 'vue';
+import { computed, getCurrentInstance, onMounted, reactive, ref } from 'vue';
+
+const { proxy } = getCurrentInstance()
 
 //实例化route
 const route = useRoute()
@@ -86,6 +89,7 @@ const currentArticle = computed(() => {
 
 // 挂载
 onMounted(() => {
+    getLabels()
     articleStore.getArticle()
 })
 
@@ -147,6 +151,19 @@ const scollToContent = () => {
     requestAnimationFrame(animateScroll);
 }
 
+// 标签数据
+let labels = ref()
+// 查找标签参数
+const selectLabelPageParams = reactive({
+    page: 1,
+    pagesize: 100,
+})
+// 分页查找标签
+const getLabels = async () => {
+    const result = await proxy.$api.selectLabelPage(selectLabelPageParams)
+    labels.value = result.data.message
+    // console.log('labels', labels.value);
+}
 </script>
 
 <style lang='less' scoped>
