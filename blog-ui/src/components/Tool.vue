@@ -3,10 +3,10 @@
         <span v-if="route.name === 'message'" @click="showCreateMessage">📫</span>
         <span v-if="route.name === 'article'" @click="showCatalog">🕹️</span>
         <span @click="toTop">🚁</span>
-        <span @click="outerVisible = true">🔍</span>
-        <span @click="toListen">🎸</span>
+        <span @click="searchVisible = true">🔍</span>
+        <span @click="musicVisible = true">🎸</span>
         <span @click="toChat">📻</span>
-        <el-dialog :show-close="false" v-model="outerVisible" width="600">
+        <el-dialog class="search-dialog" :show-close="false" v-model="searchVisible" width="600">
             <div class="search"
                 :style="{ opacity: isDark ? 0.8 : 1, backgroundImage: `url(src/assets/images/${isDark ? 'dark' : 'light'}-search.webp)` }">
                 <div class="search-title">🔍搜索</div>
@@ -33,20 +33,60 @@
                 </div>
             </div>
         </el-dialog>
+        <el-dialog class="music-dialog" :show-close="false" v-model="musicVisible" width="600">
+            <div class="music" v-if="currentLrc"
+                :style="{ opacity: isDark ? 0.8 : 1, backgroundImage: `url(src/assets/images/${isDark ? 'dark' : 'light'}-search.webp)` }">
+                <span
+                    v-if="currentMusic && currentLrc.length > 0 && currentLrcIndex !== -1 && currentLrc[currentLrcIndex]">
+                    {{ currentLrc[currentLrcIndex].text }}
+                </span>
+                <div class="music-player">
+                    <div class="player-left rotate" :class="{ pause: !isPlay }">
+                        <img v-if="currentMusic" :src="currentMusic.cover" alt="">
+                    </div>
+                    <div class="player-right">
+                        <div class="name" v-if="currentMusic">{{ currentMusic.name }}</div>
+                        <audio @timeupdate="getCurrentTime" @loadedmetadata="handleLoadedMetadata" ref="audio"
+                            style="display: none;" v-if="currentMusic" :src="currentMusic.url" controls></audio>
+                        <input type="range" class="progress" v-model="progress" @input="updateProgress" min="0"
+                            max="100"><span style="margin-left: 10px;color: #fff;font-size: 10px;">{{ currentTime }} /
+                            {{ totalTime }}</span>
+                        <div class="player">
+                            <span @click="changMusic(0)">⏮️</span>
+                            <span @click="changePlay">{{ isPlay ? '⏸️' : '▶️' }}</span>
+                            <span @click="changMusic(1)">⏭️</span>
+                            <span @click="changePlayType">{{ ['🔁', '🔀', '🔄️'][playType] }}</span>
+                            <span>🔤</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="music-list">
+                    <div class="list-item"
+                        :style="{ backgroundColor: isDark ? 'rgba(207, 185, 185, 0.4)' : 'rgba(40, 40, 40, 0.4)' }"
+                        @click="selectMusic(item, index)" v-for="(item, index) in music" :key="index">
+                        <div class="item-num">{{ index + 1 }}</div>
+                        <div class="item-txt" :class="{ 'selected': index === currentIndex }">{{ item.name }}</div>
+                    </div>
+                </div>
+            </div>
+        </el-dialog>
     </div>
 </template>
 
 <script setup lang='ts'>
 import { ElMessage } from 'element-plus';
-import { ref, reactive, onMounted, computed, watch } from 'vue'
+import { ref, reactive, onMounted, computed, watch, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router';
 import { useArticleStore, useTimeStore, useToolStore } from '../store';
 import { storeToRefs } from 'pinia';
+import axios from 'axios';
+import { findLyricIndex, formatMusicTime, parseLyrics } from '../utils/customize';
 
 //实例化route
 const route = useRoute()
 
-const outerVisible = ref(false)
+const searchVisible = ref(false)
+const musicVisible = ref(false)
 
 // 实例化 Store
 const toolStore = useToolStore()
@@ -91,16 +131,13 @@ const toTop = () => {
     requestAnimationFrame(animateScroll);
 };
 
-const toListen = () => {
-    ElMessage.warning('音乐播放器尚未开发，敬请期待！')
-}
-
 const toChat = () => {
     ElMessage.warning('在线聊天室尚未开发，敬请期待！')
 }
 
 // 挂载
 onMounted(() => {
+    getMusic()
     articleStore.getArticle();
 })
 // 推荐的文章
@@ -121,7 +158,7 @@ const toArticle = (item: any) => {
         query: { id: item.id }
     });
     componentKey.value += 1
-    outerVisible.value = false
+    searchVisible.value = false
 }
 // 控制推荐|搜索的显示
 const isShowRecomment = ref(true)
@@ -218,6 +255,119 @@ const highlightMatchContent = (text: string) => {
     return prefix + highlightedSnippet + suffix;
 };
 
+// 音乐
+const music = ref()
+// 当前音乐
+const currentMusic = ref()
+// 当前音乐的下标
+const currentIndex = ref(0)
+// 获取音乐
+const getMusic = async () => {
+    // 获取所有数据
+    const result = await axios.get('https://api-music.2leo.top/')
+    music.value = result.data
+    currentMusic.value = result.data[0]
+    // 获取第一条音乐的歌词
+    const { data } = await axios.get(`${result.data[0].lrc}`)
+    currentLrc.value = parseLyrics(data)
+}
+// 选择音乐
+const selectMusic = async (item: any, index: any) => {
+    currentMusic.value = item
+    currentIndex.value = index
+    // 获取音乐的歌词
+    const { data } = await axios.get(`${currentMusic.value.lrc}`)
+    currentLrc.value = parseLyrics(data)
+    nextTick(() => {
+        audio.value.play()
+        isPlay.value = true
+    })
+}
+// 播放器的dom
+const audio = ref()
+// 播放|暂停
+const isPlay = ref(false)
+// 切换播放|暂停的方法
+const changePlay = () => {
+    if (isPlay.value) {
+        audio.value.pause()
+    } else {
+        audio.value.play()
+    }
+    isPlay.value = !isPlay.value
+}
+// 播放方式（0顺序、1随机、2单曲循环）
+const playType = ref(0)
+// 切换播放方式
+const changePlayType = () => {
+    if (playType.value < 2) {
+        playType.value += 1
+    } else {
+        playType.value = 0
+    }
+}
+// 上一曲|下一曲
+const changMusic = async (type: any) => {
+    if (type === 0) {
+        if (currentIndex.value - 1 < 0) return
+        currentMusic.value = music.value[currentIndex.value - 1]
+        currentIndex.value -= 1
+    } else {
+        if (currentIndex.value + 1 > music.value.length - 1) return
+        currentMusic.value = music.value[currentIndex.value + 1]
+        currentIndex.value += 1
+    }
+    // 获取音乐的歌词
+    const { data } = await axios.get(`${currentMusic.value.lrc}`)
+    currentLrc.value = parseLyrics(data)
+    nextTick(() => {
+        audio.value.play()
+        isPlay.value = true
+    })
+}
+
+// 歌曲总时长
+const totalTime = ref('00:00')
+// 获取歌曲总时长
+const handleLoadedMetadata = () => {
+    if (audio.value) {
+        totalTime.value = formatMusicTime(audio.value.duration);
+    }
+}
+// 当前播放时长
+const currentTime = ref('00:00')
+// 获取当前播放时长
+const getCurrentTime = () => {
+    if (audio.value && audio.value.duration) { // 确保 duration 已加载
+        // 更新当前时间
+        currentTime.value = formatMusicTime(audio.value.currentTime);
+        // 同步更新进度条（计算当前进度百分比）
+        const progressPercent = (audio.value.currentTime / audio.value.duration) * 100;
+        progress.value = progressPercent; // 关键：让进度条跟随播放进度移动
+        // 同步词条
+        const index = findLyricIndex(audio.value.currentTime, currentLrc.value);
+        console.log('当前时间:', audio.value.currentTime, '匹配索引:', index);
+
+        if (index !== currentLrcIndex.value) {
+            currentLrcIndex.value = index;
+        }
+    }
+}
+// 歌曲进度条
+const progress = ref(0)
+// 当前的歌词
+const currentLrc = ref([])
+// 当前词条索引
+const currentLrcIndex = ref(-1)
+// 更新进度条
+const updateProgress = (e: any) => {
+    if (audio.value && audio.value.duration) { // 确保 duration 已加载
+        // 更新进度条
+        progress.value = e.target.value
+        // 同步更新当前时间
+        audio.value.currentTime = (e.target.value / 100) * audio.value.duration;
+    }
+}
 </script>
 <style lang='less' scoped>
 .tool {
@@ -239,7 +389,7 @@ const highlightMatchContent = (text: string) => {
     }
 }
 
-::v-deep .el-dialog {
+::v-deep .search-dialog {
     padding: 0;
     border-radius: 10px;
     box-shadow: 0 1px 20px -6px rgba(0, 0, 0, 0.5);
@@ -372,6 +522,173 @@ const highlightMatchContent = (text: string) => {
                 .item-txt {
                     cursor: pointer;
                     letter-spacing: 1px;
+
+                    &:hover {
+                        color: #e34b4f;
+                    }
+                }
+            }
+        }
+    }
+}
+
+::v-deep .music-dialog {
+    padding: 0;
+    border-radius: 10px;
+    box-shadow: 0 1px 20px -6px rgba(0, 0, 0, 0.5);
+    z-index: 9999 !important;
+    background-color: black;
+
+    .el-dialog__header {
+        display: none;
+    }
+
+    .music {
+        width: 100%;
+        margin: 0 auto;
+        border-radius: 10px;
+        padding: 20px 50px;
+        background-image: url(../assets/images/light-search.webp);
+        background-size: cover;
+        background-position: center;
+        font-family: auto;
+        cursor: default;
+
+        .music-player {
+            width: 98%;
+            height: 104px;
+            margin: 10px 12px;
+            padding: 2px 10px;
+            display: flex;
+            background-color: rgba(40, 40, 40, 0.4);
+
+            .player-left {
+                width: 90px;
+                height: 90px;
+                border-radius: 50%;
+                background-color: #9485f2;
+                background-image: url(../assets/images/loading.gif);
+                background-size: cover;
+                background-position: center;
+                margin-top: 4px;
+                transition: all 1s;
+
+                @keyframes rotate {
+                    from {
+                        transform: rotate(0deg);
+                    }
+
+                    to {
+                        transform: rotate(360deg);
+                    }
+                }
+
+                &.rotate {
+                    animation: rotate 8s linear infinite;
+                }
+
+                &.pause {
+                    animation-play-state: paused;
+                }
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                    border-radius: 50%;
+                    object-fit: cover;
+                    object-position: center;
+                }
+            }
+
+            .player-right {
+                width: 360px;
+                margin-left: 20px;
+                padding: 10px;
+
+                .name {
+                    font-size: 18px;
+                    color: #fff;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
+                .progress {
+                    width: 78%;
+                    height: 5px;
+                    margin: 15px 0;
+                }
+
+                .player {
+                    font-size: 15px;
+
+                    span {
+                        margin-right: 10px;
+                    }
+                }
+            }
+        }
+
+        .music-list {
+            width: 100%;
+            height: 314px;
+            overflow: auto;
+            margin-top: 10px;
+
+            &>:nth-child(1) {
+                .item-num {
+                    background-color: #ff4d4f !important;
+                    color: #fff;
+                }
+            }
+
+            &>:nth-child(2) {
+                .item-num {
+                    background-color: orange !important;
+                    color: #fff;
+                }
+            }
+
+            &>:nth-child(3) {
+                .item-num {
+                    background-color: rgb(207, 174, 114) !important;
+                    color: #fff;
+                }
+            }
+
+            .list-item {
+                display: flex;
+                align-items: center;
+                margin: 10px 12px;
+                padding: 2px 10px;
+                font-size: 14px;
+                background-color: rgba(40, 40, 40, 0.4);
+                color: #fff;
+
+                .item-num {
+                    width: 24px;
+                    height: 24px;
+                    border-radius: 50%;
+                    background-color: #d9d9d9;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    margin-right: 8px;
+                    font-weight: 700;
+                    font-size: 10px;
+                }
+
+                .item-txt {
+                    cursor: pointer;
+                    letter-spacing: 1px;
+                    font-size: 12px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+
+                    &.selected {
+                        color: #e34b4f;
+                    }
 
                     &:hover {
                         color: #e34b4f;
