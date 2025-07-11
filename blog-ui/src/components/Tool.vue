@@ -35,18 +35,18 @@
         </el-dialog>
         <el-dialog class="music-dialog" :show-close="false" v-model="musicVisible" width="600">
             <div class="music" v-if="currentLrc"
-                :style="{ opacity: isDark ? 0.8 : 1, backgroundImage: `url(src/assets/images/${isDark ? 'dark' : 'light'}-search.webp)` }">
-                <span
-                    v-if="currentMusic && currentLrc.length > 0 && currentLrcIndex !== -1 && currentLrc[currentLrcIndex]">
+                :style="{ opacity: isDark ? 0.8 : 1, backgroundImage: `url(src/assets/images/${isDark ? 'dark' : 'light'}-music.webp)` }">
+                <div class="music-captions"
+                    v-if="currentMusic && currentLrc.length > 0 && currentLrcIndex !== -1 && currentLrc[currentLrcIndex] && isShowCaptions">
                     {{ currentLrc[currentLrcIndex].text }}
-                </span>
-                <div class="music-player">
+                </div>
+                <div class="music-player"  :style="{ backgroundColor: isDark ? 'rgba(207, 185, 185, 0.4)' : 'rgba(40, 40, 40, 0.4)' }">
                     <div class="player-left rotate" :class="{ pause: !isPlay }">
                         <img v-if="currentMusic" :src="currentMusic.cover" alt="">
                     </div>
                     <div class="player-right">
                         <div class="name" v-if="currentMusic">{{ currentMusic.name }}</div>
-                        <audio @timeupdate="getCurrentTime" @loadedmetadata="handleLoadedMetadata" ref="audio"
+                        <audio @ended="handleAudioEnded" @timeupdate="getCurrentTime" @loadedmetadata="handleLoadedMetadata" ref="audio"
                             style="display: none;" v-if="currentMusic" :src="currentMusic.url" controls></audio>
                         <input type="range" class="progress" v-model="progress" @input="updateProgress" min="0"
                             max="100"><span style="margin-left: 10px;color: #fff;font-size: 10px;">{{ currentTime }} /
@@ -56,7 +56,7 @@
                             <span @click="changePlay">{{ isPlay ? '⏸️' : '▶️' }}</span>
                             <span @click="changMusic(1)">⏭️</span>
                             <span @click="changePlayType">{{ ['🔁', '🔀', '🔄️'][playType] }}</span>
-                            <span>🔤</span>
+                            <span @click="isShowCaptions=!isShowCaptions">🔤</span>
                         </div>
                     </div>
                 </div>
@@ -298,6 +298,37 @@ const changePlay = () => {
 }
 // 播放方式（0顺序、1随机、2单曲循环）
 const playType = ref(0)
+// 歌曲播放结束的方法
+const handleAudioEnded = async () => {
+  switch (playType.value) {
+    case 0: // 0：顺序播放
+      // 若当前是最后一首，不切换；否则自动下一曲
+      if (currentIndex.value < music.value.length - 1) {
+        await changMusic(1); // 调用下一曲方法
+      } else {
+        // 播放结束后重置状态（可选）
+        isPlay.value = false;
+        currentLrcIndex.value = -1;
+      }
+      break;
+    case 1: // 1：随机播放
+      // 生成随机索引（排除当前索引，避免重复）
+      let randomIndex;
+      do {
+        randomIndex = Math.floor(Math.random() * music.value.length);
+      } while (randomIndex === currentIndex.value && music.value.length > 1);
+      // 切换到随机索引的歌曲
+      await selectMusic(music.value[randomIndex], randomIndex);
+      break;
+      
+    case 2: // 2：单曲循环
+      // 重新播放当前歌曲
+      audio.value.currentTime = 0; // 重置播放进度到开头
+      audio.value.play();
+      isPlay.value = true;
+      break;
+  }
+};
 // 切换播放方式
 const changePlayType = () => {
     if (playType.value < 2) {
@@ -359,6 +390,8 @@ const progress = ref(0)
 const currentLrc = ref([])
 // 当前词条索引
 const currentLrcIndex = ref(-1)
+// 显示|隐藏歌词
+const isShowCaptions = ref(false)
 // 更新进度条
 const updateProgress = (e: any) => {
     if (audio.value && audio.value.duration) { // 确保 duration 已加载
@@ -548,16 +581,29 @@ const updateProgress = (e: any) => {
         margin: 0 auto;
         border-radius: 10px;
         padding: 20px 50px;
-        background-image: url(../assets/images/light-search.webp);
+        background-image: url(../assets/images/light-music.webp);
         background-size: cover;
         background-position: center;
         font-family: auto;
         cursor: default;
+        position: relative;
+
+        .music-captions {
+            width: 86%;
+            height: 20px;
+            padding: 0 10px;
+            text-align: center;
+            color: rgb(24, 87, 49);
+            font-weight: 600;
+            font-size: 14px;
+            position: absolute;
+            top: 12px;
+        }
 
         .music-player {
             width: 98%;
             height: 104px;
-            margin: 10px 12px;
+            margin: 18px 12px 10px 12px;
             padding: 2px 10px;
             display: flex;
             background-color: rgba(40, 40, 40, 0.4);

@@ -38,7 +38,7 @@
                             style="color: #ff4d4f;margin-left: 10px;font-weight: 500;" v-if="weather">{{ weather.week
                             }}</span></p>
                     <p><span>风力：</span><span style="color: #ff4d4f;font-weight: 500;" v-if="weather">东风{{ weather.fl
-                    }}</span></p>
+                            }}</span></p>
                 </div>
             </div>
 
@@ -107,9 +107,10 @@
             </div>
 
             <div class="left-consulting" v-if="!isShowVideo">
-                <div class="consulting-title">🌐资讯</div>
+                <div class="consulting-title">🎰资讯</div>
                 <div class="consulting-content">
                     <p><span>文章数量：</span><span>0{{ info.articleCount[0].count }}</span></p>
+                    <p><span>标签总数：</span><span>0{{ info.labelCount[0].count }}</span></p>
                     <p><span>图片数目：</span><span>0{{ info.albumCount[0].count }}</span></p>
                     <p><span>获赞数量：</span><span>0{{ info.praiseCount[0].count }}</span></p>
                     <p><span>评论总数：</span><span>{{ info.commentCount[0].count }}</span></p>
@@ -167,7 +168,7 @@
                         <div class="content-info">
                             <span>👁️</span><span style="margin-left: 4px;">{{ item.count }}</span>&nbsp;
                             <span>📑</span><span style="margin-left: 4px;">{{ item.commentCount[0].count
-                            }}</span>&nbsp;
+                                }}</span>&nbsp;
                             <span class="isLike" :class="{ addlike: item.isPraise[0].count !== 0 }"
                                 @click="addPraise($event, item)">❤</span><span style="margin-left: 4px;">{{
                                     item.praiseCount[0].count }}</span>
@@ -214,7 +215,7 @@
                         <div class="content-info">
                             <span>👁️</span><span style="margin-left: 4px;">{{ item.count }}</span>&nbsp;
                             <span>📑</span><span style="margin-left: 4px;">{{ item.commentCount[0].count
-                                }}</span>&nbsp;
+                            }}</span>&nbsp;
                             <span class="isLike" :class="{ addlike: item.isPraise[0].count !== 0 }"
                                 @click="addPraise($event, item)">❤</span><span style="margin-left: 4px;">{{
                                     item.praiseCount[0].count }}</span>
@@ -419,11 +420,11 @@ const getLabels = async () => {
 const toClassification = (item: any) => {
     router.push({
         name: 'classification',
-        query: { 
-            id: item.id, 
-            name: item.name, 
+        query: {
+            id: item.id,
+            name: item.name,
             count: article.value.filter(a => a.label === item.id).length
-         }
+        }
     });
     componentKey.value += 1
 }
@@ -666,6 +667,9 @@ const toClassification = (item: any) => {
 
                 .item-txt {
                     cursor: pointer;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
 
                     &:hover {
                         color: #1dd98d;
@@ -679,7 +683,7 @@ const toClassification = (item: any) => {
             width: 100%;
             height: 391px;
             background-color: #2eaed575;
-            margin-top: 20px;
+            margin-top: 19px;
             border-bottom: 8px;
             border-radius: 5px;
             padding: 4px 12px 10px 12px;
@@ -746,11 +750,8 @@ const toClassification = (item: any) => {
                         .msg {
                             width: 186px;
                             white-space: nowrap;
-                            /* 强制文本不换行 */
                             overflow: hidden;
-                            /* 隐藏超出容器宽度的内容 */
                             text-overflow: ellipsis;
-                            /* 为溢出的文本显示省略号 */
                             margin-right: 15px;
                         }
                     }
@@ -761,7 +762,7 @@ const toClassification = (item: any) => {
         .left-label {
             width: 100%;
             background-color: rgb(234 226 100 / 30%);
-            margin-top: 20px;
+            margin-top: 19px;
             border-radius: 5px;
             padding: 4px 12px 10px 12px;
             font-family: auto;
@@ -796,7 +797,7 @@ const toClassification = (item: any) => {
         .left-video {
             width: 100%;
             background-color: rgb(85 247 246 / 30%);
-            margin-top: 20px;
+            margin-top: 19px;
             border-radius: 5px;
             padding: 4px 12px 10px 12px;
             font-family: auto;
@@ -859,9 +860,9 @@ const toClassification = (item: any) => {
         .left-consulting {
             width: 100%;
             background-color: rgba(190, 163, 192, 0.3);
-            margin-top: 20px;
+            margin-top: 19px;
             border-radius: 5px;
-            padding: 4px 12px 10px 12px;
+            padding: 4px 12px 7px 12px;
             font-family: auto;
             box-shadow: 0 1px 16px -10px rgba(0, 0, 0, 0.5);
             transition: all 0.3s;

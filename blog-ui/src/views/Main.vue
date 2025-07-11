@@ -5,7 +5,7 @@
         <router-view :key="route.fullPath"/>
     </div>
     <router-view v-else />
-    <tool v-if="route.name !== 'treehole'" />
+    <tool v-show="route.name !== 'treehole'" />
     <footer-bar v-if="route.name !== 'treehole'" />
 </template>
 
