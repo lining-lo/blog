@@ -150,6 +150,12 @@ onMounted(() => {
     border-left: 2px solid #1a72cb;
     padding: 10px 16px;
     color: #433b3b;
+
+    p {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
 
   hr {
@@ -314,6 +320,18 @@ onMounted(() => {
       box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
       cursor: default;
 
+      @media screen and (max-width: 1000px) {
+        width: calc(33% - 20px);
+      }
+
+      @media screen and (max-width: 800px) {
+        width: calc(50% - 20px);
+      }
+
+      @media screen and (max-width: 550px) {
+        width: 100%;
+      }
+
       .item-img {
         width: 100%;
         height: 60%;
@@ -330,7 +348,8 @@ onMounted(() => {
           object-fit: cover;
           object-position: center;
           transition: transform 0.8s ease;
-          &:hover{
+
+          &:hover {
             transform: scale(1.2);
           }
         }
@@ -348,6 +367,9 @@ onMounted(() => {
           margin-bottom: 10px;
           color: #658daa;
           transition: all 0.2s;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
 
           &:hover {
             color: #39c5bb;

@@ -233,7 +233,7 @@ const submit = async () => {
         display: flex;
         align-items: center;
         animation: scrollDanmu linear forwards;
-        right: -30%;
+        right: -100%;
         cursor: default;
 
         .item-img {

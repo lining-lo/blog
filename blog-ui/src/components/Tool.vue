@@ -40,14 +40,16 @@
                     v-if="currentMusic && currentLrc.length > 0 && currentLrcIndex !== -1 && currentLrc[currentLrcIndex] && isShowCaptions">
                     {{ currentLrc[currentLrcIndex].text }}
                 </div>
-                <div class="music-player"  :style="{ backgroundColor: isDark ? 'rgba(207, 185, 185, 0.4)' : 'rgba(40, 40, 40, 0.4)' }">
+                <div class="music-player"
+                    :style="{ backgroundColor: isDark ? 'rgba(207, 185, 185, 0.4)' : 'rgba(40, 40, 40, 0.4)' }">
                     <div class="player-left rotate" :class="{ pause: !isPlay }">
                         <img v-if="currentMusic" :src="currentMusic.cover" alt="">
                     </div>
                     <div class="player-right">
                         <div class="name" v-if="currentMusic">{{ currentMusic.name }}</div>
-                        <audio @ended="handleAudioEnded" @timeupdate="getCurrentTime" @loadedmetadata="handleLoadedMetadata" ref="audio"
-                            style="display: none;" v-if="currentMusic" :src="currentMusic.url" controls></audio>
+                        <audio @ended="handleAudioEnded" @timeupdate="getCurrentTime"
+                            @loadedmetadata="handleLoadedMetadata" ref="audio" style="display: none;"
+                            v-if="currentMusic" :src="currentMusic.url" controls></audio>
                         <input type="range" class="progress" v-model="progress" @input="updateProgress" min="0"
                             max="100"><span style="margin-left: 10px;color: #fff;font-size: 10px;">{{ currentTime }} /
                             {{ totalTime }}</span>
@@ -56,7 +58,7 @@
                             <span @click="changePlay">{{ isPlay ? '⏸️' : '▶️' }}</span>
                             <span @click="changMusic(1)">⏭️</span>
                             <span @click="changePlayType">{{ ['🔁', '🔀', '🔄️'][playType] }}</span>
-                            <span @click="isShowCaptions=!isShowCaptions">🔤</span>
+                            <span @click="isShowCaptions = !isShowCaptions">🔤</span>
                         </div>
                     </div>
                 </div>
@@ -305,34 +307,34 @@ const changePlay = () => {
 const playType = ref(0)
 // 歌曲播放结束的方法
 const handleAudioEnded = async () => {
-  switch (playType.value) {
-    case 0: // 0：顺序播放
-      // 若当前是最后一首，不切换；否则自动下一曲
-      if (currentIndex.value < music.value.length - 1) {
-        await changMusic(1); // 调用下一曲方法
-      } else {
-        // 播放结束后重置状态（可选）
-        isPlay.value = false;
-        currentLrcIndex.value = -1;
-      }
-      break;
-    case 1: // 1：随机播放
-      // 生成随机索引（排除当前索引，避免重复）
-      let randomIndex;
-      do {
-        randomIndex = Math.floor(Math.random() * music.value.length);
-      } while (randomIndex === currentIndex.value && music.value.length > 1);
-      // 切换到随机索引的歌曲
-      await selectMusic(music.value[randomIndex], randomIndex);
-      break;
-      
-    case 2: // 2：单曲循环
-      // 重新播放当前歌曲
-      audio.value.currentTime = 0; // 重置播放进度到开头
-      audio.value.play();
-      isPlay.value = true;
-      break;
-  }
+    switch (playType.value) {
+        case 0: // 0：顺序播放
+            // 若当前是最后一首，不切换；否则自动下一曲
+            if (currentIndex.value < music.value.length - 1) {
+                await changMusic(1); // 调用下一曲方法
+            } else {
+                // 播放结束后重置状态（可选）
+                isPlay.value = false;
+                currentLrcIndex.value = -1;
+            }
+            break;
+        case 1: // 1：随机播放
+            // 生成随机索引（排除当前索引，避免重复）
+            let randomIndex;
+            do {
+                randomIndex = Math.floor(Math.random() * music.value.length);
+            } while (randomIndex === currentIndex.value && music.value.length > 1);
+            // 切换到随机索引的歌曲
+            await selectMusic(music.value[randomIndex], randomIndex);
+            break;
+
+        case 2: // 2：单曲循环
+            // 重新播放当前歌曲
+            audio.value.currentTime = 0; // 重置播放进度到开头
+            audio.value.play();
+            isPlay.value = true;
+            break;
+    }
 };
 // 切换播放方式
 const changePlayType = () => {
@@ -382,7 +384,7 @@ const getCurrentTime = () => {
         progress.value = progressPercent; // 关键：让进度条跟随播放进度移动
         // 同步词条
         const index = findLyricIndex(audio.value.currentTime, currentLrc.value);
-        console.log('当前时间:', audio.value.currentTime, '匹配索引:', index);
+        // console.log('当前时间:', audio.value.currentTime, '匹配索引:', index);
 
         if (index !== currentLrcIndex.value) {
             currentLrcIndex.value = index;
@@ -434,6 +436,10 @@ const updateProgress = (e: any) => {
     z-index: 9999 !important;
     background-color: black;
 
+    @media screen and (max-width: 600px) {
+        width: 100%;
+    }
+
     .el-dialog__header {
         display: none;
     }
@@ -482,6 +488,7 @@ const updateProgress = (e: any) => {
                 background-color: #9485f2;
                 font-size: 12px;
                 color: #fff;
+                white-space: nowrap;
             }
         }
 
@@ -576,6 +583,10 @@ const updateProgress = (e: any) => {
     box-shadow: 0 1px 20px -6px rgba(0, 0, 0, 0.5);
     z-index: 9999 !important;
     background-color: black;
+
+    @media screen and (max-width: 600px) {
+        width: 100%;
+    }
 
     .el-dialog__header {
         display: none;

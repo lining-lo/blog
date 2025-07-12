@@ -15,10 +15,11 @@
         <div class="photos-list">
             <div class="list-item" v-for="(item, index) in album" :key="index">
                 <div class="item-like">
-                    <span class="icon" :class="{ addlike: item.isPraise[0].count !== 0 }" @click="addPraise(item)">❤</span>
-                    <span class="count">{{item.praiseCount[0].count}}</span>
+                    <span class="icon" :class="{ addlike: item.isPraise[0].count !== 0 }"
+                        @click="addPraise(item)">❤</span>
+                    <span class="count">{{ item.praiseCount[0].count }}</span>
                 </div>
-                <div class="item-tip">{{item.name}}</div>
+                <div class="item-tip">{{ item.name }}</div>
                 <el-image style="width: 100%; height: 100%;border-radius: 5px;" :src="item.imgurl" fit="cover"
                     :preview-src-list="imgurlList" :initial-index="index" />
             </div>
@@ -88,7 +89,7 @@ const praiseParams = reactive({
     createdate: formattime(Date.now())
 })
 // 点赞方法
-const addPraise = async (item:any) => {
+const addPraise = async (item: any) => {
     praiseParams.id = nanoid(10)
     praiseParams.type_id = item.id
     // 点过一次赞不允许再点赞
@@ -103,7 +104,7 @@ const addPraise = async (item:any) => {
 </script>
 <style lang='less' scoped>
 .album-container {
-    width: 67%;
+    width: 800px;
     margin: 60px auto;
     margin-bottom: 20px;
     padding: 10px;
@@ -113,6 +114,10 @@ const addPraise = async (item:any) => {
     position: relative;
     background-color: rgba(255, 255, 255, 0.2);
     cursor: default;
+
+    @media screen and (max-width: 900px) {
+        width: 100%;
+    }
 
     .album-top {
         width: 170px;
@@ -128,11 +133,12 @@ const addPraise = async (item:any) => {
 
     .album-list {
         display: flex;
+        flex-wrap: wrap;
         align-items: center;
         color: #fff;
 
         .list-item {
-            width: 201px;
+            width: calc(25% - 10px);
             height: 98px;
             background-color: pink;
             margin: 7.5px 5px;
@@ -143,6 +149,11 @@ const addPraise = async (item:any) => {
             background-position: center;
             background-image: url(../assets/images/loading.gif);
             transition: all .3s ease-in-out;
+
+            @media screen and (max-width: 800px) {
+                width: calc(50% - 10px);
+            }
+
 
             &:hover {
                 filter: saturate(2) drop-shadow(0 0 5px rgba(0, 0, 0, .66));
@@ -186,7 +197,7 @@ const addPraise = async (item:any) => {
 }
 
 .photos-container {
-    width: 67%;
+    width: 800px;
     margin: 0 auto;
     margin-bottom: 40px;
     padding: 10px;
@@ -195,6 +206,10 @@ const addPraise = async (item:any) => {
     font-family: auto;
     background-color: rgba(255, 255, 255, 0.2);
     cursor: default;
+
+    @media screen and (max-width: 900px) {
+        width: 100%;
+    }
 
     .photos-list {
         display: flex;
@@ -210,8 +225,11 @@ const addPraise = async (item:any) => {
             background-size: cover;
             background-position: center;
             position: relative;
+            @media screen and (max-width: 800px) {
+                width: calc(50% - 10px);
+            }
 
-            &:hover .item-tip{
+            &:hover .item-tip {
                 opacity: 1 !important;
             }
 

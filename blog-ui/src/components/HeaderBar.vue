@@ -125,7 +125,7 @@ const { token } = storeToRefs(userStore)
 
 const router = useRouter()
 // 路由跳转
-const toRoute = async(path: any) => {
+const toRoute = async (path: any) => {
     componentKey.value += 1
     router.push(path)
 }
@@ -398,6 +398,10 @@ const updateUser = async () => {
         font-size: 17px;
         font-family: fantasy;
         word-break: break-word;
+
+        @media screen and (max-width: 600px) {
+            display: none;
+        }
     }
 
     .header-right {
@@ -444,6 +448,10 @@ const updateUser = async () => {
                     font-weight: 300;
                     color: #fff;
                     font-family: cursive;
+
+                    @media screen and (max-width: 1020px) {
+                        display: none;
+                    }
                 }
             }
         }
@@ -467,6 +475,10 @@ const updateUser = async () => {
     box-shadow: 0 1px 20px -6px rgba(0, 0, 0, 0.5);
     z-index: 9999 !important;
 
+    @media screen and (max-width: 800px) {
+        width: 100%;
+    }
+
     .el-dialog__header {
         display: none;
     }
@@ -488,6 +500,10 @@ const updateUser = async () => {
             background-position: center;
             border-radius: 10px 0 0 10px;
             opacity: 0.9;
+
+            @media screen and (max-width: 700px) {
+                display: none;
+            }
         }
 
         .right {
@@ -498,6 +514,10 @@ const updateUser = async () => {
             flex-direction: column;
             align-items: center;
             background: rgba(228, 231, 254, 0.8);
+
+            @media screen and (max-width: 700px) {
+                width: 100%;
+            }
 
             .login,
             .regist {

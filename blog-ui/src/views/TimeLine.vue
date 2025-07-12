@@ -21,17 +21,17 @@
                             <div class="right-info">
                                 <span>👁️</span><span style="margin-left: 4px;">{{ item.count }}</span>&nbsp;
                                 <span>📑</span><span style="margin-left: 4px;">{{ item.commentCount[0].count
-                                    }}</span>&nbsp;
+                                }}</span>&nbsp;
                                 <span class="isLike" :class="{ addlike: item.isPraise[0].count !== 0 }"
                                     @click="addPraise($event, item)">❤</span><span style="margin-left: 4px;">{{
                                         item.praiseCount[0].count }}</span>
                             </div>
                             <div class="right-info">
-                                <p>
+                                <p style="margin-right: 12px;">
                                     🥝 博客文章
                                 </p>
                                 <p v-if="article && labels">
-                                    🏷️ {{labels[item.label].name}}
+                                    🏷️ {{ labels[item.label].name }}
                                 </p>
                             </div>
                         </div>
@@ -129,6 +129,10 @@ const getLabels = async () => {
     position: relative;
     padding: 100px 0;
     margin: 40px 0;
+    @media screen and (max-width: 1000px) {
+           margin: 40px 0;
+           padding: 0;
+        }
 
     &::before {
         content: "";
@@ -140,6 +144,10 @@ const getLabels = async () => {
         left: 50%;
         transform: translateX(-50%);
         background-color: orange;
+
+        @media screen and (max-width: 1000px) {
+            display: none;
+        }
     }
 
     .timeline-line {
@@ -152,12 +160,19 @@ const getLabels = async () => {
             width: 100%;
             height: 128px;
             cursor: default;
+            @media screen and (max-width: 1000px) {
+                    margin: 20px 0;
+                }
 
             .item-content {
                 position: absolute;
                 width: 50%;
                 height: 100%;
                 display: flex;
+
+                @media screen and (max-width: 1000px) {
+                    width: 100%;
+                }
 
                 .content-avator {
                     position: absolute;
@@ -167,16 +182,24 @@ const getLabels = async () => {
                     background-image: url(../assets/images/avator.jpg);
                     background-size: cover;
                     background-position: center;
+
+                    @media screen and (max-width: 1000px) {
+                        display: none;
+                    }
                 }
 
                 .content-main {
-                    width: 400px;
+                    width: 64%;
                     height: 100%;
                     background-color: skyblue;
                     padding: 4px;
                     display: flex;
                     border-radius: 3px;
                     transition: all 0.3s;
+
+                    @media screen and (max-width: 1000px) {
+                        width: 100%;
+                    }
 
                     &:hover {
                         transform: translateY(-8px);
@@ -188,7 +211,7 @@ const getLabels = async () => {
                     }
 
                     .main-left {
-                        width: 156px;
+                        width: 38%;
                         height: 120px;
                         margin-right: 4px;
                         border-radius: 3px;
@@ -212,7 +235,7 @@ const getLabels = async () => {
                     }
 
                     .main-right {
-                        width: 240px;
+                        width: 60%;
                         height: 120px;
                         background-color: rgba(255, 255, 255, 0.1);
                         border-radius: 3px;
@@ -264,6 +287,7 @@ const getLabels = async () => {
                             align-items: center;
                             font-size: 13px;
                             color: gray;
+                            white-space: nowrap;
 
                             .isLike {
                                 cursor: pointer;
@@ -285,7 +309,6 @@ const getLabels = async () => {
 
                             p {
                                 margin-top: 12px;
-                                margin-right: 14px;
                                 font-size: 11px;
                                 padding: 2px 4px;
                                 background-color: #eeeeee;
@@ -323,6 +346,9 @@ const getLabels = async () => {
 
                     .content-main {
                         margin-right: 92px;
+                        @media screen and (max-width: 1000px) {
+                            margin: 0;
+                        }
 
                         .main-duihua {
                             right: 76px;
@@ -342,6 +368,10 @@ const getLabels = async () => {
                         top: 10px;
                         right: -10px;
                         background-color: #ffffff;
+
+                        @media screen and (max-width: 1000px) {
+                            display: none;
+                        }
                     }
                 }
 
@@ -354,6 +384,9 @@ const getLabels = async () => {
 
                     .content-main {
                         margin-left: 92px;
+                        @media screen and (max-width: 1000px) {
+                            margin: 0;
+                        }
 
                         .main-duihua {
                             left: 76px;
@@ -373,6 +406,9 @@ const getLabels = async () => {
                         top: 10px;
                         left: -10px;
                         background-color: #ffffff;
+                        @media screen and (max-width: 1000px) {
+                            display: none;
+                        }
                     }
                 }
             }

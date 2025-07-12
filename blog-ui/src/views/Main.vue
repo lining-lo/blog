@@ -33,5 +33,8 @@ const { componentKey } = storeToRefs(timeStore)
     // background-color: pink;
     margin: 0 auto;
     padding: 0 10px 0 10px;
+    @media screen and (max-width: 800px) {
+      width: 100%;
+    }
 }
 </style>

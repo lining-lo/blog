@@ -204,7 +204,7 @@ export const commentType = [
     color: 'success',
   },
   {
-    name: '留言墙',
+    name: 'wall',
     color: 'info',
   },
   {

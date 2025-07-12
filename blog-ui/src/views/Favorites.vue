@@ -1,6 +1,6 @@
 <template>
     <div class="container-favorites">
-        <div class="favorites-title" :style="{ color: isDark ? '#ff4d4f' : '#000000' }">前端</div>
+        <div class="favorites-title" :style="{ color: isDark ? '#ff4d4f' : '#000000' }" v-if="favorites">前端</div>
         <div class="favorites-list">
             <a :href="item.url" target="_blank" class="list-item" v-for="item in favorites.frontend" :key="item.id">
                 <div class="item-img">
@@ -16,7 +16,7 @@
                 </div>
             </a>
         </div>
-        <div class="favorites-title" :style="{ color: isDark ? '#ff4d4f' : '#000000' }">后端</div>
+        <div class="favorites-title" :style="{ color: isDark ? '#ff4d4f' : '#000000' }" v-if="favorites">后端</div>
         <div class="favorites-list">
             <a :href="item.url" target="_blank" class="list-item" v-for="item in favorites.backend" :key="item.id">
                 <div class="item-img">
@@ -32,7 +32,7 @@
                 </div>
             </a>
         </div>
-        <div class="favorites-title" :style="{ color: isDark ? '#ff4d4f' : '#000000' }">工具</div>
+        <div class="favorites-title" :style="{ color: isDark ? '#ff4d4f' : '#000000' }" v-if="favorites">工具</div>
         <div class="favorites-list">
             <a :href="item.url" target="_blank" class="list-item" v-for="item in favorites.tool" :key="item.id">
                 <div class="item-img">
@@ -114,12 +114,24 @@ onMounted(() => {
             border-radius: 12px;
             margin: 10px;
             padding: 15px;
-            box-shadow: 0 1px 20px -6px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 1px 10px -6px rgba(0, 0, 0, 1.5);
             transition: all .5s;
             background: rgba(255, 255, 255, 0.2);
             display: flex;
             overflow: hidden;
             cursor: pointer;
+
+            @media screen and (max-width: 906px) {
+                width: calc(33.33333% - 20px);
+            }
+
+            @media screen and (max-width: 636px) {
+                width: calc(50% - 20px);
+            }
+
+            @media screen and (max-width: 500px) {
+                width: 100%;
+            }
 
             &:hover {
                 background-color: orange;

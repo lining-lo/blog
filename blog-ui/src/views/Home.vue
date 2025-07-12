@@ -38,7 +38,7 @@
                             style="color: #ff4d4f;margin-left: 10px;font-weight: 500;" v-if="weather">{{ weather.week
                             }}</span></p>
                     <p><span>风力：</span><span style="color: #ff4d4f;font-weight: 500;" v-if="weather">东风{{ weather.fl
-                            }}</span></p>
+                    }}</span></p>
                 </div>
             </div>
 
@@ -72,8 +72,9 @@
                                 :style="{ backgroundImage: item.user_type === 0 ? `url(http://localhost:3000${item.user_imgurl})` : `${portrait[item.user_imgurl]}` }">
                             </div>
                             <div class="msg">{{ item.content }}</div>
-                            <el-tag :type="commentType[item.type].color" style="opacity: 0.5;">{{
-                                commentType[item.type].name }}</el-tag>
+                            <el-tag :type="commentType[item.type].color"
+                                style="opacity: 0.5;position: absolute;right: 8px;">{{
+                                    commentType[item.type].name }}</el-tag>
                         </div>
                     </div>
                 </div>
@@ -168,7 +169,7 @@
                         <div class="content-info">
                             <span>👁️</span><span style="margin-left: 4px;">{{ item.count }}</span>&nbsp;
                             <span>📑</span><span style="margin-left: 4px;">{{ item.commentCount[0].count
-                                }}</span>&nbsp;
+                            }}</span>&nbsp;
                             <span class="isLike" :class="{ addlike: item.isPraise[0].count !== 0 }"
                                 @click="addPraise($event, item)">❤</span><span style="margin-left: 4px;">{{
                                     item.praiseCount[0].count }}</span>
@@ -215,7 +216,7 @@
                         <div class="content-info">
                             <span>👁️</span><span style="margin-left: 4px;">{{ item.count }}</span>&nbsp;
                             <span>📑</span><span style="margin-left: 4px;">{{ item.commentCount[0].count
-                            }}</span>&nbsp;
+                                }}</span>&nbsp;
                             <span class="isLike" :class="{ addlike: item.isPraise[0].count !== 0 }"
                                 @click="addPraise($event, item)">❤</span><span style="margin-left: 4px;">{{
                                     item.praiseCount[0].count }}</span>
@@ -311,7 +312,7 @@ onMounted(() => {
     getComment()
     getLabels()
     articleStore.getArticle()
-    // console.log(nanoid(10),formattime(Date.now()));
+    console.log(nanoid(10), formattime(Date.now()));
 })
 
 // 获取置顶文章
@@ -436,10 +437,20 @@ const toClassification = (item: any) => {
     display: flex;
     margin-left: -20px;
 
+    @media screen and (max-width: 1020px) {
+        flex-direction: column;
+        margin: 0;
+    }
+
     .home-left {
         margin: 0 0 0 50px;
         width: 24%;
         min-width: 308px;
+
+        @media screen and (max-width: 1020px) {
+            margin: 0;
+            width: 100%;
+        }
 
         .left-baseInfo {
             margin: 40px 0;
@@ -742,9 +753,13 @@ const toClassification = (item: any) => {
                         padding: 2px 0;
                         font-size: 14px;
 
+                        @media screen and (max-width: 1020px) {
+                            justify-content: space-between;
+                        }
+
                         .avator {
-                            width: 36px;
-                            height: 36px;
+                            width: 32px;
+                            height: 32px;
                             background-size: cover;
                             background-position: center;
                             border-radius: 50%;
@@ -753,11 +768,12 @@ const toClassification = (item: any) => {
                         }
 
                         .msg {
-                            width: 186px;
+                            width: 62.8%;
                             white-space: nowrap;
                             overflow: hidden;
                             text-overflow: ellipsis;
                             margin-right: 15px;
+                            font-size: 12px;
                         }
                     }
                 }
@@ -906,6 +922,11 @@ const toClassification = (item: any) => {
         width: 70%;
         margin-left: 30px;
 
+        @media screen and (max-width: 1020px) {
+            margin: 0;
+            width: 100%;
+        }
+
         .right-banner {
             width: 100%;
             height: 340px;
@@ -924,6 +945,7 @@ const toClassification = (item: any) => {
         }
 
         .right-header {
+            width: 100%;
             padding: 22px;
             color: #868686;
             border-radius: 5px;
@@ -939,6 +961,9 @@ const toClassification = (item: any) => {
 
                 .notice {
                     margin-left: 5px;
+                    height: 17px;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
                 }
             }
 
@@ -979,7 +1004,7 @@ const toClassification = (item: any) => {
             width: 100%;
             display: flex;
             flex-wrap: wrap;
-            // justify-content: space-between;
+            justify-content: space-between;
 
             .recommend-header {
                 width: 100%;
@@ -1009,13 +1034,21 @@ const toClassification = (item: any) => {
 
             .article-item {
                 height: 300px;
-                width: calc(33.33333% - 15px);
+                width: calc(33.33333% - 10px);
                 border-radius: 10px;
                 overflow: hidden;
-                margin: 10px 10px 10px 0;
+                margin: 10px 0 10px 0;
                 flex-shrink: 0;
                 box-shadow: 0 1px 16px -10px rgba(0, 0, 0, 0.5);
                 cursor: default;
+
+                @media screen and (max-width: 1400px) {
+                    width: calc(50% - 10px);
+                }
+
+                @media screen and (max-width: 600px) {
+                    width: 100%;
+                }
 
                 &:hover {
                     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
@@ -1141,7 +1174,7 @@ const toClassification = (item: any) => {
             width: 100%;
             display: flex;
             flex-wrap: wrap;
-            // justify-content: space-between;
+            justify-content: space-between;
 
             .article-header {
                 width: 100%;
@@ -1171,14 +1204,22 @@ const toClassification = (item: any) => {
 
             .article-item {
                 height: 300px;
-                width: calc(33.33333% - 15px);
+                width: calc(33.33333% - 10px);
                 border-radius: 10px;
                 overflow: hidden;
-                margin: 10px 10px 10px 0;
+                margin: 10px 0 10px 0;
                 flex-shrink: 0;
                 cursor: default;
                 box-shadow: 0 1px 16px -10px rgba(0, 0, 0, 0.5);
                 transition: all 0.5s;
+
+                @media screen and (max-width: 1400px) {
+                    width: calc(50% - 10px);
+                }
+
+                @media screen and (max-width: 600px) {
+                    width: 100%;
+                }
 
                 &:hover {
                     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);

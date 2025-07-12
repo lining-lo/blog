@@ -2,23 +2,25 @@
     <div class="banner" :style="{ backgroundImage: imgurl, opacity: isDark && route.name === 'article' ? 0.3 : 1 }">
         <div class="title-container">
             <!-- 路由标题 -->
-            <div class="title-route" v-if="route.name !== 'article' ">
+            <div class="title-route" v-if="route.name !== 'article'">
                 <p class="route-name  animate__animated animate__bounce">{{ route.meta.name }}</p>
-                <p class="route-msg  animate__animated animate__zoomIn" v-if="route.name !== 'classification'">{{ route.meta.msg }}</p>
-                <p class="route-msg  animate__animated animate__zoomIn" v-else>该分类：{{ route.query.name }} ~ 共计{{ route.query.count }}篇文章</p>
+                <p class="route-msg  animate__animated animate__zoomIn" v-if="route.name !== 'classification'">{{
+                    route.meta.msg }}</p>
+                <p class="route-msg  animate__animated animate__zoomIn" v-else>该分类：{{ route.query.name }} ~ 共计{{
+                    route.query.count }}篇文章</p>
             </div>
             <!-- 文章标题 -->
             <div class="title-article" v-if="route.name === 'article'">
                 <p class="article-name animate__animated animate__bounce" v-if="currentArticle">{{ currentArticle.name
-                }}</p>
+                    }}</p>
                 <p class="article-msg animate__animated animate__flash">
                     🦸🏻<span style="margin-left: 4px;">lining-lo</span> |
                     📅<span style="margin-left: 4px;" v-if="currentArticle">{{ currentArticle.createdate }}</span> |
                     👁️<span style="margin-left: 4px;" v-if="currentArticle">{{ currentArticle.count }}</span> |
                     ❤️<span style="margin-left: 4px;" v-if="currentArticle">{{ currentArticle.praiseCount[0].count
-                    }}</span> |
+                        }}</span> |
                     📑<span style="margin-left: 4px;" v-if="currentArticle">{{ currentArticle.commentCount[0].count
-                    }}</span>
+                        }}</span>
                 </p>
                 <div class="labels">
                     <p class="labels-item">
@@ -131,8 +133,8 @@ const imgurl = computed(() => {
 
     if (route.name === 'article') {
         // 文章页：优先使用文章封面，否则用默认封面
-        return currentArticle.value 
-            ? `url(http://localhost:3000${currentArticle.value.cover})` 
+        return currentArticle.value
+            ? `url(http://localhost:3000${currentArticle.value.cover})`
             : `url()`; // 使用导入的默认封面
     } else if (route.name && imageMap[route.name as keyof typeof imageMap]) {
         // 其他已配置的路由：从映射表中获取对应图片
@@ -287,15 +289,15 @@ const getLabels = async () => {
     .water-container {
         width: 100%;
         height: 100px;
-        position: relative;
-        top: calc(50vh - 99px);
+        position: absolute;
+        bottom: 0;
         overflow: hidden;
 
         .wave {
             position: absolute;
             bottom: 0;
             left: 0;
-            width: 200%;
+            width: 333%;
             height: 100px;
             background-repeat: repeat-x;
         }

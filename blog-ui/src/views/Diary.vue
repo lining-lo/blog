@@ -6,7 +6,8 @@
         <div class="item-left"></div>
         <div class="item-right">
           <div class="right-name">
-            <span style="margin-right: 5px;" :style="{ color: isDark ? '#ff4d4f' : '#000000' }">{{ item.user_name }}</span>
+            <span style="margin-right: 5px;" :style="{ color: isDark ? '#ff4d4f' : '#000000' }">{{ item.user_name
+              }}</span>
             <!-- 添加条件渲染 -->
             <template v-if="item.level">
               <img width="34" height="34" :src="item.level.level">
@@ -58,7 +59,8 @@
                       <div class="title-left">
                         <div class="name">
                           <span style="margin-right: 5px;font-size: 16px;"
-                            :style="{ color: isDark ? '#ff4d4f' : '#000000' }">{{ commentItem.user_name }}</span>
+                            :style="{ color: isDark ? '#ff4d4f' : '#000000' }">{{
+                            commentItem.user_name }}</span>
                           <!-- 添加条件渲染 -->
                           <template v-if="commentItem.level">
                             <img width="30" height="30" :src="commentItem.level.level">
@@ -73,7 +75,8 @@
                       <button class="title-right" @click="toReCall(commentItem)"
                         v-if="token.type === 0 ? commentItem.user_id !== token.id : commentItem.user_id !== token.username">回复</button>
                     </div>
-                    <div class="right-liuyan" :style="{ color: isDark ? '#fff' : '#000000',backgroundColor:isDark?'#5b5b5ccf':'#f7f9fe' }">
+                    <div class="right-liuyan"
+                      :style="{ color: isDark ? '#fff' : '#000000', backgroundColor: isDark ? '#5b5b5ccf' : '#f7f9fe' }">
                       <div v-if="commentItem.replier_id !== '' && commentItem.replier_id !== null"
                         style="display: inline-block;">
                         <span>回复 </span><span style="color: #0f91c8;">@{{ commentItem.replier_name }}</span>：
@@ -161,14 +164,14 @@ const getDiary = async () => {
   try {
     const result = await proxy.$api.selectDiaryPage(diaryPageParams)
     const diaryItems = []
-    
+
     // 使用 for...of 确保每个 item.level 加载完成
     for (const item of result.data.message) {
       item.isShow = false
       item.level = await getLevel(item) // 等待等级加载完成
       diaryItems.push(item)
     }
-    
+
     diary.value = diaryItems
   } catch (error) {
     console.error('获取说说失败:', error)
@@ -214,23 +217,23 @@ const toggleComment = async (item: any) => {
     item.isShow = false
     return
   }
-  
+
   // 打开评论区逻辑
   currentDiary.value = item
   findCommentParams.type_id = item.id
-  
+
   try {
     const result = await proxy.$api.findCommentPage(findCommentParams)
     const commentItems = []
-    
+
     // 使用 for...of 确保每个评论的 level 加载完成
     for (const commentItem of result.data.message) {
       commentItem.level = await getLevel(commentItem) // 等待等级加载完成
       commentItems.push(commentItem)
     }
-    
+
     comment.value = commentItems
-    
+
     // 关闭其他所有评论区，打开当前评论区
     diary.value.forEach(d => d.isShow = false)
     item.isShow = true
@@ -258,24 +261,24 @@ const submit = async (item: any) => {
   commentParams.id = nanoid(10)
   commentParams.type_id = item.id
   commentParams.createdate = formattime(Date.now())
-  
+
   // 校验
   if (commentParams.content.trim() === '') {
     ElMessage.warning('内容输入不能为空')
     return
   }
-  
+
   try {
     // 发送请求
     const result = await proxy.$api.insertComment(commentParams)
-    
+
     // 重新获取数据
     await toggleComment(item) // 刷新评论区
     await getDiary()          // 刷新说说列表
-    
+
     // 清空数据
     initCommentParams()
-    
+
     // 提示用户
     ElMessage.success('发送成功')
   } catch (error) {
@@ -300,26 +303,26 @@ const toReCall = (item: any) => {
 const send = async () => {
   // 拼接参数
   commentParams.content = recallContent.value
-  
+
   // 校验
   if (commentParams.content.trim() === '') {
     ElMessage.warning('内容输入不能为空')
     return
   }
-  
+
   try {
     // 发送请求
     const result = await proxy.$api.insertComment(commentParams)
-    
+
     // 重新获取数据
     await toggleComment(currentDiary.value)
     getDiary()
-    
+
     outerVisible.value = false
-    
+
     // 清空数据
     initCommentParams()
-    
+
     // 提示用户
     ElMessage.success('回复成功')
   } catch (error) {
@@ -336,40 +339,40 @@ const getLevel = async (item: any) => {
       console.warn('用户名为空:', item)
       return userLevel[0]
     }
-    
+
     const result = await proxy.$api.findUserByUserName({ username: item.user_name })
-    
+
     // 多层校验接口返回数据
     if (
-      !result || 
-      !result.data || 
-      !result.data.message || 
+      !result ||
+      !result.data ||
+      !result.data.message ||
       result.data.message.length === 0
     ) {
       console.warn('用户数据不存在:', item.user_name)
       return userLevel[0]
     }
-    
+
     const userInfo = result.data.message[0]
-    
+
     // 校验 createdate 是否存在
     if (!userInfo.createdate) {
       console.warn('用户创建日期不存在:', item.user_name)
       return userLevel[0]
     }
-    
+
     // 计算月数差
     const createDate = new Date(userInfo.createdate)
     const now = new Date()
     const monthsDiff = (now.getFullYear() - createDate.getFullYear()) * 12 +
-                      (now.getMonth() - createDate.getMonth())
-    
+      (now.getMonth() - createDate.getMonth())
+
     // 根据月数差确定等级索引（每6个月提升一级）
     const levelIndex = Math.min(
       Math.floor(monthsDiff / 6),
       userLevel.length - 1 // 限制最高等级
     )
-    
+
     return userLevel[levelIndex]
   } catch (error) {
     console.error('获取用户等级失败:', error, item)
@@ -404,6 +407,11 @@ const getLevel = async (item: any) => {
     margin: 40px auto;
     padding: 40px 20px;
 
+    @media screen and (max-width: 800px) {
+      padding: 40px 0;
+    }
+
+
     .list-item {
       display: flex;
       border-bottom: .5px dashed rgb(162, 175, 185);
@@ -421,8 +429,8 @@ const getLevel = async (item: any) => {
       }
 
       .item-right {
-        margin-left: 10px;
-        width: 100%;
+        margin: 0 16px 0 10px;
+        width: calc(100% - 50px);
 
         .right-name {
           color: #4b4948;
@@ -572,7 +580,7 @@ const getLevel = async (item: any) => {
               }
 
               .item-right {
-                width: 100%;
+                width: calc(100% - 46px);
                 margin-left: 10px;
 
                 .right-title {

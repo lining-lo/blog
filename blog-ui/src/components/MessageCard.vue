@@ -69,12 +69,21 @@ const addPraise = async () => {
 
 <style lang='less' scoped>
 .message-card {
-    width: 308px;
+    width: calc(24.6% - 10px);
     height: 240px;
     background-color: #f5d8d7;
     padding: 10px 20px 60px;
     box-sizing: border-box;
     position: relative;
+    @media screen and (max-width: 1200px) {
+        width: calc(33% - 10px);
+    }
+    @media screen and (max-width: 800px) {
+        width: calc(48% - 10px);
+    }
+    @media screen and (max-width: 550px) {
+        width: 100%;
+    }
 
     .top {
         width: 100%;

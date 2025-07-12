@@ -16,10 +16,10 @@
                         </div>
                         <div class="txt-info">
                             <span>⏲️</span><span style="margin-left: 4px;" v-if="hotArticle">{{ item.createdate
-                                }}</span>&nbsp;
+                            }}</span>&nbsp;
                             <span>👁️</span><span style="margin-left: 4px;">{{ item.count }}</span>&nbsp;
                             <span>📑</span><span style="margin-left: 4px;">{{ item.commentCount[0].count
-                                }}</span>&nbsp;
+                            }}</span>&nbsp;
                             <span class="isLike" :class="{ addlike: item.isPraise[0].count !== 0 }"
                                 @click="addPraise($event, item)">❤</span><span style="margin-left: 4px;">{{
                                     item.praiseCount[0].count }}</span>&nbsp;
@@ -132,6 +132,10 @@ const toArticle = (item: any) => {
     position: relative;
     cursor: default;
 
+    @media screen and (max-width: 1000px) {
+        width: 100%;
+    }
+
     .classification-list {
         width: 100%;
         height: 100%;
@@ -149,6 +153,10 @@ const toArticle = (item: any) => {
                 height: 100%;
                 position: absolute;
                 z-index: 1;
+
+                @media screen and (max-width: 700px) {
+                    display: none;
+                }
 
                 img {
                     width: 90%;
@@ -169,6 +177,10 @@ const toArticle = (item: any) => {
                 position: absolute;
                 z-index: 1;
                 cursor: pointer;
+
+                @media screen and (max-width: 700px) {
+                    width: 100%;
+                }
 
                 .content-txt {
                     width: 100%;
@@ -248,6 +260,10 @@ const toArticle = (item: any) => {
             .item-content {
                 right: 0;
                 padding: 20px 30px 20px 0;
+
+                @media screen and (max-width: 700px) {
+                    padding: 20px;
+                }
             }
         }
 
@@ -265,8 +281,16 @@ const toArticle = (item: any) => {
                 left: 0;
                 padding: 20px 0 20px 30px;
 
+                @media screen and (max-width: 700px) {
+                    padding: 20px;
+                }
+
                 .txt-info {
                     text-align: end;
+
+                    @media screen and (max-width: 700px) {
+                        text-align: left;
+                    }
                 }
             }
 
