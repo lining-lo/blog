@@ -106,6 +106,11 @@ import { nanoid } from 'nanoid'
 import { formattime, encryptIpToPassword, getObjectURL } from '../utils/customize'
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
+// 引入图片
+import lightLogin from '@/assets/images/login.webp';
+import lightRegist from '@/assets/images/regist.webp';
+import lightFindPassword from '@/assets/images/findpassword.png';
+import lightPerson from '@/assets/images/person.webp';
 
 const outerVisible = ref(false)
 const { proxy } = getCurrentInstance()
@@ -131,13 +136,13 @@ const match = ref(0)
 const getbackground = () => {
     let url = ''
     if (token.value.type === 1 && match.value === 0) {
-        url = `url(/src/assets/images/login.webp)`;
+        url = `url(${lightLogin})`;
     } else if (token.value.type === 1 && match.value === 1) {
-        url = `url(/src/assets/images/regist.webp)`;
+        url = `url(${lightRegist})`;
     } else if (token.value.type === 1 && match.value === 2) {
-        url = `url(/src/assets/images/findpassword.png)`;
+        url = `url(${lightFindPassword})`;
     } else {
-        url = `url(/src/assets/images/person.webp)`;
+        url = `url(${lightPerson})`;
     }
     return url
 }

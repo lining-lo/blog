@@ -437,12 +437,14 @@ const toClassification = (item: any) => {
     margin-left: -20px;
 
     .home-left {
-        padding: 0px 0 0 50px;
-        width: calc(30% - 30px);
+        margin: 0 0 0 50px;
+        width: 24%;
+        min-width: 308px;
 
         .left-baseInfo {
             margin: 40px 0;
             width: 100%;
+            min-width: 308px;
             height: 340px;
             background: linear-gradient(-45deg, #e8d8b9, #eccec5, #a3e9eb, #bdbdf0, #eec1ea);
             background-size: 500% 500%;
@@ -562,6 +564,7 @@ const toClassification = (item: any) => {
 
         .left-welcome {
             width: 100%;
+            min-width: 308px;
             margin: 10px 0;
             border-radius: 5px;
             padding: 1px 12px 6px 12px;
@@ -596,6 +599,7 @@ const toClassification = (item: any) => {
 
         .left-news {
             width: 100%;
+            min-width: 308px;
             background-color: rgba(142, 86, 137, 0.3);
             margin-top: 20px;
             border-radius: 5px;
@@ -681,6 +685,7 @@ const toClassification = (item: any) => {
 
         .left-message {
             width: 100%;
+            min-width: 308px;
             height: 391px;
             background-color: #2eaed575;
             margin-top: 19px;
@@ -761,6 +766,7 @@ const toClassification = (item: any) => {
 
         .left-label {
             width: 100%;
+            min-width: 308px;
             background-color: rgb(234 226 100 / 30%);
             margin-top: 19px;
             border-radius: 5px;
@@ -796,6 +802,7 @@ const toClassification = (item: any) => {
 
         .left-video {
             width: 100%;
+            min-width: 308px;
             background-color: rgb(85 247 246 / 30%);
             margin-top: 19px;
             border-radius: 5px;
@@ -859,6 +866,7 @@ const toClassification = (item: any) => {
 
         .left-consulting {
             width: 100%;
+            min-width: 308px;
             background-color: rgba(190, 163, 192, 0.3);
             margin-top: 19px;
             border-radius: 5px;

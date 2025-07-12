@@ -1,6 +1,11 @@
 const mysql = require('mysql2/promise');
 const config = require('../config/default');
 
+// 工具函数：将 undefined 转换为 null（避免数据库参数错误）
+const sanitizeValues = (values) => {
+    return values.map(value => value === undefined ? null : value);
+};
+
 // 创建连接池
 const pool = mysql.createPool({
     host: config.database.HOST,
@@ -13,24 +18,21 @@ const pool = mysql.createPool({
 });
 
 // 封装通用查询方法
-const query = async (sql, values) => {
+const query = async (sql, values = []) => {
     let connection;
     try {
         connection = await pool.getConnection();
         await connection.beginTransaction();
-        const [results] = await connection.execute(sql, values);
+        const safeValues = sanitizeValues(values); // 处理参数
+        const [results] = await connection.execute(sql, safeValues);
         await connection.commit();
         return results;
     } catch (error) {
-        if (connection) {
-            await connection.rollback();
-        }
+        if (connection) await connection.rollback();
         console.error('Database error:', error);
         throw error;
     } finally {
-        if (connection) {
-            connection.release();
-        }
+        if (connection) connection.release();
     }
 };
 
@@ -245,10 +247,10 @@ module.exports = {
         if (type === 3) {// 查询树洞
             sql = `SELECT * FROM comment WHERE type = ? ORDER BY createdate LIMIT ?,?`
             values = [type, (page - 1) * pagesize, pagesize]
-        }else if(type === -1){// 查询所有
+        } else if (type === -1) {// 查询所有
             sql = `SELECT * FROM comment ORDER BY createdate DESC LIMIT ?,?`
             values = [(page - 1) * pagesize, pagesize]
-        }else {// 查询除树洞的所有
+        } else {// 查询除树洞的所有
             sql = `SELECT * FROM comment WHERE type_id = ? AND type = ? ORDER BY createdate LIMIT ?,?`
             values = [type_id, type, (page - 1) * pagesize, pagesize]
         }

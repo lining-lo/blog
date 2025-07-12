@@ -192,6 +192,7 @@ const praiseParams = reactive({
 
 // 点赞方法
 const addPraise = async (item: any) => {
+  praiseParams.id = nanoid(10)
   praiseParams.type_id = item.id
   // 点过一次赞不允许再点赞
   if (item.isPraise[0].count === 0) {

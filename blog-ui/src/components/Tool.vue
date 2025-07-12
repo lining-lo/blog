@@ -8,7 +8,7 @@
         <span @click="toChat">📻</span>
         <el-dialog class="search-dialog" :show-close="false" v-model="searchVisible" width="600">
             <div class="search"
-                :style="{ opacity: isDark ? 0.8 : 1, backgroundImage: `url(src/assets/images/${isDark ? 'dark' : 'light'}-search.webp)` }">
+                :style="{ opacity: isDark ? 0.8 : 1, backgroundImage: `url(${isDark ? darkSearch : lightSearch})` }">
                 <div class="search-title">🔍搜索</div>
                 <div class="search-input">
                     <input type="text" v-model="searchKeyword" @keyup.enter="filteredArticles">
@@ -35,7 +35,7 @@
         </el-dialog>
         <el-dialog class="music-dialog" :show-close="false" v-model="musicVisible" width="600">
             <div class="music" v-if="currentLrc"
-                :style="{ opacity: isDark ? 0.8 : 1, backgroundImage: `url(src/assets/images/${isDark ? 'dark' : 'light'}-music.webp)` }">
+                :style="{ opacity: isDark ? 0.8 : 1, backgroundImage: `url(${isDark ? darkMusic : lightMusic})` }">
                 <div class="music-captions"
                     v-if="currentMusic && currentLrc.length > 0 && currentLrcIndex !== -1 && currentLrc[currentLrcIndex] && isShowCaptions">
                     {{ currentLrc[currentLrcIndex].text }}
@@ -81,6 +81,11 @@ import { useArticleStore, useTimeStore, useToolStore } from '../store';
 import { storeToRefs } from 'pinia';
 import axios from 'axios';
 import { findLyricIndex, formatMusicTime, parseLyrics } from '../utils/customize';
+// 引入图片
+import lightSearch from '@/assets/images/light-search.webp';
+import darkSearch from '@/assets/images/dark-search.webp';
+import lightMusic from '@/assets/images/light-music.webp';
+import darkMusic from '@/assets/images/dark-music.webp';
 
 //实例化route
 const route = useRoute()
@@ -593,7 +598,7 @@ const updateProgress = (e: any) => {
             height: 20px;
             padding: 0 10px;
             text-align: center;
-            color: rgb(24, 87, 49);
+            color: #fff;
             font-weight: 600;
             font-size: 14px;
             position: absolute;

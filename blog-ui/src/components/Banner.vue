@@ -47,6 +47,26 @@ import { useRoute } from 'vue-router';
 import { useArticleStore, useTimeStore, useUserStore } from '../store'
 import { storeToRefs } from 'pinia'
 import { computed, getCurrentInstance, onMounted, reactive, ref } from 'vue';
+// 浅色主题图片
+import lightHome from '@/assets/images/light-home.webp';
+import lightTimeline from '@/assets/images/light-timeline.webp';
+import lightFavorites from '@/assets/images/light-favorites.webp';
+import lightAlbum from '@/assets/images/light-album.webp';
+import lightDiary from '@/assets/images/light-diary.webp';
+import lightTreehole from '@/assets/images/light-treehole.webp';
+import lightFriend from '@/assets/images/light-friend.webp';
+import lightMessage from '@/assets/images/light-message.webp';
+import lightClassification from '@/assets/images/light-classification.webp';
+import darkClassification from '@/assets/images/dark-classification.webp';
+// 深色主题图片
+import darkHome from '@/assets/images/dark-home.webp';
+import darkTimeline from '@/assets/images/dark-timeline.webp';
+import darkFavorites from '@/assets/images/dark-favorites.webp';
+import darkAlbum from '@/assets/images/dark-album.webp';
+import darkDiary from '@/assets/images/dark-diary.webp';
+import darkTreehole from '@/assets/images/dark-treehole.webp';
+import darkFriend from '@/assets/images/dark-friend.webp';
+import darkMessage from '@/assets/images/dark-message.webp';
 
 const { proxy } = getCurrentInstance()
 
@@ -95,18 +115,33 @@ onMounted(() => {
 
 //获取背景图片
 const imgurl = computed(() => {
-    let url = null
+    // 建立路由名称与图片的映射关系（根据路由名匹配对应图片）
+    const imageMap = {
+        home: isDark.value ? darkHome : lightHome,
+        timeline: isDark.value ? darkTimeline : lightTimeline,
+        favorites: isDark.value ? darkFavorites : lightFavorites,
+        album: isDark.value ? darkAlbum : lightAlbum,
+        diary: isDark.value ? darkDiary : lightDiary,
+        treehole: isDark.value ? darkTreehole : lightTreehole,
+        friend: isDark.value ? darkFriend : lightFriend,
+        message: isDark.value ? darkMessage : lightMessage,
+        classification: isDark.value ? darkClassification : lightClassification,
+        photos: lightTreehole // photos 路由固定使用light-treehole（可根据需求调整）
+    };
+
     if (route.name === 'article') {
-        url = currentArticle.value
-            ? `url(http://localhost:3000${currentArticle.value.cover})`
-            : `url(/src/assets/images/default-article-cover.png)`; // 默认封面图路径
-    } else if (route.name === 'photos') {
-        url = `url(/src/assets/images/light-treehole.webp`;
+        // 文章页：优先使用文章封面，否则用默认封面
+        return currentArticle.value 
+            ? `url(http://localhost:3000${currentArticle.value.cover})` 
+            : `url()`; // 使用导入的默认封面
+    } else if (route.name && imageMap[route.name as keyof typeof imageMap]) {
+        // 其他已配置的路由：从映射表中获取对应图片
+        return `url(${imageMap[route.name as keyof typeof imageMap]})`;
     } else {
-        url = `url(/src/assets/images/${isDark.value ? 'dark' : 'light'}-${String(route.name)}.webp)`;
+        // 未匹配到路由时的默认图片（ fallback ）
+        return `url(${isDark.value ? darkHome : lightHome})`;
     }
-    return url;
-})
+});
 
 //获取水流背景颜色
 const wave1Bg = computed(() => {
