@@ -138,16 +138,18 @@ onMounted(() => {
 
     .message-labels {
         display: flex;
-        justify-content: center;
         align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
         margin-top: 40px;
 
         p {
-            padding: 0 14px;
+            padding: 0 10px;
             margin: 4px;
             color: #585858;
             box-sizing: border-box;
             cursor: pointer;
+            white-space: nowrap
         }
 
         .selected {

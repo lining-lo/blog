@@ -3,13 +3,9 @@
     <div class="footerbar-inner">
       <div class="footer-left">
         <div class="logo">
-          <img src="../../public/yksg.svg" alt="">
           <div class="logo-name">LO'S BELOG</div>
         </div>
-        <p>这是我第一个用全栈技术从0到1搭建的个人博客项目。</p>
-        <p>开发这个项目一来是为了练习全栈技术，积累项目经验，二来呢是拥有一个属于自己的博客是一个很酷的事情。<br />
-          我会博客分享一些记录自己平时学习的笔记、心得还有做项目时的记录以及踩过的坑。<br />
-          这个博客我会一直完善下去，毕竟现在还比较菜，只能实现一些简单的功能。</p>
+        <p>哈喽，大家好！这是我从 0 到 1 搭建的个人博客，用于记录学习笔记、心得、项目过程及踩坑经历</p>
         <p class="state"><span>声明</span><span>备案/许可证粤ICP备19012866号</span>
         </p>
       </div>
@@ -54,6 +50,11 @@ import { ref, reactive } from 'vue'
     display: flex;
     justify-content: space-between;
 
+    @media screen and (max-width: 1200px) {
+      width: 100%;
+      text-align: center;
+    }
+
     .footer-left {
       p {
         font-size: 16px;
@@ -63,9 +64,13 @@ import { ref, reactive } from 'vue'
       }
 
       .logo {
-        display: flex;
-        align-items: center;
+        width: 100%;
         padding-bottom: 20px;
+
+        @media screen and (max-width: 1200px) {
+          width: 100%;
+          text-align: center;
+        }
 
         .logo-name {
           color: #fff;
@@ -87,6 +92,10 @@ import { ref, reactive } from 'vue'
     }
 
     .link {
+      @media screen and (max-width: 1200px) {
+        display: none;
+      }
+
       .title {
         font-size: 16px;
         font-weight: 600;
@@ -104,6 +113,10 @@ import { ref, reactive } from 'vue'
     }
 
     .footer-right {
+      @media screen and (max-width: 1200px) {
+        display: none;
+      }
+
       .right-title {
         font-size: 16px;
         font-weight: 600;

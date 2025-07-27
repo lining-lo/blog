@@ -12,7 +12,7 @@
         </div>
         <div class="detail-content">
             <!-- 留言卡片 -->
-            <message-card :card="card" />
+            <message-card style="width: 100%;" :card="card" />
             <!-- 评论表单 -->
             <div class="detail-form">
                 <textarea v-model="commentParams.content" class="text" style="outline: none;" placeholder="请输入..." />
@@ -26,7 +26,7 @@
                 <p class="comment-title">评论{{ props.card.commentCount[0].count }}</p>
                 <div class="comment-item" v-for="(item, index) in comment" :key="index">
                     <div class="avatar"
-                        :style="{ backgroundImage: item.user_type === 0 ? `url(http://localhost:3000${item.user_imgurl})` : `${portrait[item.user_imgurl]}` }">
+                        :style="{ backgroundImage: item.user_type === 0 ? `url(${baseUrl}${item.user_imgurl})` : `${portrait[item.user_imgurl]}` }">
                     </div>
                     <div class="content">
                         <div class="userInfo">
@@ -62,6 +62,7 @@ import { portrait } from '../utils/data';
 import { ElMessage } from 'element-plus';
 import { useTimeStore, useUserStore } from '../store';
 import { storeToRefs } from 'pinia';
+import { baseUrl } from '../utils/env';
 
 const { proxy } = getCurrentInstance()
 

@@ -7,7 +7,7 @@
                     <div class="content-main" @click="toArticle(item)"
                         :style="{ backgroundColor: createMessageCardColors[index % createMessageCardColors.length] }">
                         <div class="main-left">
-                            <img :src="`http://localhost:3000${item.cover}`" alt="">
+                            <img :src="`${baseUrl}${item.cover}`" alt="">
                         </div>
                         <div class="main-right">
                             <div class="right-time">
@@ -55,6 +55,7 @@ import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { createMessageCardColors } from '../utils/data'
+import { baseUrl } from '../utils/env'
 
 const { proxy } = getCurrentInstance()
 
@@ -129,10 +130,11 @@ const getLabels = async () => {
     position: relative;
     padding: 100px 0;
     margin: 40px 0;
+
     @media screen and (max-width: 1000px) {
-           margin: 40px 0;
-           padding: 0;
-        }
+        margin: 40px 0;
+        padding: 0;
+    }
 
     &::before {
         content: "";
@@ -160,9 +162,10 @@ const getLabels = async () => {
             width: 100%;
             height: 128px;
             cursor: default;
+
             @media screen and (max-width: 1000px) {
-                    margin: 20px 0;
-                }
+                margin: 20px 0;
+            }
 
             .item-content {
                 position: absolute;
@@ -243,6 +246,12 @@ const getLabels = async () => {
                         z-index: 5;
                         position: relative;
 
+                        @media screen and (max-width: 600px) {
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: space-between;
+                        }
+
                         .right-time {
                             display: flex;
                             align-items: center;
@@ -258,6 +267,10 @@ const getLabels = async () => {
                             text-overflow: ellipsis;
                             overflow: hidden;
                             color: gray;
+
+                            @media screen and (max-width: 600px) {
+                                margin: 0;
+                            }
 
                             &:hover {
                                 +.right-tip {
@@ -317,6 +330,10 @@ const getLabels = async () => {
                                 align-items: center;
                                 transition: all 0.5s;
 
+                                @media screen and (max-width: 600px) {
+                                    margin-top: 0;
+                                }
+
                                 &:hover {
                                     background-color: #ffa500;
                                     color: #fff;
@@ -346,6 +363,7 @@ const getLabels = async () => {
 
                     .content-main {
                         margin-right: 92px;
+
                         @media screen and (max-width: 1000px) {
                             margin: 0;
                         }
@@ -384,6 +402,7 @@ const getLabels = async () => {
 
                     .content-main {
                         margin-left: 92px;
+
                         @media screen and (max-width: 1000px) {
                             margin: 0;
                         }
@@ -406,6 +425,7 @@ const getLabels = async () => {
                         top: 10px;
                         left: -10px;
                         background-color: #ffffff;
+
                         @media screen and (max-width: 1000px) {
                             display: none;
                         }

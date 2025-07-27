@@ -131,4 +131,12 @@ module.exports = function (app) {
     app.post('/selectLabelPage', (request, response) => {
         controller.selectLabelPage(request, response)
     })
+
+    /**
+     * 音乐相关
+     */
+    // 分页获取音乐
+    app.post('/selectMusicPage', (request, response) => {
+        controller.selectMusicPage(request, response)
+    })
 }

@@ -27,6 +27,7 @@ app.set('view engine', 'html');
 require('./routes')(app);
 require('./routes/files')(app);
 require('./routes/email')(app);
+require('./routes/weather')(app);
 
 // Vue Router history 模式支持（放在所有路由最后）
 // 修复：使用更安全的路径匹配，避免与后端路由冲突

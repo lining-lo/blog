@@ -21,8 +21,7 @@
     </div>
     <div class="article-next">
       <div class="left" @click="changeArticle(0)" :class="{ disabled: !lastArticle }">
-        <div class="last"
-          :style="lastArticle ? { backgroundImage: `url(http://localhost:3000${lastArticle.cover})` } : {}">
+        <div class="last" :style="lastArticle ? { backgroundImage: `url(${baseUrl}${lastArticle.cover})` } : {}">
           <p style="font-size: 18px;font-weight: 600;opacity: lastArticle ? 1 : 0.5;">
             < 上一篇</p>
               <p style="font-size: 15px;font-weight: 600;margin-top: 10px;opacity: lastArticle ? 1 : 0.5;">{{
@@ -30,8 +29,7 @@
         </div>
       </div>
       <div @click="changeArticle(1)" class="right" :class="{ disabled: !nextArticle }">
-        <div class="next"
-          :style="nextArticle ? { backgroundImage: `url(http://localhost:3000${nextArticle.cover})` } : {}">
+        <div class="next" :style="nextArticle ? { backgroundImage: `url(${baseUrl}${nextArticle.cover})` } : {}">
           <p style="font-size: 18px;font-weight: 600;opacity: nextArticle ? 1 : 0.5;">下一篇 ></p>
           <p style="font-size: 15px;font-weight: 600;margin-top: 10px;opacity: nextArticle ? 1 : 0.5;">{{
             nextArticle?.name || '没有下一篇' }}</p>
@@ -51,7 +49,7 @@
           <div class="message-commentList">
             <div class="commentList-item" v-for="(commentItem, idx) in comment" :key="idx">
               <div class="item-left"
-                :style="{ backgroundImage: commentItem.user_type === 0 ? `url(http://localhost:3000${commentItem.user_imgurl})` : `${portrait[commentItem.user_imgurl]}` }">
+                :style="{ backgroundImage: commentItem.user_type === 0 ? `url(${baseUrl}${commentItem.user_imgurl})` : `${portrait[commentItem.user_imgurl]}` }">
               </div>
               <div class="item-right">
                 <div class="right-title">
@@ -94,7 +92,7 @@
       <span>🎸</span>
       <span>📻</span>
     </div> -->
-    <el-dialog center="true" title="留言" v-model="outerVisible" width="30%">
+    <el-dialog center="true" title="留言" v-model="outerVisible" width="30%" style="min-width: 320px;">
       <textarea v-model="recallContent" class="message-text" placeholder="写下点什么..." maxlength="10000"></textarea>
       <div class="message-submit">
         <button @click="send">发布</button>
@@ -114,6 +112,7 @@ import { ElMessage } from 'element-plus';
 import { nanoid } from 'nanoid';
 import { formattime } from '../utils/customize';
 import { portrait, userLevel } from '../utils/data';
+import { baseUrl } from '../utils/env';
 
 const { proxy } = getCurrentInstance() as any
 const outerVisible = ref(false)
@@ -440,6 +439,11 @@ const changeArticle = async (type: number) => {
     width: 875px;
     margin: 0 auto;
 
+    @media screen and (max-width: 1000px) {
+      width: 100%;
+      padding: 16px;
+    }
+
     ::v-deep .md-editor-preview {
       font-size: 15px;
 
@@ -501,6 +505,11 @@ const changeArticle = async (type: number) => {
     padding: 10px 16px;
     color: #949294;
 
+    @media screen and (max-width: 1000px) {
+      width: 100%;
+      padding: 16px;
+    }
+
     p {
       line-height: 2;
       border-left: .2rem solid var(--blue);
@@ -540,7 +549,6 @@ const changeArticle = async (type: number) => {
   .article-next {
     width: 875px;
     height: 112px;
-    background-color: pink;
     border-radius: 5px;
     margin: 20px auto;
     display: flex;
@@ -549,6 +557,12 @@ const changeArticle = async (type: number) => {
     inset: 0px;
     transition: 0.5s;
     background-color: rgba(0, 0, 0, 0.7);
+
+    @media screen and (max-width: 1000px) {
+      width: 100%;
+      padding: 16px;
+      background: none;
+    }
 
     .left,
     .right {
@@ -622,6 +636,10 @@ const changeArticle = async (type: number) => {
     width: 875px;
     margin: 0 auto;
     margin-bottom: 80px;
+    @media screen and (max-width: 1000px) {
+      width: 100%;
+      padding: 16px;
+    }
 
     .right-message {
       width: 100%;

@@ -77,7 +77,7 @@
 
 <script setup lang='ts'>
 import { ElMessage } from 'element-plus';
-import { ref, reactive, onMounted, computed, watch, nextTick } from 'vue'
+import { ref, reactive, onMounted, computed, watch, nextTick, getCurrentInstance } from 'vue'
 import { useRoute, useRouter } from 'vue-router';
 import { useArticleStore, useTimeStore, useToolStore } from '../store';
 import { storeToRefs } from 'pinia';
@@ -88,6 +88,8 @@ import lightSearch from '@/assets/images/light-search.webp';
 import darkSearch from '@/assets/images/dark-search.webp';
 import lightMusic from '@/assets/images/light-music.webp';
 import darkMusic from '@/assets/images/dark-music.webp';
+
+const { proxy } = getCurrentInstance()
 
 //实例化route
 const route = useRoute()
@@ -264,27 +266,39 @@ const highlightMatchContent = (text: string) => {
 
 // 音乐
 const music = ref()
+// 获取音乐参数
+const musicParams = reactive({
+    page: 1,
+    pagesize: 100
+})
 // 当前音乐
 const currentMusic = ref()
 // 当前音乐的下标
 const currentIndex = ref(0)
 // 获取音乐
 const getMusic = async () => {
-    // 获取所有数据
-    const result = await axios.get('https://api-music.2leo.top/')
-    music.value = result.data
-    currentMusic.value = result.data[0]
-    // 获取第一条音乐的歌词
-    const { data } = await axios.get(`${result.data[0].lrc}`)
-    currentLrc.value = parseLyrics(data)
+    // // 获取所有数据
+    // const result = await axios.get('https://api-music.2leo.top/')
+    // music.value = result.data
+    // currentMusic.value = result.data[0]
+    // // 获取第一条音乐的歌词
+    // const { data } = await axios.get(`${result.data[0].lrc}`)
+    // currentLrc.value = parseLyrics(data)
+    const result = await proxy.$api.selectMusicPage(musicParams)
+    music.value = result.data.message
+    currentMusic.value = result.data.message[0]
+    currentLrc.value = parseLyrics(result.data.message[0].lrc)
 }
+
+
 // 选择音乐
 const selectMusic = async (item: any, index: any) => {
     currentMusic.value = item
     currentIndex.value = index
     // 获取音乐的歌词
-    const { data } = await axios.get(`${currentMusic.value.lrc}`)
-    currentLrc.value = parseLyrics(data)
+    // const { data } = await axios.get(`${currentMusic.value.lrc}`)
+    currentLrc.value = parseLyrics(currentMusic.value.lrc)
+
     nextTick(() => {
         audio.value.play()
         isPlay.value = true
@@ -356,8 +370,9 @@ const changMusic = async (type: any) => {
         currentIndex.value += 1
     }
     // 获取音乐的歌词
-    const { data } = await axios.get(`${currentMusic.value.lrc}`)
-    currentLrc.value = parseLyrics(data)
+    // const { data } = await axios.get(`${currentMusic.value.lrc}`)
+    currentLrc.value = parseLyrics(currentMusic.value.lrc)
+    
     nextTick(() => {
         audio.value.play()
         isPlay.value = true
@@ -454,6 +469,10 @@ const updateProgress = (e: any) => {
         background-position: center;
         font-family: auto;
         cursor: default;
+
+        @media screen and (max-width: 600px) {
+            padding: 20px;
+        }
 
         .search-title {
             font-size: 17x;
@@ -604,6 +623,10 @@ const updateProgress = (e: any) => {
         cursor: default;
         position: relative;
 
+        @media screen and (max-width: 600px) {
+            padding: 20px;
+        }
+
         .music-captions {
             width: 86%;
             height: 20px;
@@ -634,6 +657,10 @@ const updateProgress = (e: any) => {
                 background-position: center;
                 margin-top: 4px;
                 transition: all 1s;
+
+                @media screen and (max-width: 600px) {
+                    display: none;
+                }
 
                 @keyframes rotate {
                     from {
@@ -667,6 +694,12 @@ const updateProgress = (e: any) => {
                 margin-left: 20px;
                 padding: 10px;
 
+                @media screen and (max-width: 600px) {
+                    width: 100%;
+                    margin: 0;
+                    padding: 2px;
+                }
+
                 .name {
                     font-size: 18px;
                     color: #fff;
@@ -676,7 +709,7 @@ const updateProgress = (e: any) => {
                 }
 
                 .progress {
-                    width: 78%;
+                    width: 70%;
                     height: 5px;
                     margin: 15px 0;
                 }

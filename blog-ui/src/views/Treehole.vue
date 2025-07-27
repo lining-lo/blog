@@ -26,6 +26,10 @@ import { computed, getCurrentInstance, nextTick, onMounted, reactive, ref } from
 import { nanoid } from 'nanoid';
 import { formattime } from '../utils/customize';
 import { ElMessage } from 'element-plus';
+import { baseUrl } from '../utils/env';
+// 背景图片
+import lightTreehole from '@/assets/images/light-treehole.webp';
+import darkTreehole from '@/assets/images/dark-treehole.webp';
 
 // 生成唯一ID的函数
 const generateId = () => `${Date.now()}-${Math.floor(Math.random() * 1000)}`;
@@ -43,7 +47,7 @@ const { token } = storeToRefs(userStore)
 
 //获取背景图片
 const imgurl = computed(() => {
-    const url = `url(/src/assets/images/${isDark.value ? 'dark' : 'light'}-${String(route.name)}.webp)`;
+    const url = `url(${isDark.value ? darkTreehole : lightTreehole})`;
     return url;
 })
 
@@ -64,11 +68,11 @@ const findCommentParams = reactive({
 const getImageUrl = (item: any) => {
     // 用户类型为0使用用户头像，否则使用预设头像
     if (item.user_type === 0) {
-        if (!item.user_imgurl) return 'http://localhost:3000/photo/1751212892031.png'; // 默认头像
+        if (!item.user_imgurl) return `${baseUrl}/photo/1751212892031.png`; // 默认头像
         if (item.user_imgurl.startsWith('http')) return item.user_imgurl;
-        return `http://localhost:3000${item.user_imgurl}`;
+        return `${baseUrl}${item.user_imgurl}`;
     } else {
-        return portrait[item.user_imgurl] || 'http://localhost:3000/photo/1751212892031.png';
+        return portrait[item.user_imgurl] || `${baseUrl}/photo/1751212892031.png`;
     }
 };
 

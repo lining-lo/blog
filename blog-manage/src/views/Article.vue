@@ -13,8 +13,7 @@
         </div>
         <div class="article-header">
             <div class="header-labels">
-                <span class="selected">全部</span>
-                <span v-for="(item, index) in 5" :key="index">我的博客</span>
+                
             </div>
             <div class="header-create">
                 <router-link to="createArticle" style="display: flex;align-items: center; color: #42b983;">
@@ -26,29 +25,34 @@
             </div>
         </div>
         <div class="article-form">
-            <el-table :data="tableData" border style="width: 100%">
-                <el-table-column prop="id" label="序号" width="60" align="center" />
+            <el-table :data="article" border style="width: 100%">
+                <el-table-column type="index" label="序号" width="60" align="center" />
                 <el-table-column label="封面" width="180" align="center">
                     <template #default="scope">
-                        <img style="width: 100%;height: 55px;background-color: pink;" :src="scope.row.cover" alt="">
+                        <img style="width: 100%;height: 55px;object-fit: cover;object-position: center;"
+                            :src="`${baseUrl}${scope.row.cover}`" alt="">
                     </template>
                 </el-table-column>
-                <el-table-column prop="title" label="标题" align="center" />
-                <el-table-column prop="content" label="文字描述" show-overflow-tooltip="true" align="center" />
+                <el-table-column prop="name" label="标题" align="center" />
+                <el-table-column label="文字描述" show-overflow-tooltip="true" align="center">
+                    <template #default="scope">
+                        {{ scope.row.content.substring(0, 80) }}...
+                    </template>
+                </el-table-column>
                 <el-table-column prop="label" label="标签" align="center">
                     <template #default="{ row }">
-                        <el-tag color="#f6f6f8" style="color: #42b983; padding: 5px 10px;">
-                            {{ row.label }}
+                        <el-tag color="#f6f6f8" style="color: #42b983; padding: 5px 10px;font-size: 12px;">
+                            {{ labels[row.label].name }}
                         </el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column label="是否置顶" align="center">
                     <template #default="{ row }">
-                        <el-switch v-model="row.istop"
+                        <el-switch v-model="row.top"
                             style="--el-switch-on-color: #42b983; --el-switch-off-color: #f4f4f5" />
                     </template>
                 </el-table-column>
-                <el-table-column prop="date" label="创建时间" align="center" />
+                <el-table-column prop="createdate" label="创建时间" align="center" />
                 <el-table-column label="操作" align="center">
                     <template #default="scope">
                         <el-button size="small" link type="success" @click="handleEdit(scope.$index, scope.row)">
@@ -75,80 +79,54 @@
 </template>
 
 <script setup lang='ts'>
-const tableData = [
-    {
-        id: 1,
-        cover: 'https://s1.ax1x.com/2022/11/10/z9VlHs.png',
-        title: '我的博客',
-        content: '开发这个项目一来是为了练习全栈技术，积累项目经验，二来呢是拥有一个属于自己的博客是一个很酷的事情',
-        label: '学习',
-        istop: true,
-        date: '2016-05-03',
-        name: 'Tom',
-        address: 'No. 189, Grove St, Los Angeles',
-    },
-    {
-        id: 2,
-        cover: 'http://img.mrzym.top/FsmFwJb-phLb9aNSiKLYZP-s_vAk',
-        title: '我不吃牛肉',
-        content: '开发这个项目一来是为了练习全栈技术，积累项目经验，二来呢是拥有一个属于自己的博客是一个很酷的事情',
-        label: '生活',
-        istop: false,
-        date: '2016-05-03',
-        name: 'Tom',
-        address: 'No. 189, Grove St, Los Angeles',
-    },
-    {
-        id: 1,
-        cover: 'https://s1.ax1x.com/2022/11/10/z9VlHs.png',
-        title: '我的博客',
-        content: '开发这个项目一来是为了练习全栈技术，积累项目经验，二来呢是拥有一个属于自己的博客是一个很酷的事情',
-        label: '学习',
-        istop: true,
-        date: '2016-05-03',
-        name: 'Tom',
-        address: 'No. 189, Grove St, Los Angeles',
-    },
-    {
-        id: 2,
-        cover: 'http://img.mrzym.top/FsmFwJb-phLb9aNSiKLYZP-s_vAk',
-        title: '我不吃牛肉',
-        content: '开发这个项目一来是为了练习全栈技术，积累项目经验，二来呢是拥有一个属于自己的博客是一个很酷的事情',
-        label: '生活',
-        istop: false,
-        date: '2016-05-03',
-        name: 'Tom',
-        address: 'No. 189, Grove St, Los Angeles',
-    },
-    {
-        id: 1,
-        cover: 'https://s1.ax1x.com/2022/11/10/z9VlHs.png',
-        title: '我的博客',
-        content: '开发这个项目一来是为了练习全栈技术，积累项目经验，二来呢是拥有一个属于自己的博客是一个很酷的事情',
-        label: '学习',
-        istop: true,
-        date: '2016-05-03',
-        name: 'Tom',
-        address: 'No. 189, Grove St, Los Angeles',
-    },
-    {
-        id: 2,
-        cover: 'http://img.mrzym.top/FsmFwJb-phLb9aNSiKLYZP-s_vAk',
-        title: '我不吃牛肉',
-        content: '开发这个项目一来是为了练习全栈技术，积累项目经验，二来呢是拥有一个属于自己的博客是一个很酷的事情',
-        label: '生活',
-        istop: false,
-        date: '2016-05-03',
-        name: 'Tom',
-        address: 'No. 189, Grove St, Los Angeles',
-    },
-]
+import { getCurrentInstance, onMounted, reactive, ref } from 'vue'
+import { baseUrl } from '../utils/env';
 
-const handleEdit = (index:any,row:any)=>{
+const { proxy } = getCurrentInstance()
+
+// 文章
+const article = ref([])
+// 分页获取文章参数
+const articlePageParams = {
+    page: 1,
+    pagesize: 100,
+    user_id: 'sNbEkOHxk5',
+    user_type: 0
+};
+// 分页获取文章方法
+const getArticle = async () => {
+    // 获取文章方法
+    const result = await proxy.$api.selectArticlePage(articlePageParams)
+    article.value = result.data.message.map(item => ({
+        ...item,
+        top: item.top === 1 ? false : true
+    }));
+}
+
+// 标签数据
+let labels = ref()
+// 查找标签参数
+const selectLabelPageParams = reactive({
+    page: 1,
+    pagesize: 100,
+})
+// 分页查找标签
+const getLabels = async () => {
+    const result = await proxy.$api.selectLabelPage(selectLabelPageParams)
+    labels.value = result.data.message
+    // console.log('labels', labels.value);
+}
+// 挂载
+onMounted(() => {
+    getArticle()
+    getLabels()
+})
+
+const handleEdit = (index: any, row: any) => {
 
 }
 
-const handleDelete = (index:any,row:any)=>{
+const handleDelete = (index: any, row: any) => {
 
 }
 </script>
@@ -231,6 +209,7 @@ const handleDelete = (index:any,row:any)=>{
                 cursor: pointer;
                 border-radius: 2px;
                 background: #F6F6F8;
+                white-space: nowrap;
             }
         }
     }

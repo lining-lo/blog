@@ -136,4 +136,19 @@ export default {
     selectLabelPage(data: any) {
         return http.post('/selectLabelPage', data)
     },
+
+    /**
+     * 音乐相关
+     */
+    // 分页获取音乐
+    selectMusicPage(data: any) {
+        return http.post('/selectMusicPage', data)
+    },
+
+    /**
+     * 天气相关
+     */
+    getWeather(){
+        return http.get('/weather')
+    }
 }

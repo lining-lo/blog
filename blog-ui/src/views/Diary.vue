@@ -19,7 +19,7 @@
           </div>
           <div class="right-msg" :style="{ color: isDark ? '#fff' : '#000000' }">{{ item.content }}</div>
           <div class="right-imgs" style="max-width: 300px;">
-            <img class="imgs-item" :src="`http://localhost:3000${item.imgurl}`" alt="">
+            <img class="imgs-item" :src="`${baseUrl}${item.imgurl}`" alt="">
           </div>
           <div class="right-content">
             <div class="content-time">{{ item.createdate }}</div>
@@ -52,7 +52,7 @@
               <div class="message-commentList">
                 <div class="commentList-item" v-for="(commentItem, idx) in comment" :key="idx">
                   <div class="item-left"
-                    :style="{ backgroundImage: commentItem.user_type === 0 ? `url(http://localhost:3000${commentItem.user_imgurl})` : `${portrait[commentItem.user_imgurl]}` }">
+                    :style="{ backgroundImage: commentItem.user_type === 0 ? `url(${baseUrl}${commentItem.user_imgurl})` : `${portrait[commentItem.user_imgurl]}` }">
                   </div>
                   <div class="item-right">
                     <div class="right-title">
@@ -91,7 +91,7 @@
         </div>
       </div>
     </div>
-    <el-dialog center="true" title="留言" v-model="outerVisible" width="30%">
+    <el-dialog center="true" title="留言" v-model="outerVisible" width="30%" style="min-width: 320px;">
       <textarea v-model="recallContent" class="message-text" placeholder="写下点什么..." maxlength="10000"></textarea>
       <div class="message-submit">
         <button @click="send">发布</button>
@@ -108,6 +108,7 @@ import { useTimeStore, useUserStore } from '../store';
 import { storeToRefs } from 'pinia';
 import { formattime } from '../utils/customize';
 import { ElMessage } from 'element-plus';
+import { baseUrl } from '../utils/env';
 
 const outerVisible = ref(false)
 const { proxy } = getCurrentInstance()

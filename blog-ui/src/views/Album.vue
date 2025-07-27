@@ -13,7 +13,8 @@
     </div>
     <div class="photos-container">
         <div class="photos-list">
-            <div class="list-item" v-for="(item, index) in album" :key="index">
+            <!-- 用item.id作为key，确保唯一性（避免index重复导致的渲染问题） -->
+            <div class="list-item" v-for="(item, index) in album" :key="item.id || index">
                 <div class="item-like">
                     <span class="icon" :class="{ addlike: item.isPraise[0].count !== 0 }"
                         @click="addPraise(item)">❤</span>
@@ -34,21 +35,23 @@ import { nanoid } from 'nanoid';
 import { formattime } from '../utils/customize';
 import { storeToRefs } from 'pinia';
 import { useTimeStore, useUserStore } from '../store';
+import { baseUrl } from '../utils/env';
 
 const { proxy } = getCurrentInstance()
 
 // 实例化 Store
 const timeStore = useTimeStore()
 const userStore = useUserStore()
-// 解构 State（自动转为响应式 ref）
 const { isDark } = storeToRefs(timeStore)
 const { token } = storeToRefs(userStore)
 
-// 图库数据
-const albumInit = []
-const album = ref()
-// 图片列表
-const imgurlList = ref([])
+// 图库数据（初始化为空数组，确保响应式正常）
+const album = ref<any[]>([]) 
+// 原始数据备份（用于分类筛选）
+const albumInit = ref<any[]>([]) 
+// 图片预览列表
+const imgurlList = ref<string[]>([]) 
+
 // 分页获取图库参数
 const albumPageParams = reactive({
     user_id: token.value.type === 1 ? token.value.username : token.value.id,
@@ -56,27 +59,47 @@ const albumPageParams = reactive({
     page: 1,
     pagesize: 100,
 })
-// 分页获取图库方法
-const getAlbum = async () => {
+
+// 分页获取图库方法（初始化数据）
+const getAlbum = async () => {  
+    albumInit.value = [] // 清空原始数据
     const result = await proxy.$api.selectAlbumPage(albumPageParams)
-    album.value = result.data.message
-    for (let i = 0; i < album.value.length; i++) {
-        album.value[i].imgurl = `http://localhost:3000${album.value[i].imgurl}`
-        albumInit.push(album.value[i])
-        imgurlList.value.push(album.value[i].imgurl)
-    }
+    // 处理数据并拼接图片路径
+    const processedData = result.data.message.map(item => ({
+        ...item,
+        imgurl: `${baseUrl}${item.imgurl}`
+    }))
+    album.value = processedData // 初始化展示数据（全部）
+    albumInit.value = [...processedData] // 备份原始数据
+    imgurlList.value = processedData.map(item => item.imgurl)
 }
-// 挂载
+
+// 挂载时初始化
 onMounted(() => {
     getAlbum()
 })
 
-// 根据类别获取图片
+// 根据类别筛选图片
 const getTypePage = (type: any) => {
-    album.value = albumInit.filter(item => item.type === type);
-    imgurlList.value = []
-    for (let i = 0; i < album.value.length; i++) {
-        imgurlList.value.push(album.value[i].imgurl)
+    // 从原始数据中筛选当前分类
+    const filtered = albumInit.value.filter(item => item.type === type);
+    album.value = filtered // 更新展示数据为当前分类
+    imgurlList.value = filtered.map(item => item.imgurl)
+}
+
+// 点赞方法（局部更新，不重新请求全部数据）
+const addPraise = async (item: any) => {
+    // 已点赞则直接返回
+    if (item.isPraise[0].count !== 0) return;
+    praiseParams.id = nanoid(10)
+    praiseParams.type_id = item.id
+    try {
+        const result = await proxy.$api.insertPraise(praiseParams)
+        // 直接更新当前项的点赞数（局部更新，不影响整体数据）
+        item.praiseCount[0].count++
+        item.isPraise[0].count++
+    } catch (err) {
+        console.error('点赞失败:', err)
     }
 }
 
@@ -88,19 +111,6 @@ const praiseParams = reactive({
     user_type: token.value.type,
     createdate: formattime(Date.now())
 })
-// 点赞方法
-const addPraise = async (item: any) => {
-    praiseParams.id = nanoid(10)
-    praiseParams.type_id = item.id
-    // 点过一次赞不允许再点赞
-    if (item.isPraise[0].count === 0) {
-        const result = await proxy.$api.insertPraise(praiseParams)
-        item.praiseCount[0].count++
-        item.isPraise[0].count++
-        getAlbum()
-    }
-    // console.log(props.card);
-}
 </script>
 <style lang='less' scoped>
 .album-container {

@@ -130,6 +130,7 @@ onMounted(() => {
             }
 
             @media screen and (max-width: 500px) {
+                max-width: none;
                 width: 100%;
             }
 

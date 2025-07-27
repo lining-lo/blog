@@ -313,3 +313,18 @@ exports.selectLabelPage = async (request, response) => {
         })
     })
 }
+
+/**
+ * 音乐相关
+ */
+// 分页获取音乐
+exports.selectMusicPage = async (request, response) => {
+    const data = request.body
+    await db.selectMusicPage([(data.page - 1) * data.pagesize, data.pagesize]).then(result => {
+        // 返回结果
+        response.send({
+            code: 200,
+            message: result
+        })
+    })
+}

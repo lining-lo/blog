@@ -7,7 +7,7 @@
       <p>头像: https://s1.ax1x.com/2022/11/10/z9E7X4.jpg</p>
       <p>描述: 这是一个 Vue3 与 nodejs 结合的产物～</p>
       <p>网站封面: https://s1.ax1x.com/2022/11/10/z9VlHs.png</p>
-      <button @click="outerVisible = true" style="font-size: 15px;color: blueviolet;">点我自助申请</button>
+      <p @click="outerVisible = true" style="font-size: 15px;color: blueviolet;cursor: pointer;">点我自助申请</p>
     </div>
     <hr>
     <el-dialog :show-close="false" v-model="outerVisible" width="530">
@@ -136,6 +136,11 @@ onMounted(() => {
   padding: 40px;
   margin-bottom: 40px;
 
+  @media screen and (max-width: 600px) {
+    padding: 40px 0;
+    box-shadow: none;
+  }
+
   .friend-title {
     font-size: 17px;
     font-weight: 600;
@@ -144,7 +149,6 @@ onMounted(() => {
   .friend-tip {
     margin-top: 20px;
     width: 100%;
-    height: 132px;
     background-color: rgba(80, 210, 226, 0.5);
     border-radius: 5px;
     border-left: 2px solid #1a72cb;

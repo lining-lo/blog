@@ -4,7 +4,7 @@
             <div class="list-item" :class="index % 2 === 0 ? 'left' : 'right'" v-for="(item, index) in currentData"
                 :key="item.id">
                 <div class="item-img">
-                    <img v-if="hotArticle" :src="`http://localhost:3000${item.cover}`" alt="">
+                    <img v-if="hotArticle" :src="`${baseUrl}${item.cover}`" alt="">
                 </div>
                 <div class="item-content">
                     <div class="content-txt">
@@ -28,7 +28,7 @@
                     </div>
                 </div>
                 <div class="item-bg" v-if="hotArticle"
-                    :style="{ backgroundImage: `url(http://localhost:3000${item.cover})` }"></div>
+                    :style="{ backgroundImage: `url(${baseUrl}${item.cover})` }"></div>
             </div>
         </div>
         <div class="classification-pager" v-if="hotArticle && hotArticle.length >= 5">
@@ -47,6 +47,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { nanoid } from 'nanoid';
 import { formattime } from '../utils/customize';
 import { ElMessage } from 'element-plus';
+import { baseUrl } from '../utils/env';
 
 const { proxy } = getCurrentInstance()
 

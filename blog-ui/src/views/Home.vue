@@ -30,7 +30,7 @@
                 </div>
                 <div class="welcome-content" @click="aa">
                     <p><span>温度：</span><span style="color: #ff4d4f;font-weight: 500;" v-if="weather">{{
-                        weather.temperature }}</span><span style="margin-left: 20px;">天气：</span><span
+                        weather.high }}</span><span style="margin-left: 20px;">天气：</span><span
                             style="color: #ff4d4f;font-weight: 500;" v-if="weather">{{ weather.tq }}</span>
                     </p>
                     <p><span>日期：</span><span style="color: #ff4d4f;font-weight: 500;" v-if="weather">{{
@@ -61,7 +61,7 @@
                     <div class="content-list">
                         <div class="list-item" v-for="item in comment" :key="item.id">
                             <div class="avator"
-                                :style="{ backgroundImage: item.user_type === 0 ? `url(http://localhost:3000${item.user_imgurl})` : `${portrait[item.user_imgurl]}` }">
+                                :style="{ backgroundImage: item.user_type === 0 ? `url(${baseUrl}${item.user_imgurl})` : `${portrait[item.user_imgurl]}` }">
                             </div>
                             <div class="msg">{{ item.content }}</div>
                             <el-tag :type="commentType[item.type].color" style="opacity: 0.5;">{{
@@ -69,7 +69,7 @@
                         </div>
                         <div class="list-item" v-for="item in comment" :key="item.id">
                             <div class="avator"
-                                :style="{ backgroundImage: item.user_type === 0 ? `url(http://localhost:3000${item.user_imgurl})` : `${portrait[item.user_imgurl]}` }">
+                                :style="{ backgroundImage: item.user_type === 0 ? `url(${baseUrl}${item.user_imgurl})` : `${portrait[item.user_imgurl]}` }">
                             </div>
                             <div class="msg">{{ item.content }}</div>
                             <el-tag :type="commentType[item.type].color"
@@ -155,7 +155,7 @@
                 </div>
                 <div class="article-item" @click="toArticle(item)" v-for="(item, index) in topArticle" :key="index">
                     <div class="item-img">
-                        <img style="width: 100%;height: 100%;" :src="`http://localhost:3000${item.cover}`" alt="">
+                        <img style="width: 100%;height: 100%;" :src="`${baseUrl}${item.cover}`" alt="">
                     </div>
                     <div class="item-content">
                         <div class="content-time">
@@ -202,7 +202,7 @@
                 </div>
                 <div class="article-item" @click="toArticle(item)" v-for="(item, index) in currentData" :key="index">
                     <div class="item-img">
-                        <img style="width: 100%;height: 100%;" :src="`http://localhost:3000${item.cover}`" alt="">
+                        <img style="width: 100%;height: 100%;" :src="`${baseUrl}${item.cover}`" alt="">
                     </div>
                     <div class="item-content">
                         <div class="content-time">
@@ -251,6 +251,7 @@ import { useRouter } from 'vue-router';
 import { nanoid } from 'nanoid';
 import { formattime, getRuntime } from '../utils/customize';
 import { ElMessage } from 'element-plus';
+import { baseUrl } from '../utils/env';
 
 const { proxy } = getCurrentInstance()
 
@@ -298,11 +299,14 @@ const getNews = () => {
 }
 // 天气
 const weather = ref()
-const getWeather = () => {
-    axios.get('https://info.2leo.top/api/visitor.info').then((data) => {
-        weather.value = data.data
-        // console.log(weather.value);
-    })
+const getWeather = async() => {
+    // axios.get('https://info.2leo.top/api/visitor.info').then((data) => {
+    //     weather.value = data.data
+    //     // console.log(weather.value);
+    // })
+    const result = await proxy.$api.getWeather()
+    weather.value = result.data
+    
 }
 // 挂载
 onMounted(() => {
@@ -1085,6 +1089,12 @@ const toClassification = (item: any) => {
                     border-radius: 0 0 10px 10px;
                     padding: 10px 15px;
 
+                    @media screen and (max-width: 600px) {
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: space-around;
+                    }
+
                     .content-time {
                         display: flex;
                         align-items: center;
@@ -1100,6 +1110,10 @@ const toClassification = (item: any) => {
                         text-overflow: ellipsis;
                         overflow: hidden;
                         color: gray;
+
+                        @media screen and (max-width: 600px) {
+                            margin: 0;
+                        }
 
                         &:hover {
                             +.right-tip {
@@ -1159,6 +1173,10 @@ const toClassification = (item: any) => {
                             display: flex;
                             align-items: center;
                             transition: all 0.5s;
+
+                            @media screen and (max-width: 600px) {
+                                margin-top: 0;
+                            }
 
                             &:hover {
                                 background-color: #ffa500;
@@ -1256,6 +1274,12 @@ const toClassification = (item: any) => {
                     border-radius: 0 0 10px 10px;
                     padding: 10px 15px;
 
+                    @media screen and (max-width: 600px) {
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: space-around;
+                    }
+
                     .content-time {
                         display: flex;
                         align-items: center;
@@ -1271,6 +1295,10 @@ const toClassification = (item: any) => {
                         text-overflow: ellipsis;
                         overflow: hidden;
                         color: gray;
+
+                        @media screen and (max-width: 600px) {
+                            margin: 0;
+                        }
 
                         &:hover {
                             +.right-tip {
@@ -1328,6 +1356,10 @@ const toClassification = (item: any) => {
                             display: flex;
                             align-items: center;
                             transition: all 0.5s;
+
+                            @media screen and (max-width: 600px) {
+                                margin-top: 0;
+                            }
 
                             &:hover {
                                 background-color: #ffa500;

@@ -198,6 +198,19 @@ const createTables = async () => {
                     PRIMARY KEY ( id )
                 );`
         },
+        {
+            name: 'music',
+            sql: `create table if not exists music( 
+                    id VARCHAR(100) NOT NULL,
+                    name VARCHAR(100) NOT NULL COMMENT '名称',
+                    author VARCHAR(100) NOT NULL COMMENT '作者',
+                    cover VARCHAR(100) NOT NULL COMMENT '封面',
+                    url VARCHAR(100) NOT NULL COMMENT '地址',
+                    lrc VARCHAR(5000) NOT NULL COMMENT '歌词',
+                    createdate VARCHAR(100) NOT NULL COMMENT '创建时间',
+                    PRIMARY KEY ( id )
+                );`
+        },
     ];
 
     for (const table of tables) {
@@ -431,5 +444,14 @@ module.exports = {
     selectLabelCount: async () => {
         const sql = `SELECT count(*) as count FROM label`
         return query(sql, [])
+    },
+
+    /**
+     * 音乐相关
+     */
+    // 分页获取音乐
+    selectMusicPage: async (values) => {
+        const sql = `SELECT * FROM music ORDER BY createdate DESC LIMIT ?,? `
+        return query(sql, values)
     },
 };

@@ -13,7 +13,7 @@
             <el-switch v-model="isDark" :active-action-icon="MoonNight" :inactive-action-icon="Sunny"
                 style="--el-switch-on-color: #6f5ac3; --el-switch-off-color: #f4c97a" />
             <div class="right-avator" @click="outerVisible = true"
-                :style="{ backgroundImage: token.type === 0 ? `url(http://localhost:3000${token.imgurl})` : `${portrait[token.imgurl]}` }">
+                :style="{ backgroundImage: token.type === 0 ? `url(${baseUrl}${token.imgurl})` : `${portrait[token.imgurl]}` }">
             </div>
             <el-dialog :show-close="false" v-model="outerVisible" width="800">
                 <div class="content" :style="{ background: isDark ? '#26282a' : '' }">
@@ -74,7 +74,7 @@
                                     </el-icon>
                                 </div>
                                 <img :class="{ cleardark: isDark }" v-if="imgurl || token.imgurl"
-                                    :src="imgurl ? imgurl : `http://localhost:3000/${token.imgurl}`" alt="">
+                                    :src="imgurl ? imgurl : `${baseUrl}/${token.imgurl}`" alt="">
                             </div>
                             <div class="form">
                                 <div class="username"><span>用户：</span><input type="text"
@@ -111,6 +111,7 @@ import lightLogin from '@/assets/images/login.webp';
 import lightRegist from '@/assets/images/regist.webp';
 import lightFindPassword from '@/assets/images/findpassword.png';
 import lightPerson from '@/assets/images/person.webp';
+import { baseUrl } from '../utils/env'
 
 const outerVisible = ref(false)
 const { proxy } = getCurrentInstance()
@@ -388,6 +389,10 @@ const updateUser = async () => {
     justify-content: space-between;
     padding: 0 25px;
     transition: all 0.5s;
+
+    @media screen and (max-width: 600px) {
+        padding: 0 2px;
+    }
 
     &:hover {
         background: rgba(5, 12, 14, 0.8);

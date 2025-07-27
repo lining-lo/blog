@@ -69,6 +69,7 @@ import darkDiary from '@/assets/images/dark-diary.webp';
 import darkTreehole from '@/assets/images/dark-treehole.webp';
 import darkFriend from '@/assets/images/dark-friend.webp';
 import darkMessage from '@/assets/images/dark-message.webp';
+import { baseUrl } from '../utils/env';
 
 const { proxy } = getCurrentInstance()
 
@@ -134,7 +135,7 @@ const imgurl = computed(() => {
     if (route.name === 'article') {
         // 文章页：优先使用文章封面，否则用默认封面
         return currentArticle.value
-            ? `url(http://localhost:3000${currentArticle.value.cover})`
+            ? `url(${baseUrl}${currentArticle.value.cover})`
             : `url()`; // 使用导入的默认封面
     } else if (route.name && imageMap[route.name as keyof typeof imageMap]) {
         // 其他已配置的路由：从映射表中获取对应图片
@@ -238,6 +239,7 @@ const getLabels = async () => {
                 font-size: 40px;
                 font-weight: 600;
                 margin-bottom: 18px;
+                white-space: nowrap
             }
 
             .route-msg {
@@ -246,6 +248,7 @@ const getLabels = async () => {
                 color: #fff;
                 font-size: 18px;
                 font-weight: 600;
+                white-space: nowrap
             }
         }
 
@@ -255,10 +258,12 @@ const getLabels = async () => {
                 font-size: 33px;
                 font-weight: 600;
                 margin-bottom: 10px;
+                white-space: nowrap;
             }
 
             .article-msg {
                 color: #fff;
+                white-space: nowrap;
             }
 
             .labels {
@@ -297,7 +302,7 @@ const getLabels = async () => {
             position: absolute;
             bottom: 0;
             left: 0;
-            width: 333%;
+            width: 400%;
             height: 100px;
             background-repeat: repeat-x;
         }
@@ -317,9 +322,8 @@ const getLabels = async () => {
     .bottom-container {
         position: absolute;
         bottom: 0;
-        left: 50%;
+        left: calc(50% + 20px);
         cursor: pointer;
-        position: absolute;
         animation: float 1s ease-in-out infinite;
     }
 
